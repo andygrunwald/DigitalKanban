@@ -38,3 +38,7 @@ publish
 # build script local files
 build/buildinfo.properties
 build/config/buildinfo.properties
+
+# Cache and log files from Symfony2
+app/cache/*
+app/logs/*
