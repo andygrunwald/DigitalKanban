@@ -85,9 +85,14 @@ with
 
     $kernel = new AppKernel('prod', true);
 
-reload the page and have a look which error occur.<br />
-If it is a bug, please report it.
+reload the page, have a look which error occur and try to solve it on your own.<br />
+If you can not find a solution, drop me a short message in a ticket or something like this. I will try to help you.
 
-5) Have fun
+5) Hints and more informations
+--------------------------------
+You can use the github wiki for more informations about DigitalKanban.<br />
+If there are useful informations and hints, you will find them in the wiki.
+
+6) Have fun
 --------------------------------
 Enjoy this little application and i will be happy for feedback!
