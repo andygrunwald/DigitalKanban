@@ -11,6 +11,8 @@ DigitalKanban was created for a small project at my university and one of my wis
 
 This project is based on [Symfony2](http://symfony.com/), [jQuery](http://jquery.com/), [HTML5Boilerplate](html5boilerplate.com) and there sub projects. 
 
+PS: You should use a 'newer' browser like Google Chrome or Mozilla Firefox (up to date please), because DigitalKanban make use of some HTML5 and CSS3 features. Thanks ;)
+
 2) Installation
 --------------------------------
 
