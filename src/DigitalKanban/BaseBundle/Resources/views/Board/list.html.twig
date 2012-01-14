@@ -1,0 +1,79 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Board management{% endblock %}
+
+{% block content %}
+	<div class="box management">
+		<div class="information">
+			<h1>Board management</h1>
+			<p>
+				Hey dude, nice to see you here!<br />
+				In this area you can see all existing boards and you have the opportunity to:<br />
+			</p>
+			<ul>
+				<li>add new kanban boards</li>
+				<li>edit existing kanban boards</li>
+				<li>delete one or more kanban boards</li>
+				<li>or just edit the columns of some boards</li>
+			</ul>
+			<p>
+				Enjoy your stay here!
+			</p>
+		</div>
+		{% if app.session.flash('success') %}
+			<div class="flash-message message-success">
+				<div class="message-header">{{ app.session.flash('success').title }}</div>
+				<div class="message-body">{{ app.session.flash('success').message }}</div>
+			</div>
+		{% endif %}
+		{% if app.session.flash('error') %}
+			<div class="flash-message message-error">
+				<div class="message-header">{{ app.session.flash('error').title }}</div>
+				<div class="message-body">{{ app.session.flash('error').message }}</div>
+			</div>
+		{% endif %}
+		<table>
+			<tr>
+				<td colspan="10">
+					<a href="{{ path('application_board_new') }}" title="Add a new Kanban board">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/add_board.png') }}" alt="Add a new Kanban board" title="Add a new Kanban board" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Created</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+			</tr>
+		{% for board in boards %}
+			<tr>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ board.getId() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ board.getName() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">{% filter nl2br %}{{ board.getDescription() }}{% endfilter %}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ board.getCreated()|date("d.m.Y H:i:s") }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">
+					<a href="{{ path('application_board_edit', {'id': board.getId()}) }}" title="Edit the Kanban board '{{ board.getName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/edit.png') }}" alt="Edit the Kanban board '{{ board.getName() }}'" title="Edit the Kanban board '{{ board.getName() }}'" />
+					</a>
+				</td>
+				<td class="delete-link {{ cycle(['odd', 'even'], loop.index) }}">
+					<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ board.getName() }}"</span>
+					<a href="{{ path('application_board_delete', {'id': board.getId()}) }}" title="Delete the Kanban board '{{ board.getName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/delete_board.png') }}" alt="Delete the Kanban board '{{ board.getName() }}'" title="Delete the Kanban board '{{ board.getName() }}'" />
+					</a>
+				</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">
+					<a href="{{ path('application_board_editcolumns', {'id': board.getId()}) }}" title="Edit the columns of Kanban board '{{ board.getName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/edit_column.png') }}" alt="Edit the columns of Kanban board '{{ board.getName() }}'" title="Edit the columns of Kanban board '{{ board.getName() }}'" />
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

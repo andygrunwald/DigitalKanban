@@ -1,0 +1,75 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Kanban board "{{ board.getName() }}"{% endblock %}
+
+{% block content %}
+	<div class="box show-board">
+		<div class="board-header">
+			{% if board.getColumns().count() > 0 %}
+			<div class="create-new-issue">
+				<div id="new-issue">
+					<textarea rows="3" cols="22" placeholder="Enter your issue title here"></textarea>
+				</div>
+				<a href="javascript:void(0);" title="Save your new issue" id="link-issue-save">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new issue" title="Save your new issue" />
+				</a>
+				<a href="javascript:void(0);" title="Reset the issue" id="link-issue-reset">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Reset the issue" title="Reset the issue" />
+				</a>
+				<div class="clearfix"></div>
+			</div>
+			{% endif %}
+			<div class="information">
+				<h1>{{ board.getName() }}</h1>
+				<p>{{ board.getDescription() }}</p>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		{% if board.getColumns().count() > 0 %}
+		<div class="kanban-board">
+			<div class="board-columns">
+				{% for column in board.getColumns() %}
+					<div class="column draganddrop-ok column-{{column.getId() }} {% if board.getColumns().count() == loop.index %}last{% endif %}">
+						<div class="limit">
+							{% if column.getMaxIssues() > 0 %}
+								{{ column.getMaxIssues() }}
+							{% else %}
+								&nbsp;
+							{% endif %}
+						</div>
+						<div class="name">{{ column.getName() }}</div>
+						<div class="issues">
+							<ul>
+								{% for issue in column.getIssues() %}
+									<li class="issue rotate{{issue.getRandomRotation()}} issue-{{issue.getId() }}">
+										{% if is_granted('ROLE_ADMIN') %}
+											<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ issue.getName() }}"</span>
+											<a href="javascript:void(0);" class="delete" style="display: none;">
+												<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete the issue '{{ issue.getName() }}'" title="Delete the issue '{{ issue.getName() }}'" />
+											</a>
+										{% endif %}
+										{{ issue.getName() }}
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				{% endfor %}
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		{% else %}
+			<div class="flash-message message-information">
+				<div class="message-header">No columns exists</div>
+				<div class="message-body">
+					Sorry, but there are no columns for the board "{{ board.getName() }}".<br />
+					{% if is_granted('ROLE_ADMIN') %}
+					Please visit the <a href="{{ path('application_board_editcolumns', {'id': board.getId()}) }}" title="Edit boardcolumns for '{{ board.getName() }}'">Board-Management</a> and create some columns :)
+					{% else %}
+					Please be so nice to talk to your supervisor to create some and make this Kanban board useable :)
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

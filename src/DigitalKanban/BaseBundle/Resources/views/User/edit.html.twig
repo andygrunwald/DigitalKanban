@@ -1,0 +1,25 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Edit the user "{{ user.getUsername() }}"{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Edit the user "{{ user.getUsername() }}"</h1>
+			<p>
+				Hey, what about {{ user.getFirstName() }}? Is he / she alive?<br />
+				Or did he / she just changed the email address?<br />
+				Or is he / she switched to a new team?<br />
+				Oh wait. Better. Now i know it.<br />
+				He / she was promoted, get a new job you want to grant him administrator rights. Correct?<br />
+			</p>
+			<p>
+				But anyhow. To care about the data is an important task. So, YOU are the real hero! Do your job and feel good! But hey, don` forget the beer in your leisure-time.
+			</p>
+		</div>
+		<form action="{{ path('application_user_edit', {'id': user.getId()}) }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:User:form.html.twig' with {'form': form, 'mode': 'edit'} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

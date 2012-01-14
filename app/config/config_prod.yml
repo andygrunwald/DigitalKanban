@@ -1,0 +1,28 @@
+imports:
+    - { resource: config.yml }
+
+# 
+# If you have installed APC, replace 'array' with 'apc'.
+# Alternatives are memcache or xcache.
+# For more information have a look at
+# http://symfony.com/doc/current/reference/configuration/doctrine.html
+#
+# This setting is set to 'array', because APC is only a recommendation,
+# so this app will also run in production mode with no APC installed
+#
+doctrine:
+    orm:
+        metadata_cache_driver: array
+        result_cache_driver: array
+        query_cache_driver: array
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug

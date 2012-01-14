@@ -1,0 +1,27 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Edit your Kanban board "{{ board.getName() }}"{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Edit your Kanban board</h1>
+			<p>
+				Your team has a new name? Is the new name a cool one?<br />Like a name of a hero from marvel comics? :)
+			</p>
+			<p>
+				Or did you get a new team member? Yes? Who is it?<br />
+				Tell me, tell me. Please :) It it Spider-Man? Or Captain America?<br />
+				Oh wait! Now i got it. You`ve got a really cool one: Thor.<br />
+				Rock your project with him!
+			</p>
+			<p>
+				Or have you edit the description because your boss said that this one is not really meaningful?  :(
+			</p>
+		</div>
+		<form action="{{ path('application_board_edit', {'id': board.getId()}) }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:Board:form.html.twig' with {'form': form} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

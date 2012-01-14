@@ -1,0 +1,5 @@
+services:
+    text.twig.extension:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            -  { name: twig.extension }

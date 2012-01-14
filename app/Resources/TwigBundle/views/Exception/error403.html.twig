@@ -1,0 +1,16 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}{{ status_code }} {{ status_text }}{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<div class="flash-message message-error">
+			<div class="message-header">{{ status_code }} {{ status_text }}</div>
+			<div class="message-body">
+				Sorry dude, but you don`t have access to this document.<br />
+				Don`t try it. With this way you won`t get in. <br />
+				If you need access have a nice talk to your administrator during a beer or two ;)
+			</div>
+		</div>
+	</div>
+{% endblock %}

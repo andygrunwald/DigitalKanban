@@ -1,0 +1,11 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Dummy template{% endblock %}
+
+{% block content %}
+	This is only a dummy template, because in 'DefaultController' -> 'indexAction'
+	the user will be redirected to route 'login', if the user is not logged in.
+	Otherwise the user will be redirected to route 'application'.
+
+	For details have a look at src/DigitalKanban/BaseBundle/Controller/DefaultController.php->indexAction()
+{% endblock %}

@@ -1,0 +1,49 @@
+{{ form_errors(form) }}
+
+<div>
+	{{ form_label(form.username) }}
+	{{ form_widget(form.username) }}
+	{{ form_errors(form.username) }}
+</div>
+{% if mode == 'new' %}
+	<div>
+		{{ form_label(form.password) }}
+		{{ form_widget(form.password) }}
+		{{ form_errors(form.password) }}
+	</div>
+{% endif %}
+<div>
+	{{ form_label(form.firstName) }}
+	{{ form_widget(form.firstName) }}
+	{{ form_errors(form.firstName) }}
+</div>
+<div>
+	{{ form_label(form.lastName) }}
+	{{ form_widget(form.lastName) }}
+	{{ form_errors(form.lastName) }}
+</div>
+<div>
+	{{ form_label(form.email) }}
+	{{ form_widget(form.email) }}
+	{{ form_errors(form.email) }}
+</div>
+<div>
+	{{ form_label(form.admin) }}
+	{{ form_widget(form.admin) }}
+	{{ form_errors(form.admin) }}
+</div>
+<div>
+	{{ form_label(form.disabled) }}
+	{{ form_widget(form.disabled) }}
+	{{ form_errors(form.disabled) }}
+</div>
+<div>
+	{{ form_label(form.boards) }}
+	{{ form_widget(form.boards) }}
+	{{ form_errors(form.boards) }}
+</div>
+
+{{ form_rest(form) }}
+<div class="submit center">
+	<input type="submit" name="submit" value="Submit your changes now" />
+</div>

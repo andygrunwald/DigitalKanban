@@ -1,0 +1,101 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+
+	<title>{% block title %}Your digital Kanban tool{% endblock %} - DigitalKanban</title>
+	<meta name="description" content="DigitalKanban is your personal Kanban tool! Work in distributed teams in one of the greatest project management ways: 'Kanban'. An remember: Yes, you Kanban!">
+	<meta name="author" content="Andreas Grunwald. For more information visit out 'About' section.">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="stylesheet" href="{{ asset('bundles/digitalkanbanbase/css/html5boilerplate.css') }}" />
+	<link rel="stylesheet" href="{{ asset('bundles/digitalkanbanbase/css/styles.css') }}" />
+</head>
+<body>
+	<div id="container">
+		<header>
+			{% block content_header %}
+				<div class="logo">
+					<a href="{{ path('default_index') }}">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/logo_digital_kanban.jpg') }}" alt="DigitalKanban" title="DigitalKanban" />
+					</a>
+				</div>
+				<nav>
+					<ul>
+						{% if app.user == FALSE %}
+							<li>
+								<a href="{{ path('login') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_login.png') }});">
+									Login <small>Yes you Kanban!</small>
+								</a>
+							</li>
+						{% endif %}
+						{% if app.user %}
+							<li>
+								<a href="{{ path('application') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_home.png') }});">
+									Home <small>Your personal view</small>
+								</a>
+							</li>
+							<li class="chose-board">
+								Jump to board<br />
+								{% if app.user.getBoards().count() > 0 %}
+									<select name="boardToShow" id="boardToShow">
+										<option value="">Choose a board</option>
+										{% for board in app.user.getBoards() %}
+											<option value="{{ path('application_board_show', {'id': board.getId()}) }}">{{ board.getName() }}</option>
+										{% endfor %}
+									</select>
+								{% else %}
+									No boards there :(
+								{% endif %}
+							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+								<li>
+									<a href="{{ path('application_user_list') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_user.png') }});">
+										User management
+										<small>Administrate the user</small>
+									</a>
+								</li>
+								<li>
+									<a href="{{ path('application_board_list') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_board.png') }});">
+										Board management
+										<small>Organize the boards</small>
+									</a>
+								</li>
+							{% endif %}
+						{% endif %}
+						<li>
+							<a href="{{ path('about') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_info.png') }});">
+								About <small>What? Why? Who? ...</small>
+							</a>
+						</li>
+						{% if app.user %}
+							<li class="logout">
+								<a href="{{ path('logout') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_logout.png') }});">
+									Logout
+									<small>as {% if is_granted('ROLE_ADMIN') %}admin{% else %}user{% endif %} &laquo;{{ app.user.username }}&raquo; </small>
+								</a>
+							</li>
+						{% endif %}
+					</ul>
+				</nav>
+				<div class="clearfix"></div>
+			{% endblock %}
+		</header>
+		<div id="main" role="main">
+			{% block content %}
+				This is the default content.
+				Please add a content block to your template :)
+			{% endblock %}
+		</div>
+	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="{{ asset('bundles/digitalkanbanbase/js/jquery-1.7.1.js') }}"><\/script>')</script>
+	<script defer src="{{ asset('bundles/digitalkanbanbase/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
+	<script defer src="{{ asset('bundles/digitalkanbanbase/js/scripts.js') }}"></script>
+</body>
+</html>

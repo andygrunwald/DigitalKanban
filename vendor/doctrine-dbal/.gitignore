@@ -1,0 +1,7 @@
+build.properties
+build/
+logs/
+reports/
+dist/
+download/
+lib/Doctrine/Common/

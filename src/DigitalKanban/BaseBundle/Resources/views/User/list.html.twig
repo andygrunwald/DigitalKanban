@@ -1,0 +1,90 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}User management{% endblock %}
+
+{% block content %}
+	<div class="box management">
+		<div class="information">
+			<h1>User management</h1>
+			<p>
+				Welcome to the user management area!<br />
+				In this section you can see all existing users and your opportunities are:
+			</p>
+			<ul>
+				<li>add new users</li>
+				<li>edit existing users</li>
+				<li>delete users</li>
+				<li>appropriate users to boards</li>
+				<li>or just looking around :)</li>
+			</ul>
+			<p>
+				Common, be brave and try one of your options!
+			</p>
+		</div>
+		{% if app.session.flash('success') %}
+			<div class="flash-message message-success">
+				<div class="message-header">{{ app.session.flash('success').title }}</div>
+				<div class="message-body">{{ app.session.flash('success').message }}</div>
+			</div>
+		{% endif %}
+		{% if app.session.flash('error') %}
+			<div class="flash-message message-error">
+				<div class="message-header">{{ app.session.flash('error').title }}</div>
+				<div class="message-body">{{ app.session.flash('error').message }}</div>
+			</div>
+		{% endif %}
+		<table>
+			<tr>
+				<td colspan="10">
+					<a href="{{ path('application_user_new') }}" title="Add a new user">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/add_user.png') }}" alt="Add a new user" title="Add a new user" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<th>ID</th>
+				<th>Username</th>
+				<th>First name</th>
+				<th>Last name</th>
+				<th>E-mail</th>
+				<th>Rights</th>
+				<th>Active</th>
+				<th>Created</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+			</tr>
+		{% for user in users %}
+			<tr>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ user.getId() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ user.getUsername() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ user.getFirstName() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ user.getLastName() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">
+					<a href="mailto:{{ user.getEmail() }}" title="Write {{ user.getFirstName() }} {{ user.getLastName() }} an e-mail">{{ user.getEmail() }}</a>
+				</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ user.getRolesAsReadableString() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} center">
+					{% if user.getDisabled() == 1 %}
+						<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="{{ user.getFirstName() }} {{ user.getLastName() }} is inactive" title="{{ user.getFirstName() }} {{ user.getLastName() }} is inactive" />
+					{% else %}
+						<img src="{{ asset('bundles/digitalkanbanbase/images/ok.png') }}" alt="{{ user.getFirstName() }} {{ user.getLastName() }} is active" title="{{ user.getFirstName() }} {{ user.getLastName() }} is active" />
+					{% endif %}
+				</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ user.getCreated()|date("d.m.Y H:i:s") }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">
+					<a href="{{ path('application_user_edit', {'id': user.getId()}) }}" title="Edit the user '{{ user.getFirstName() }} {{ user.getLastName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/edit.png') }}" alt="Edit the user '{{ user.getFirstName() }} {{ user.getLastName() }}'" title="Edit the user '{{ user.getFirstName() }} {{ user.getLastName() }}'" />
+					</a>
+				</td>
+				<td class="delete-link {{ cycle(['odd', 'even'], loop.index) }}">
+					<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ user.getFirstName() }} {{ user.getLastName() }}"</span>
+					<a href="{{ path('application_user_delete', {'id': user.getId()}) }}" title="Delete the user '{{ user.getFirstName() }} {{ user.getLastName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/delete_user.png') }}" alt="Delete the user '{{ user.getFirstName() }} {{ user.getLastName() }}'" title="Delete the user '{{ user.getFirstName() }} {{ user.getLastName() }}'" />
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+	<div id="loginbox" class="box">
+		<div class="information">
+			<h1>Login</h1>
+			<p>Dear DigitalKanban user, please log in with your username and your password.<br />If you don’t have one please contact your supervisor. Thank you!</p>
+		</div>
+		{% if error %}
+			<div class="error">{{ error.message }}</div>
+		{% endif %}
+
+		<form action="{{ path('login_check') }}" method="post">
+			<div>
+				<label for="username">Username:</label>
+				<input type="text" id="username" name="_username" value="{{ last_username }}" />
+			</div>
+			<div>
+				<label for="password">Password:</label>
+				<input type="password" id="password" name="_password" />
+			</div>
+			<div class="center">
+				<input type="submit" value="Login" />
+			</div>
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+# ----------------------------------------------------------------------
+# Better website experience for IE users
+# ----------------------------------------------------------------------
+
+# Force the latest IE version, in various cases when it may fall back to IE7 mode
+#  github.com/rails/rails/commit/123eb25#commitcomment-118920
+# Use ChromeFrame if it's installed for a better experience for the poor IE folk
+
+<IfModule mod_headers.c>
+	Header set X-UA-Compatible "IE=Edge,chrome=1"
+	# mod_headers can't match by content-type, but we don't want to send this header on *everything*...
+	<FilesMatch "\.(js|css|gif|png|jpe?g|pdf|xml|oga|ogg|m4a|ogv|mp4|m4v|webm|svg|svgz|eot|ttf|otf|woff|ico|webp|appcache|manifest|htc|crx|xpi|safariextz|vcf)$" >
+		Header unset X-UA-Compatible
+	</FilesMatch>
+</IfModule>
+
+# ----------------------------------------------------------------------
+# Proper MIME type for all files
+# ----------------------------------------------------------------------
+
+# JavaScript
+#   Normalize to standard type (it's sniffed in IE anyways)
+#   tools.ietf.org/html/rfc4329#section-7.2
+AddType application/javascript         js
+
+# Assorted types
+AddType image/x-icon                   ico
+
+# ----------------------------------------------------------------------
+# Gzip compression
+# ----------------------------------------------------------------------
+
+<IfModule mod_deflate.c>
+	# Force deflate for mangled headers developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping/
+	<IfModule mod_setenvif.c>
+		<IfModule mod_headers.c>
+			SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+			RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+		</IfModule>
+	</IfModule>
+
+	# HTML, TXT, CSS, JavaScript, JSON, XML:
+	<IfModule filter_module>
+		FilterDeclare   COMPRESS
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/html
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/css
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/plain
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/xml
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/x-component
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/javascript
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/json
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xml
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xhtml+xml
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/rss+xml
+		FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/atom+xml
+		FilterChain     COMPRESS
+		FilterProtocol  COMPRESS  DEFLATE change=yes;byteranges=no
+	</IfModule>
+
+	<IfModule !mod_filter.c>
+		# Legacy versions of Apache
+		AddOutputFilterByType DEFLATE text/html text/plain text/css application/json
+		AddOutputFilterByType DEFLATE application/javascript
+		AddOutputFilterByType DEFLATE text/xml application/xml text/x-component
+		AddOutputFilterByType DEFLATE application/xhtml+xml application/rss+xml application/atom+xml
+	</IfModule>
+</IfModule>
+
+# ----------------------------------------------------------------------
+# UTF-8 encoding
+# ----------------------------------------------------------------------
+
+# Use UTF-8 encoding for anything served text/plain or text/html
+AddDefaultCharset utf-8
+
+# Force UTF-8 for a number of file formats
+AddCharset utf-8 .html .css .js .xml .json .rss .atom
+
+# ----------------------------------------------------------------------
+# A little more security
+# ----------------------------------------------------------------------
+
+# "-Indexes" will have Apache block users from browsing folders without a default document
+# Usually you should leave this activated, because you shouldn't allow everybody to surf through
+# every folder on your server (which includes rather private places like CMS system folders).
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+	Options +FollowSymlinks
+
+	RewriteEngine On
+	RewriteBase /
+
+	# Block access to "hidden" directories whose names begin with a period. This
+	# includes directories used by version control systems such as Subversion or Git.
+	RewriteRule "(^|/)\." - [F]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)$ app.php [QSA,L]
+</IfModule>

@@ -1,0 +1,80 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Home - Your personal overview{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<div class="information">
+			<h1>Welcome {{ app.user.username }}</h1>
+			<p>This is your personal overview of your DigitalKanban application.</p>
+			<p>
+				On the top of the page you will find your menu to navigate through this little digital helper.
+				On the left of this page you will find some simple statistics about the status of your personal kanban.
+			</p>
+			<p>
+				Let`s start and chose your board
+				{% if app.user.getBoards().count() > 0 %}
+					<ul>
+					{% for board in app.user.getBoards() %}
+						<li><a href="{{ path('application_board_show', {'id': board.getId()}) }}">{{ board.getName() }}</a></li>
+					{% endfor %}
+					</ul>
+				{% else %}
+					No boards there :(<br />
+					{% if is_granted('ROLE_ADMIN') %}
+						Create and advise some boards. <a href="{{ path('application_board_list') }}">Start here</a>.
+					{% else %}
+						Go and talk to your administrator to get some boards!
+					{% endif %}
+				{% endif %}
+			</p>
+		</div>
+		<div class="statistics">
+			<h2>Statistics of your personal overview</h2>
+			<p>This statistics are generated from your assigned boards, columns and tickets.</p>
+			<table border="0" width="100%" cellpadding="5">
+				<tr>
+					<th colspan="2">Boards</th>
+				</tr>
+				<tr>
+					<td width="80%";>Assigned boards:</td>
+					<td width="20%">{{ statistics.boards }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Columns:</td>
+					<td width="20%">{{ statistics.columns }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Columns per board (avg):</td>
+					<td width="20%">{{ statistics.columnsPerBoardAVG }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Tickets:</td>
+					<td width="20%">{{ statistics.tickets }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Tickets per board (avg):</td>
+					<td width="20%">{{ statistics.ticketsPerBoardAVG }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Tickets per column (avg):</td>
+					<td width="20%">{{ statistics.ticketsPerColumnAVG }}</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" cellpadding="5">
+				<tr>
+					<th colspan="2">Users</th>
+				</tr>
+				<tr>
+					<td width="80%">Users, who work with you:</td>
+					<td width="20%">{{ statistics.users }}</td>
+				</tr>
+				<tr>
+					<td width="80%">Users per board (avg):</td>
+					<td width="20%">{{ statistics.usersPerBoardAVG }}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

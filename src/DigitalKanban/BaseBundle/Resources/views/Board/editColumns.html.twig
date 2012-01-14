@@ -1,0 +1,84 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Edit the columns of your Kanban board "{{ board.getName() }}"{% endblock %}
+
+{% block content %}
+	<div class="box edit-columns">
+		<div class="board-header">
+			<div class="create-new-column">
+				<h2>Create a new column</h2>
+				<div id="new-column">
+					<label for="column-name">Name:</label>
+					<input type="text" name="name" id="column-name" placeholder="The name of column ..." />
+					<br />
+					<label for="column-limit">Limit:</label>
+					<input type="text" name="limit" id="column-limit" placeholder="The limit of column ..." />
+				</div>
+				<a href="javascript:void(0);" title="Save your new column" id="link-column-save">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new column" title="Save your new column" />
+				</a>
+				<a href="javascript:void(0);" title="Reset the column settings" id="link-column-reset">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Reset the column settings" title="Reset the column settings" />
+				</a>
+				<div class="clearfix"></div>
+			</div>
+			<div class="information">
+				<h1>Edit the columns of "{{ board.getName() }}"</h1>
+				<p>
+					Hey, cool. You are always here. This is really great. At this site you can modify your current process. This is normal in a Kanban team.
+					During the time you are working with the board, you will notice that some steps are missing or some steps are superfluous. So, correct your board.
+					After the correction it must be fit again to your <i>personal</i> process. This task is called <i>Kaizen</i> or <i>continuous improvement</i>.
+				</p>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="kanban-board board-{{board.getId() }}">
+			<div class="board-columns">
+				<ul class="editable-column-board">
+				{% for column in board.getColumns() %}
+					<li class="column draganddrop-ok column-{{column.getId() }}">
+						<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ column.getName() }}"</span>
+						<a href="javascript:void(0);" class="delete" style="display: none;">
+							<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete '{{ column.getName() }}'" title="Delete '{{ column.getName() }}'" />
+						</a>
+						<div class="limit">
+							{% if column.getMaxIssues() > 0 %}
+								{{ column.getMaxIssues() }}
+							{% else %}
+								&nbsp;
+							{% endif %}
+						</div>
+						<div class="name">{{ column.getName() }}</div>
+						<div class="issues">
+							<ul>
+								{% for issue in column.getIssues() %}
+									<li class="issue rotate{{issue.getRandomRotation()}} issue-{{issue.getId() }}">
+										{{ issue.getName() }}
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</li>
+				{% endfor %}
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<ul class="hidden">
+		<li class="column draganddrop-ok">
+			<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "###NAME###"</span>
+			<a href="javascript:void(0);" class="delete" style="display: none;">
+				<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete '###NAME###'" title="Delete '###NAME###'" />
+			</a>
+			<div class="limit">
+				&nbsp;
+			</div>
+			<div class="name"></div>
+			<div class="issues">
+				<ul>
+				</ul>
+			</div>
+		</li>
+	</div>
+{% endblock %}

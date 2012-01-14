@@ -1,0 +1,108 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}About this project{% endblock %}
+
+{% block content %}
+	<div class="box about">
+		<div class="information">
+			<h1>About this project</h1>
+			<p>
+				Here you will find some (useful?) information about this project.<br />
+			</p>
+			<p>
+				{% if app.user == FALSE %}
+					If you have always tested this application, i hope you like it. But if you don`t find some spare time do it, do it now.<br />
+					It takes only a few minutes.
+					</p>
+					<p>
+					Go to the <a href="{{ path('login') }}">login</a>, use 'john' as username and 'admin' as password if you want to walk around as an administrator.
+					Use the user 'max' and the password 'user' to see the application as a normal user :)
+					Enjoy your testing!
+				{% else %}
+					As we can see you are always logged in. Great!<br />
+					Do you have tried to use this application as an
+					{% if is_granted('ROLE_ADMIN') %}
+						user, and not as an administrator? No?<br />
+						Try it now. Use 'max' as username with the password 'user'.
+					{% else %}
+						administrator, and not as an user? No?<br />
+						Try it now. Use 'john' as username with the password 'admin'.
+					{% endif %}
+				{% endif %}
+			</p>
+			<p>
+				If you are missing something feel free to contact us!<br />
+				I don`t bite and i`m are sure that you will find us ;)
+			</p>
+		</div>
+		<h2>What?</h2>
+		<p>
+			DigitalKanban is a small but simple digital Kanban board.<br />
+			Kanban is a widely common lean management method in companies for software development.<br />
+			There are few rules to respect, but the rest of the rule set is free to choice and can be adapt to your personal process.<br />
+		</p>
+		<p>
+			Most of the companies have a physical board in the office. This is a very good way, but has some disadvantages. For example the work on one with distributed teams.<br />
+			With DigitalKanban distributed teams can work on one project with one Kanban board together! DigitalKanban isn`t bind to a physical location :)
+		</p>
+		<p>
+			The list of features is quite basic but useful:<br />
+			<ul>
+				<li>Create, edit and delete a unlimited numbers of users</li>
+				<li>Two usergroups (Administrators and users)</li>
+				<li>Create, edit and delete a unlimited numbers of Kanban boards</li>
+				<li>Create and delete a unlimited numbers of Kanbans (single tickets)</li>
+				<li>Drag and drop to move the issue through your whole process</li>
+				<li>Create and delete a unlimited numbers of columns per Kanban board</li>
+				<li>Respect WiP (Limits) per column</li>
+				<li>... and much more!</li>
+			</ul>
+		</p>
+		<h2>Why?</h2>
+		<p>
+			DigitalKanban is the result of a project during the third semester at our university <a href="http://www.fom.de/">FOM  - Hochschule für Oekonomie & Management - University of applied science</a>.<br />
+			Our task was to develop a web application in JSP, ASP or PHP with the use of HTML, CSS and JavaScript. What kind of application was free to choose.<br />
+			During this time the company where is Andy working introduced the agile project management way "<a href="http://en.wikipedia.org/wiki/Kanban_(development)" title="Kanban at Wikipedia">Kanban</a>".<br />
+			The idea was born. Lets build a small and simple digital kanban board to combine all needs by out professor.<br />
+		</p>
+		<p>
+			I have chosen Symfony2, because i always want to try this framework but there was no time during the holidays / out spare time.<br />
+			This was the best way and a cool live project to try it.
+		</p>
+		<h2>Who?</h2>
+		<p>
+			DigitalKanban was created by Andy Grunwald <a href="https://twitter.com/andygrunwald" alt="Visit Andreas Grunwald on twitter"><img src="{{ asset('bundles/digitalkanbanbase/images/logo_twitter.png') }}" height="22" width="22" alt="Visit Andreas Grunwald on twitter" title="Visit Andreas Grunwald on twitter" /></a>
+		</p>
+		<h2>Where?</h2>
+		<p>
+			DigitalKanban is open source and free to use for all people.<br />
+			You search a simple <a href="http://en.wikipedia.org/wiki/Kanban_(development)" title="Kanban at Wikipedia">Kanban</a> tool? Or you want to learn <a href="http://symfony.com/" title="Symfony2">Symfony2</a> and have quick look how to solve specific problems? Or you want to develop this to a bigger product?<br />
+			No problem. You can find the sources on <a href="https://github.com/andygrunwald/DigitalKanban" title="DigitalKanban on github">github</a>. Fork it and have fun :)
+		</p>
+		<h2>With what?</h2>
+		<p>
+			This project is (partly) based on the some open source projects. For example
+			<div class="project-links">
+				<a href="http://php.net/" title="PHP">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_php.png') }}" alt="PHP" title="PHP" />
+				</a>
+				<a href="http://mysql.com/" title="MySQL">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_mysql.png') }}" height="51" alt="MySQL" title="MySQL" />
+				</a>
+				<a href="http://symfony.com/" title="Symfony2">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_symfony.png') }}" height="51" alt="Symfony2" title="Symfony2" />
+				</a>
+				<a href="http://www.doctrine-project.org/" title="Doctrine2">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_doctrine.png') }}" height="51" alt="Doctrine2" title="Doctrine2" />
+				</a>
+				<a href="http://jquery.com/" title="JQuery">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_jquery.png') }}" height="51" alt="JQuery" title="JQuery" />
+				</a>
+				<a href="http://html5boilerplate.com/" title="HTML5Boilerplate">
+					<img src="{{ asset('bundles/digitalkanbanbase/images/logo_html5boilerplate.png') }}" class="rounded" height="51" alt="HTML5Boilerplate" title="HTML5Boilerplate" />
+				</a>
+			</div>
+		</p>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

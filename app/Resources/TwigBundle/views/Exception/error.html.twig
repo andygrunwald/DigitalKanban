@@ -1,0 +1,18 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}An Error Occurred: {{ status_text }}{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<div class="flash-message message-error">
+			<div class="message-header">Oops! An error occurred</div>
+			<div class="message-body">
+				The server returned a "{{ status_code }} {{ status_text }}".<br />
+				<br />
+				Something is broken. Please report this on <a href="https://github.com/andygrunwald/DigitalKanban" title="DigitalKanban on github">github</a> us and let us know
+				what you were doing when this error occurred. We will fix it as soon
+				as possible. Sorry for any inconvenience caused.
+			</div>
+		</div>
+	</div>
+{% endblock %}

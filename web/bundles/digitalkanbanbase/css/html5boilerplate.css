@@ -1,0 +1,211 @@
+/**
+ * This is a modified and stripped version of the css document
+ * from HTML5Boilerplate (http://html5boilerplate.com/)
+ *
+ * Only css rules which are used by this project are in this file.
+ * All other rules was deleted. If you need further description
+ * to special rules have a look at HTML5Boilerplate website.
+ *
+ * This document was restructed for (in my point of view)
+ * better readability.
+ *
+ */
+/* =============================================================================
+   HTML5 element display
+   ========================================================================== */
+
+header, nav {
+	display: block;
+}
+
+/* =============================================================================
+   Base
+   ========================================================================== */
+html {
+	font-size: 100%;
+	overflow-y: scroll;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.231;
+}
+
+body, button, input, select, textarea {
+	font-family: sans-serif;
+	color: #222;
+}
+
+/**
+ * Yes, hot pink will be in this project during a text selection, too ;)
+ * Thanks Paul Irish for the funny moments in his videos :)
+ *
+ */
+::-moz-selection {
+	background: #FE57A1;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+::selection {
+	background: #FE57A1;
+	color: #FFFFFF;
+	text-shadow: none;
+}
+
+/* =============================================================================
+   Links
+   ========================================================================== */
+
+a,
+a:visited,
+a:hover{
+	color: #646464;
+}
+
+a:focus {
+	outline: thin dotted;
+}
+
+a:hover, a:active {
+	outline: 0;
+}
+
+/* =============================================================================
+   Typography
+   ========================================================================== */
+
+b, strong {
+	font-weight: bold;
+}
+
+small {
+	font-size: 81%;
+}
+
+/* =============================================================================
+   Lists
+   ========================================================================== */
+
+ul {
+	margin: 1em 0;
+	padding: 0 0 0 40px;
+}
+
+nav ul, nav ol {
+	list-style: none;
+	list-style-image: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* =============================================================================
+   Embedded content
+   ========================================================================== */
+
+img {
+	border: 0;
+	-ms-interpolation-mode: bicubic;
+	vertical-align: middle;
+}
+
+/* =============================================================================
+   Forms
+   ========================================================================== */
+
+form {
+	margin: 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+button, input, select, textarea {
+	font-size: 100%;
+	margin: 0;
+	vertical-align: baseline;
+	*vertical-align: middle;
+}
+
+button, input {
+	line-height: normal;
+	*overflow: visible;
+}
+
+table button, table input {
+	*overflow: auto;
+}
+
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+	cursor: pointer;
+	-webkit-appearance: button;
+}
+
+input[type="checkbox"], input[type="radio"] {
+	box-sizing: border-box;
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+textarea {
+	overflow: auto;
+	vertical-align: top;
+	resize: vertical;
+}
+
+input:invalid, textarea:invalid {
+	background-color: #F0DDDD;
+}
+
+/* =============================================================================
+   Tables
+   ========================================================================== */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+td {
+	vertical-align: top;
+}
+
+/* =============================================================================
+   Different usefull classes
+   ========================================================================== */
+
+.visuallyhidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.hidden {
+	display: none !important;
+	visibility: hidden;
+}
+
+.clearfix:before, .clearfix:after {
+	content: "";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	zoom: 1;
+}

@@ -1,0 +1,40 @@
+security:
+    encoders:
+        DigitalKanban\BaseBundle\Entity\User:
+            algorithm: sha512
+            encode-as-base64: true
+            iterations: 10
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+
+    providers:
+        main:
+            entity: { class: DigitalKanbanBaseBundle:User}
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: /.*
+            form_login:
+                check_path: /login_check
+                login_path: /login
+            logout:
+                path:   /logout
+                target: /
+            security: true
+            anonymous: true
+
+    access_control:
+        - { path: ^/application/user/.*, role: ROLE_ADMIN }
+        - { path: ^/application/board/show/.*, role: ROLE_USER }
+        - { path: ^/application/board/update, role: ROLE_USER }
+        - { path: ^/application/board/.*, role: ROLE_ADMIN }
+        - { path: ^/application/issue/add, role: ROLE_USER }
+        - { path: ^/application/issue/.*, role: ROLE_ADMIN }
+        - { path: ^/application/column/.*, role: ROLE_ADMIN }
+        - { path: ^/application/.*, role: ROLE_USER }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

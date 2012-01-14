@@ -1,0 +1,23 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Create a new Kanban board{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Create a new Kanban board</h1>
+			<p>
+				Yeah! You kicked off a new project? Is this a result of a winning pitch? Or do you create a new team and want to try a lean project management way?
+				Anyhow. All very cool reasons! Congratulation!
+			</p>
+			<p>
+				So we don`t want to disrupt you during your work. So, chose a fancy name and a useful description and assign your colleagues to your new Kanban board
+				and start to fell in love with Kanban!
+			</p>
+		</div>
+		<form action="{{ path('application_board_new') }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:Board:form.html.twig' with {'form': form} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+default_index:
+    pattern:  /
+    defaults: { _controller: DigitalKanbanBaseBundle:Default:index }
+
+about:
+    pattern:  /about
+    defaults: { _controller: DigitalKanbanBaseBundle:Content:about }
+
+login:
+    pattern:  /login
+    defaults: { _controller: DigitalKanbanBaseBundle:Default:login }
+
+login_check:
+    pattern:  /login_check
+
+logout:
+    pattern:  /logout
+
+application:
+    pattern:  /application/
+    defaults: { _controller: DigitalKanbanBaseBundle:Application:index }
+
+application_user_list:
+    pattern: /application/user/list
+    defaults: { _controller: DigitalKanbanBaseBundle:User:list }
+
+application_user_new:
+    pattern: /application/user/new
+    defaults: { _controller: DigitalKanbanBaseBundle:User:new }
+
+application_user_edit:
+    pattern: /application/user/edit/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:User:edit }
+
+application_user_delete:
+    pattern: /application/user/delete/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:User:delete }
+
+application_board_show:
+    pattern: /application/board/show/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:show }
+
+application_board_update:
+    pattern: /application/board/update
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:update }
+
+application_board_list:
+    pattern: /application/board/list
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:list }
+
+application_board_new:
+    pattern: /application/board/new
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:new }
+
+application_board_edit:
+    pattern: /application/board/edit/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:edit }
+
+application_board_delete:
+    pattern: /application/board/delete/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:delete }
+
+application_board_editcolumns:
+    pattern: /application/board/editcolumns/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:Board:editColumns }
+
+application_issue_add:
+    pattern: /application/issue/add
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:add }
+
+application_issue_delete:
+    pattern: /application/issue/delete/{issueId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:delete }
+
+application_column_add:
+    pattern: /application/column/add
+    defaults: { _controller: DigitalKanbanBaseBundle:BoardColumn:add }
+
+application_column_update:
+    pattern: /application/column/update
+    defaults: { _controller: DigitalKanbanBaseBundle:BoardColumn:update }
+
+application_column_delete:
+    pattern: /application/column/delete/{columnId}
+    defaults: { _controller: DigitalKanbanBaseBundle:BoardColumn:delete }

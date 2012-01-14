@@ -1,0 +1,22 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Create a new user{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Create a new user</h1>
+			<p>
+				Yeah! You are on the right way.<br />
+				At the moment you try to create a new user. This is a great news.
+			</p>
+			<p>
+				Add some colleagues to DigitalKanban and try to work with them with your new Kanban System. We think you will fell in love with it!
+			</p>
+		</div>
+		<form action="{{ path('application_user_new') }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:User:form.html.twig' with {'form': form, 'mode': 'new'} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

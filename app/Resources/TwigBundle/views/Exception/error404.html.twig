@@ -1,0 +1,16 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}{{ status_code }} {{ status_text }}{% endblock %}
+
+{% block content %}
+	<div class="box">
+		<div class="flash-message message-error">
+			<div class="message-header">{{ status_code }} {{ status_text }}</div>
+			<div class="message-body">
+				Sorry, but the requested document was not found. What you are searching for?<br />
+				All you need is in the menu at the top of the page. Have a look there.
+			</div>
+		</div>
+
+	</div>
+{% endblock %}
