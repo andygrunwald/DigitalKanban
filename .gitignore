@@ -40,5 +40,12 @@ build/buildinfo.properties
 build/config/buildinfo.properties
 
 # Cache and log files from Symfony2
-app/cache/*
-app/logs/*
+/app/cache/*
+/app/logs/*
+
+# Recommendations to store a Syfmony2 project in git
+# Have a look: http://symfony.com/doc/2.0/cookbook/workflow/new_project_git.html
+/web/bundles/
+/app/bootstrap*
+/vendor/
+/app/config/parameters.ini
