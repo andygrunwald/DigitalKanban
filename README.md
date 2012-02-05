@@ -1,8 +1,8 @@
-DigitalKanban
-========================
+README
+======
 
-1) About DigitalKanban
---------------------------------
+What is DigitalKanban?
+-----------------
 
 Hey, welcome to DigitalKanban. But what is it?
 DigitalKanban is a small digital Kanban board with multiple users, multiple boards and some drag and drop features for tickets and columns.
@@ -13,8 +13,13 @@ This project is based on [Symfony2](http://symfony.com/), [jQuery](http://jquery
 
 PS: You should use a 'newer' browser like Google Chrome or Mozilla Firefox (up to date please), because DigitalKanban make use of some HTML5 and CSS3 features. Thanks ;)
 
-2) Installation
---------------------------------
+Requirements
+------------
+DigitalKanban is a normal Symfony2 application.
+Have a look at [Requirements for running Symfony2](http://symfony.com/doc/2.0/reference/requirements.html)
+
+Installation
+------------
 
 * Get a copy of this application
 * Target your vhost to the web/ directory (document root). In this example your vhost is named ``digitalkanban.local``
@@ -29,8 +34,8 @@ PS: You should use a 'newer' browser like Google Chrome or Mozilla Firefox (up t
 	* ``php app/console doctrine:fixtures:load``
 * Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
 
-3) Logins
---------------------------------
+Logins
+------------
 At first you will be asked for a login. Login with username/password or email/password.<br />
 Here are some logins:
 
@@ -64,8 +69,8 @@ Password: *user*<br />
 Role: User<br />
 Active: Yes
 
-4) Problems / Issues / Help
---------------------------------
+Problems / Issues / Help
+------------
 If you got a blank page while starting the application, open *web/app.php* and replace
 
     $kernel = new AppKernel('prod', false);
@@ -74,14 +79,10 @@ with
 
     $kernel = new AppKernel('prod', true);
 
-reload the page, have a look which error occur and try to solve it on your own.<br />
+reload the page, have a look which error occur and try to solve it on your own.
 If you can not find a solution, drop me a short message in a ticket or something like this. I will try to help you.
+You can also use the github wiki for more informations about DigitalKanban.
 
-5) Hints and more informations
---------------------------------
-You can use the github wiki for more informations about DigitalKanban.<br />
-If there are useful informations and hints, you will find them in the wiki.
-
-6) Have fun
---------------------------------
+Have fun
+------------
 Enjoy this little application and i will be happy for feedback!
