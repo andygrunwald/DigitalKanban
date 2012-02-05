@@ -18,23 +18,15 @@ PS: You should use a 'newer' browser like Google Chrome or Mozilla Firefox (up t
 
 * Get a copy of this application
 * Target your vhost to the web/ directory (document root). In this example your vhost is named ``digitalkanban.local``
-* For shell commands you must change the directory to main leben (where is ``app/``, ``bin/``, ``Database/`` and so on)
+* For shell commands you have to change the directory to main application root (level on ``app/``, ``bin/`` and so on)
+* Call ``php bin/vendors install`` via shell
 * Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
 * Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
-* Open ``app/config/parameters.ini`` and edit database settings to match your personal settings (``database_host``, ``database_port``, ``database_name``, ``database_user``, ``database_password``)
-* Set up the database: You can chose between two different ways. 1. via a complete MySQL dump or 2. via Symfony2 cli. The prefered way is via Symfony2 cli, because by this way you can check if Symfony2 has access to your database ;)
-* Setting up database via Symfony2
-	* Call ``php app/console doctrine:database:create`` via shell to create the database
-		If the result was successful you will get the output<br />
-		``Created database for connection named digital_kanban``
-	* Call ``php app/console doctrine:schema:update --force`` via shell to set up the database schema
-		If the result was successful you will get the output:<br />
-		``Updating database schema...
-		Database schema updated successfully! "15" queries were executed``
-	* Call ``php app/console doctrine:fixtures:load`` via shell to fill up the database with sample data
-		If the result was successful you will get the output:<br />
-		``purging database``<br />
-		``loading DigitalKanban\BaseBundle\DataFixtures\ORM\FixtureLoader``
+* Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
+* Setting up database (incl. dummy data) with the following shell commands
+	* ``php app/console doctrine:database:create``
+	* ``php app/console doctrine:schema:update --force``
+	* ``php app/console doctrine:fixtures:load``
 * Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
 
 3) Logins
