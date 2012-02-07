@@ -23,19 +23,19 @@ because DigitalKanban make use of some HTML5 and CSS3 features (i think IE6 or 7
 Screenshots
 ------------
 <a href="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Kanban-Board.png" title="DigitalKanban: Kanban-Board">
-	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Kanban-Board.png" alt="DigitalKanban: Kanban-Board" title="DigitalKanban: Kanban-Board" width="290" />
+	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Kanban-Board.png" alt="DigitalKanban: Kanban-Board" title="DigitalKanban: Kanban-Board" width="285" />
 </a>
 <a href="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20tickets%20at%20Kanban-Board.png" title="DigitalKanban: Drag and drop tickets on a Kanban-Board">
-	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20tickets%20at%20Kanban-Board.png" alt="DigitalKanban: Drag and drop tickets on a Kanban-Board" title="DigitalKanban: Drag and drop tickets on a Kanban-Board" width="290" />
+	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20tickets%20at%20Kanban-Board.png" alt="DigitalKanban: Drag and drop tickets on a Kanban-Board" title="DigitalKanban: Drag and drop tickets on a Kanban-Board" width="285" />
 </a>
 <a href="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20columns%20at%20board%20management.png" title="DigitalKanban: Drag and drop columns on a Kanban-Board in edit mode">
-	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20columns%20at%20board%20management.png" alt="DigitalKanban: Drag and drop columns on a Kanban-Board in edit mode" title="DigitalKanban: Drag and drop columns on a Kanban-Board in edit mode" width="290" />
+	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/DragAndDrop%20columns%20at%20board%20management.png" alt="DigitalKanban: Drag and drop columns on a Kanban-Board in edit mode" title="DigitalKanban: Drag and drop columns on a Kanban-Board in edit mode" width="285" />
 </a>
 <a href="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Board%20management.png" title="DigitalKanban: Kanban-Board management">
-	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Board%20management.png" alt="DigitalKanban: Kanban-Board management" title="DigitalKanban: Kanban-Board management" width="290" />
+	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/Board%20management.png" alt="DigitalKanban: Kanban-Board management" title="DigitalKanban: Kanban-Board management" width="285" />
 </a>
 <a href="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/User%20management.png" title="DigitalKanban: User management">
-	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/User%20management.png" alt="DigitalKanban: User management" title="DigitalKanban: User management" width="290" />
+	<img src="https://github.com/andygrunwald/DigitalKanban/raw/master/Screenshots/User%20management.png" alt="DigitalKanban: User management" title="DigitalKanban: User management" width="285" />
 </a>
 
 Requirements
