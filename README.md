@@ -47,18 +47,18 @@ The requirements will also be checked during the installation.
 Installation
 ------------
 
-* Get a copy of this application
-* Target your vhost to the web/ directory (document root). In this example your vhost is named ``digitalkanban.local``
-* For shell commands you have to change the directory to main application root (level on ``app/``, ``bin/`` and so on)
-* Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
-* Call ``php bin/vendors install`` via shell
-* Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
-* Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
-* Setting up database (incl. dummy data) with the following shell commands
+1. Get a copy of this application
+2. Target your vhost to the web/ directory (document root). In this example your vhost is named ``digitalkanban.local``
+3. For shell commands you have to change the directory to main application root (level on ``app/``, ``bin/`` and so on)
+4. Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
+5. Call ``php bin/vendors install`` via shell
+6. Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
+7. Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
+8. Setting up database (incl. dummy data) with the following shell commands
 	* ``php app/console doctrine:database:create``
 	* ``php app/console doctrine:schema:update --force``
 	* ``php app/console doctrine:fixtures:load``
-* Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
+9. Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
 
 Logins
 ------------
