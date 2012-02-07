@@ -50,10 +50,10 @@ Installation
 * Get a copy of this application
 * Target your vhost to the web/ directory (document root). In this example your vhost is named ``digitalkanban.local``
 * For shell commands you have to change the directory to main application root (level on ``app/``, ``bin/`` and so on)
+* Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
 * Call ``php bin/vendors install`` via shell
 * Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
 * Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
-* Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
 * Setting up database (incl. dummy data) with the following shell commands
 	* ``php app/console doctrine:database:create``
 	* ``php app/console doctrine:schema:update --force``
