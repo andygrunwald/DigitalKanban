@@ -41,7 +41,8 @@ Screenshots
 Requirements
 ------------
 DigitalKanban is a normal Symfony2 application.
-Have a look at [Requirements for running Symfony2](http://symfony.com/doc/2.0/reference/requirements.html)
+Have a look at [Requirements for running Symfony2](http://symfony.com/doc/2.0/reference/requirements.html).
+The requirements will also be checked during the installation.
 
 Installation
 ------------
