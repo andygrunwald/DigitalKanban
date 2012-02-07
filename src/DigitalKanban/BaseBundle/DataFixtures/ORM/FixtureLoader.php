@@ -2,6 +2,7 @@
 namespace DigitalKanban\BaseBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use DigitalKanban\BaseBundle\Entity\Board;
 use DigitalKanban\BaseBundle\Entity\BoardColumn;
 use DigitalKanban\BaseBundle\Entity\Issue;
@@ -17,7 +18,7 @@ use DigitalKanban\BaseBundle\Entity\User;
  */
 class FixtureLoader implements FixtureInterface {
 
-	public function load($manager) {
+	public function load(ObjectManager $manager) {
 
 		/**
 		 * ROLES
