@@ -110,6 +110,11 @@ reload the page, have a look which error occur and try to solve it on your own.
 If you can not find a solution, drop me a short message in a ticket or something like this. I will try to help you.
 You can also use the [github wiki](https://github.com/andygrunwald/DigitalKanban/wiki) for more informations about DigitalKanban.
 
+Get in contact
+------------
+You want to get in contact with me? To drop me a short message or to have a nice talk, meetup or a beer? No problem!
+Send me a tweet over [Twitter (@andygrunwald)](https://twitter.com/#!/andygrunwald), write me a [ticket at github "bugtracker"](https://github.com/andygrunwald/DigitalKanban/issues) or [send me an email](https://github.com/andygrunwald).
+
 Have fun
 ------------
 Enjoy this little application and i will be happy for feedback!
