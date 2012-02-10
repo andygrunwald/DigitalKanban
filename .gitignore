@@ -49,3 +49,4 @@ build/config/buildinfo.properties
 /app/bootstrap*
 /vendor/
 /app/config/parameters.ini
+/app/config/parameters.yml
