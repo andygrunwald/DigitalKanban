@@ -64,6 +64,7 @@ class IssueController extends Controller {
 			// Create new issue and store it
 		$issue = new Issue();
 		$issue->setName($postIssueData['title']);
+        $issue->setIssueType($postIssueData['typeofissue']);
 		$issue->setSorting(($highestSorting + 10));
 		$issue->setBoardColumn($column);
 		$issue->setCreatedUser($user);

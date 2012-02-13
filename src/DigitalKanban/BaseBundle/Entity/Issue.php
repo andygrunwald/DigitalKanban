@@ -36,7 +36,15 @@ class Issue {
 	 */
 	protected $name;
 
-	/**
+    /**
+   	 * @var string $issueType
+   	 *
+   	 * @Assert\MaxLength(100)
+   	 * @ORM\Column(name="issueType", type="string", length=100)
+   	 */
+   	protected $issueType;
+
+    /**
 	 * @var User $created_user
 	 *
 	 * @ORM\ManyToOne(targetEntity="User")
@@ -230,4 +238,22 @@ class Issue {
 	public function getRandomRotation() {
 		return rand(-7, 7);
 	}
+
+    /**
+     * Gets issue type
+     *
+     * @return string
+     */
+    public function getIssueType() {
+        return $this->issueType;
+    }
+
+    /**
+     * Set issue type
+     *
+     * @param $issueType
+     */
+    public function setIssueType($issueType) {
+        $this->issueType = $issueType;
+    }
 }
