@@ -49,3 +49,7 @@ build/config/buildinfo.properties
 /app/bootstrap*
 /vendor/
 /app/config/parameters.ini
+
+# Capifony
+Capfile
+app/config/deploy.rb
