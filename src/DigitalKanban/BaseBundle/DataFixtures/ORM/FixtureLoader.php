@@ -92,7 +92,7 @@ class FixtureLoader implements FixtureInterface {
         $managerUser = new User();
         $managerUser->setFirstName('Daniel');
         $managerUser->setLastName('K');
-        $managerUser->setUsername('daniel');
+        $managerUser->setUsername('manager');
         $managerUser->setEmail('daniel@example.com');
         $managerUser->getBoards()->add($board1);
         $managerUser->setSalt(md5(uniqid(microtime())));
