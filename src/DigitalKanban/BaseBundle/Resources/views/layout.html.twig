@@ -52,13 +52,15 @@
 									No boards there :(
 								{% endif %}
 							</li>
-							{% if is_granted('ROLE_ADMIN') %}
+                            {% if is_granted('ROLE_MANAGER') %}
 								<li>
 									<a href="{{ path('application_user_list') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_user.png') }});">
 										User management
 										<small>Administrate the user</small>
 									</a>
 								</li>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
 								<li>
 									<a href="{{ path('application_board_list') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_board.png') }});">
 										Board management
