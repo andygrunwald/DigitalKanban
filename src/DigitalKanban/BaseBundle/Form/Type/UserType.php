@@ -3,8 +3,17 @@ namespace DigitalKanban\BaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Doctrine\ORM\EntityRepository;
+use DigitalKanban\BaseBundle\Entity\User;
 
 class UserType extends AbstractType {
+
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
 
 	/**
 	 * Builds the form.
@@ -18,6 +27,9 @@ class UserType extends AbstractType {
 	 * @param array         $options The options
 	 */
 	public function buildForm(FormBuilder $builder, array $options) {
+
+        $user = $this->user;
+
 		$builder->add('username', 'text');
 
 		if($options['mode'] === 'new') {
@@ -37,7 +49,16 @@ class UserType extends AbstractType {
             'required' => FALSE,
         ));
 
-		$builder->add('boards', NULL);
+		$builder->add('boards', 'entity', array(
+            'class' => 'DigitalKanbanBaseBundle:Board',
+            'query_builder' => function(EntityRepository $er) use ($user) {
+                return $er->createQueryBuilder('b')
+                        ->join('b.users', 'u')
+                        ->where('u.id = :userId')
+                        ->setParameter('userId', $user->getId());
+            },
+            'multiple' => true,
+        ));
 	}
 
 	/**

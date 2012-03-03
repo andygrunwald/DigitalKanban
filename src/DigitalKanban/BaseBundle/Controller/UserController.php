@@ -24,8 +24,10 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+
         // Build form in base of an object
-        $form = $this->createForm(new UserType(), new User(), array('mode' => 'new'));
+        $form = $this->createForm(new UserType($currentUser), new User(), array('mode' => 'new'));
 
         // If the form was submitted with the HTTP method POST
         if ($request->getMethod() == 'POST') {
@@ -44,7 +46,6 @@ class UserController extends Controller
                 // Add a role to user (Admin or User)
                 // This is a special case here, because in formular, the role is a single checkbox
                 // but in technical it is a ManyToMany relation
-                $currentUser = $this->get('security.context')->getToken()->getUser();
                 $requestData = $request->request->get($form->getName());
                 if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
@@ -135,6 +136,8 @@ class UserController extends Controller
      */
     public function editAction($id, Request $request)
     {
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+
         $id = (int) $id;
         $entityManager = $this->getDoctrine()->getEntityManager();
         $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
@@ -146,7 +149,7 @@ class UserController extends Controller
         }
 
         // Build form
-        $form = $this->createForm(new UserType(), $user, array('mode' => 'edit'));
+        $form = $this->createForm(new UserType($currentUser), $user, array('mode' => 'edit'));
 
         // If the form was submitted with the HTTP method POST
         if ($request->getMethod() == 'POST') {
@@ -166,7 +169,6 @@ class UserController extends Controller
                 // But many user can be administrator OR user.
                 $user->getRolesAsArrayCollection()->clear();
 
-                $currentUser = $this->get('security.context')->getToken()->getUser();
                 if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
                 } elseif(isset($requestData['manager']) === true && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
