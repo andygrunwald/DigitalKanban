@@ -397,6 +397,22 @@ class User implements UserInterface {
 		return $result;
 	}
 
+    /**
+   	 * Checks if the user is an administrator
+   	 *
+   	 * @return bool
+   	 */
+   	public function isAdmin() {
+   		$role = $this->roles->first();
+   		$result = FALSE;
+
+   		if(($role instanceof Role) && $role->getName() === 'ROLE_ADMIN') {
+   			$result = TRUE;
+   		}
+
+   		return $result;
+   	}
+
 	/**
 	 * Returns true, if the user is admin. False otherwise.
 	 *

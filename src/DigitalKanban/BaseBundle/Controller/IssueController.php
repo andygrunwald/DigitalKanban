@@ -102,7 +102,7 @@ class IssueController extends Controller {
 			// If it is not a ajax request OR the user is not an admin
 			// exit here and send a HTTP header 403 Forbidden
 		$user = $this->get('security.context')->getToken()->getUser();
-		if($request->isXmlHttpRequest() === FALSE || $user->isAdmin() === FALSE) {
+		if($request->isXmlHttpRequest() === FALSE || ($user->isAdmin() === FALSE && $user->isManager() === FALSE)) {
 			return new Response(NULL, 403);
 		}
 
