@@ -135,12 +135,12 @@ class UserController extends Controller
      */
     public function editAction($id, Request $request)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $entityManager = $this->getDoctrine()->getEntityManager();
         $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
 
         // If there is no user, exit here with an error
-        if ($user === NULL) {
+        if ($user === null) {
             $flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
             return $this->redirectToListViewWithError('Editing failed', $flashMessage);
         }
@@ -211,7 +211,7 @@ class UserController extends Controller
         $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
 
         // If there is no user, exit here with an error
-        if ($user === NULL) {
+        if ($user === null) {
             $flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
             return $this->redirectToListViewWithError('Deletion failed', $flashMessage);
         }
