@@ -90,6 +90,17 @@ class UserController extends Controller {
 
             $users = $repository->getUsersAssociatedToManager($user);
 
+            // remove admin and manager itself
+            foreach($users as $key => $user) {
+
+                if($user->isAdmin() || $user->isManager()) {
+
+                    unset($users[$key]);
+
+                }
+
+            }
+
         } elseif($user->isAdmin()) {
 
             $users = $repository->findAll();

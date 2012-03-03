@@ -70,7 +70,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
 	}
 
     /**
-     * Returns the users associated with manager user.
+     * Returns the users associated with manager user that are not admin.
      *
      * @param $managerId
      * @param $entityManager
