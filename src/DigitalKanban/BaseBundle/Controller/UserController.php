@@ -206,7 +206,7 @@ class UserController extends Controller
      */
     public function deleteAction($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
         $entityManager = $this->getDoctrine()->getEntityManager();
         $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
 
