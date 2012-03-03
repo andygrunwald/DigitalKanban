@@ -43,7 +43,7 @@
 							<ul>
 								{% for issue in column.getIssues() %}
 									<li class="issue rotate{{issue.getRandomRotation()}} issue-{{issue.getId() }}">
-										{% if is_granted('ROLE_ADMIN') %}
+										{% if is_granted('ROLE_MANAGER') %}
 											<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ issue.getName() }}"</span>
 											<a href="javascript:void(0);" class="delete" style="display: none;">
 												<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete the issue '{{ issue.getName() }}'" title="Delete the issue '{{ issue.getName() }}'" />
