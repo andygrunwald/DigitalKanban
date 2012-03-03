@@ -69,4 +69,41 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
 		return $class === 'DigitalKanban\BaseBundle\Entity\User';
 	}
 
+    /**
+     * Returns the users associated with manager user.
+     *
+     * @param $managerId
+     * @param $entityManager
+     * @return mixed
+     */
+    public function getUsersAssociatedToManager($managerUser) {
+
+        $entityManager = $this->getEntityManager();
+
+        $managerId = $managerUser->getId();
+
+            // Select the board whose manager userId is $managerId
+        $query = $entityManager->createQuery(
+            'SELECT user
+            FROM DigitalKanbanBaseBundle:User user
+            JOIN user.boards b
+            JOIN b.users u
+            WHERE u.id = :managerId')
+            ->setParameters(array(
+                'managerId' => $managerId
+            ));
+
+        try {
+                // If there is no result, an exception will be thrown
+                // and this means, there are no issues in this column
+            $users = $query->getResult();
+
+        } catch (\Doctrine\ORM\NoResultException $eNoResult) {
+            // Nothing to do here, because $users are not found
+        } catch (Exception $e) {
+            // Nothing to do here, because $users are not found
+        }
+
+        return $users;
+    }
 }

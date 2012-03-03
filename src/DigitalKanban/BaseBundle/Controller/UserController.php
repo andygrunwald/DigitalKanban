@@ -82,7 +82,23 @@ class UserController extends Controller {
 	public function listAction() {
 			// Get all users and assign them to the template
 		$entityManager = $this->getDoctrine()->getEntityManager();
-		$users = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findAll();
+        $repository = $entityManager->getRepository('DigitalKanbanBaseBundle:User');
+
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($user->isManager()) {
+
+            $users = $repository->getUsersAssociatedToManager($user);
+
+        } elseif($user->isAdmin()) {
+
+            $users = $repository->findAll();
+
+        } else {
+
+            $users = null; // @todo: throw an exception?
+
+        }
 
 		$templateData = array(
 			'users' => $users,

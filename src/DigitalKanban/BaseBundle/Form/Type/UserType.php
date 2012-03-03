@@ -33,6 +33,9 @@ class UserType extends AbstractType {
 		$builder->add('admin', 'checkbox', array(
 			'required' => FALSE,
 		));
+        $builder->add('manager', 'checkbox', array(
+            'required' => FALSE,
+        ));
 
 		$builder->add('boards', NULL);
 	}

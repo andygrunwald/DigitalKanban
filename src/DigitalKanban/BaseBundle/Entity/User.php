@@ -398,15 +398,15 @@ class User implements UserInterface {
 	}
 
     /**
-   	 * Checks if the user is an administrator
+   	 * Checks if the user is an manager
    	 *
    	 * @return bool
    	 */
-   	public function isAdmin() {
+   	public function isManager() {
    		$role = $this->roles->first();
    		$result = FALSE;
 
-   		if(($role instanceof Role) && $role->getName() === 'ROLE_ADMIN') {
+   		if(($role instanceof Role) && $role->getName() === 'ROLE_MANAGER') {
    			$result = TRUE;
    		}
 
@@ -448,6 +448,42 @@ class User implements UserInterface {
 	public function setAdmin() {
 
 	}
+
+    /**
+   	 * Returns true, if the user is manager. False otherwise.
+   	 *
+   	 * ATTENTION: This is only a dummy method.
+   	 * Why we do this? We do this to display in DigitalKanban\BaseBundle\Form\Type\UserType a manager checkbox.
+   	 * This User-Model has no admin property. Yes, we know, there is a 'property_path' => FALSE, property for
+   	 * the checkbox. But if 'property_path' => FALSE, set, we found no way to set a checkbox as 'checked' (manually).
+   	 * If you know a way to handle a checkbox correctly without an property in your modell, please let me know :)
+   	 * You can find me on github <https://github.com/andygrunwald>
+   	 *
+   	 * @see DigitalKanban\BaseBundle\Form\Type\UserType
+   	 * @see DigitalKanban\BaseBundle\Controller\UserController
+   	 *
+   	 * @return bool
+   	 */
+   	public function getManager() {
+   		return $this->isManager();
+   	}
+
+   	/**
+   	 * ATTENTION: This is only a dummy method.
+   	 * Why we do this? We do this to display in DigitalKanban\BaseBundle\Form\Type\UserType a manager checkbox.
+   	 * This User-Model has no admin property. Yes, we know, there is a 'property_path' => FALSE, property for
+   	 * the checkbox. But if 'property_path' => FALSE, set, we found no way to set a checkbox as 'checked' (manually).
+   	 * If you know a way to handle a checkbox correctly without an property in your modell, please let me know :)
+   	 * You can find me on github <https://github.com/andygrunwald>
+   	 *
+   	 * @see DigitalKanban\BaseBundle\Form\Type\UserType
+   	 * @see DigitalKanban\BaseBundle\Controller\UserController
+   	 *
+   	 * @return void
+   	 */
+   	public function setManager() {
+
+   	}
 
 	/**
 	 * Removes sensitive data from the user.
