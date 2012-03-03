@@ -166,9 +166,11 @@ class UserController extends Controller
                 // But many user can be administrator OR user.
                 $user->getRolesAsArrayCollection()->clear();
 
-                if (isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1) {
+                $currentUser = $this->get('security.context')->getToken()->getUser();
+                if (isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
-
+                } elseif(isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
                 } else {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
                 }
