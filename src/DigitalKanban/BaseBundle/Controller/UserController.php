@@ -49,17 +49,12 @@ class UserController extends Controller
                 if (isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
 
-                } else {
-                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
-                }
-                $user->addRole($role);
-
-                if (isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                } elseif(isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
-
                 } else {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
                 }
+
                 $user->addRole($role);
 
                 $entityManager->persist($user);
