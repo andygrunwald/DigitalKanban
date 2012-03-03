@@ -191,4 +191,24 @@ class Board {
 	public function getUsers() {
 		return $this->users;
 	}
+
+    /**
+     * Add columns
+     *
+     * @param DigitalKanban\BaseBundle\Entity\BoardColumn $columns
+     */
+    public function addBoardColumn(\DigitalKanban\BaseBundle\Entity\BoardColumn $columns)
+    {
+        $this->columns[] = $columns;
+    }
+
+    /**
+     * Add users
+     *
+     * @param DigitalKanban\BaseBundle\Entity\User $users
+     */
+    public function addUser(\DigitalKanban\BaseBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    }
 }

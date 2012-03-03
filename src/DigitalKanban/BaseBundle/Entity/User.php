@@ -16,7 +16,7 @@ use DigitalKanban\BaseBundle\Entity\Role;
  * Model of an user
  *
  * But why the hell implements a normal model a UserInterface?
- * Because we implemented our own lookup method for our login formular.
+ * Because we implemented our own lookup method for our login form.
  * So the implementation of the UserInterface is necessary. For more information have a look at UserRepository
  *
  * @ORM\Table(name="user")
@@ -136,6 +136,17 @@ class User implements UserInterface {
 	 * )
 	 */
 	protected $boards;
+
+    /**
+     * @var ArrayCollection $groups
+     *
+     * @ORM\ManyToMany(targetEntity="UserGroup")
+     * @ORM\JoinTable(name="user_has_group",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
 
 	/**
 	 * Constructor
@@ -466,4 +477,34 @@ class User implements UserInterface {
 
 		return $name;
 	}
+
+    /**
+     * Add boards
+     *
+     * @param DigitalKanban\BaseBundle\Entity\Board $boards
+     */
+    public function addBoard(\DigitalKanban\BaseBundle\Entity\Board $boards)
+    {
+        $this->boards[] = $boards;
+    }
+
+    /**
+     * Add groups
+     *
+     * @param DigitalKanban\BaseBundle\Entity\UserGroup $groups
+     */
+    public function addUserGroup(\DigitalKanban\BaseBundle\Entity\UserGroup $groups)
+    {
+        $this->groups[] = $groups;
+    }
+
+    /**
+     * Get groups
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
 }

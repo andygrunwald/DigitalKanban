@@ -1,0 +1,69 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Board management{% endblock %}
+
+{% block content %}
+	<div class="box management">
+		<div class="information">
+			<h1>User group management</h1>
+			<p>
+				Hey dude, nice to see you here!<br />
+				In this area you can see all existing user group and you have the opportunity to:<br />
+			</p>
+			<ul>
+				<li>add new user groups</li>
+				<li>edit existing user groups</li>
+				<li>delete one or more user groups</li>
+			</ul>
+			<p>
+				Enjoy your stay here!
+			</p>
+		</div>
+		{% if app.session.flash('success') %}
+			<div class="flash-message message-success">
+				<div class="message-header">{{ app.session.flash('success').title }}</div>
+				<div class="message-body">{{ app.session.flash('success').message }}</div>
+			</div>
+		{% endif %}
+		{% if app.session.flash('error') %}
+			<div class="flash-message message-error">
+				<div class="message-header">{{ app.session.flash('error').title }}</div>
+				<div class="message-body">{{ app.session.flash('error').message }}</div>
+			</div>
+		{% endif %}
+		<table>
+			<tr>
+				<td colspan="10">
+					<a href="{{ path('application_usergroup_new') }}" title="Add a new user group">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/add_board.png') }}" alt="Add a new user group" title="Add a new user group" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+				<th>&nbsp;</th>
+			</tr>
+		{% for group in groups %}
+			<tr>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ group.getId() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ group.getName() }}</td>
+				<td class="{{ cycle(['odd', 'even'], loop.index) }}">
+					<a href="{{ path('application_usergroup_edit', {'id': group.getId()}) }}" title="Edit the user group '{{ group.getName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/edit.png') }}" alt="Edit the user group '{{ group.getName() }}'" title="Edit the user group '{{ group.getName() }}'" />
+					</a>
+				</td>
+				<td class="delete-link {{ cycle(['odd', 'even'], loop.index) }}">
+					<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ group.getName() }}"</span>
+					<a href="{{ path('application_usergroup_delete', {'id': group.getId()}) }}" title="Delete the user group '{{ group.getName() }}'">
+						<img src="{{ asset('bundles/digitalkanbanbase/images/delete_board.png') }}" alt="Delete the user group '{{ group.getName() }}'" title="Delete the user group '{{ group.getName() }}'" />
+					</a>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

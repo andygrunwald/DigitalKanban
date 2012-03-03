@@ -43,6 +43,12 @@
 	{{ form_errors(form.boards) }}
 </div>
 
+<div>
+	{{ form_label(form.groups) }}
+	{{ form_widget(form.groups) }}
+	{{ form_errors(form.groups) }}
+</div>
+
 {{ form_rest(form) }}
 <div class="submit center">
 	<input type="submit" name="submit" value="Submit your changes now" />

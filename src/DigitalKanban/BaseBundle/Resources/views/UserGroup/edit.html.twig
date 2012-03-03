@@ -1,0 +1,21 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Edit the user group"{{ usergroup.getName() }}"{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Edit the user group"{{ usergroup.getName() }}"</h1>
+			<p>
+				Hey, what about {{ usergroup.getName() }}? <br />
+			</p>
+			<p>
+				But anyhow. To care about the data is an important task. So, YOU are the real hero! Do your job and feel good! But hey, don` forget the beer in your leisure-time.
+			</p>
+		</div>
+		<form action="{{ path('application_usergroup_edit', {'id': usergroup.getId()}) }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:UserGroup:form.html.twig' with {'form': form, 'mode': 'edit'} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

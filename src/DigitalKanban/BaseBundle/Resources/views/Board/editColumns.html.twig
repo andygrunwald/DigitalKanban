@@ -13,6 +13,9 @@
 					<br />
 					<label for="column-limit">Limit:</label>
 					<input type="text" name="limit" id="column-limit" placeholder="The limit of column ..." />
+                    <br />
+                    <label for="column-usergroup">User Group:</label>
+                    <input type="text" name="limit" id="column-usergroup" placeholder="The group of the column ..." />
 				</div>
 				<a href="javascript:void(0);" title="Save your new column" id="link-column-save">
 					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new column" title="Save your new column" />
@@ -41,6 +44,13 @@
 						<a href="javascript:void(0);" class="delete" style="display: none;">
 							<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete '{{ column.getName() }}'" title="Delete '{{ column.getName() }}'" />
 						</a>
+                        <div class="usergroup">
+                            {%if column.getUserGroup()%}
+                                {{ column.getUserGroup() }}
+                            {%else%}
+                                &nbsp;
+                            {%endif%}
+                        </div>
 						<div class="limit">
 							{% if column.getMaxIssues() > 0 %}
 								{{ column.getMaxIssues() }}
@@ -71,6 +81,9 @@
 			<a href="javascript:void(0);" class="delete" style="display: none;">
 				<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete '###NAME###'" title="Delete '###NAME###'" />
 			</a>
+            <div class="usergroup">
+                &nbsp;
+            </div>
 			<div class="limit">
 				&nbsp;
 			</div>

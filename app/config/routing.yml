@@ -36,6 +36,22 @@ application_user_delete:
     pattern: /application/user/delete/{id}
     defaults: { _controller: DigitalKanbanBaseBundle:User:delete }
 
+application_usergroup_list:
+    pattern: /application/usergroup/list
+    defaults: { _controller: DigitalKanbanBaseBundle:UserGroup:list }
+
+application_usergroup_new:
+    pattern: /application/usergroup/new
+    defaults: { _controller: DigitalKanbanBaseBundle:UserGroup:new }
+
+application_usergroup_edit:
+   pattern: /application/usergroup/edit/{id}
+   defaults: { _controller: DigitalKanbanBaseBundle:UserGroup:edit }
+
+application_usergroup_delete:
+    pattern: /application/usergroup/delete/{id}
+    defaults: { _controller: DigitalKanbanBaseBundle:UserGroup:delete }
+
 application_board_show:
     pattern: /application/board/show/{id}
     defaults: { _controller: DigitalKanbanBaseBundle:Board:show }

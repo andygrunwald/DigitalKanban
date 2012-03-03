@@ -63,10 +63,11 @@ class BoardController extends Controller {
 			// Why in one query and not with the models? Because the models
 			// would be send about 8 queries and this solution only one.
 		$query = $entityManager->createQuery(
-			'SELECT board, boardcolumn, issue
+			'SELECT board, boardcolumn, issue, user_group
 			FROM DigitalKanbanBaseBundle:Board board
 			LEFT JOIN board.columns boardcolumn
 			LEFT JOIN boardcolumn.issues issue
+            LEFT JOIN boardcolumn.user_group user_group
 			WHERE board.id = :boardId
 			ORDER BY boardcolumn.sorting ASC, issue.sorting ASC')
 			->setParameter('boardId', $id);

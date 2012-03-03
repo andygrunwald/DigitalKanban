@@ -8,6 +8,7 @@ use DigitalKanban\BaseBundle\Entity\BoardColumn;
 use DigitalKanban\BaseBundle\Entity\Issue;
 use DigitalKanban\BaseBundle\Entity\Role;
 use DigitalKanban\BaseBundle\Entity\User;
+use DigitalKanban\BaseBundle\Entity\UserGroup;
 
 /**
  * Fixture loader
@@ -66,6 +67,17 @@ class FixtureLoader implements FixtureInterface {
 		/**
 		 * USER
 		 */
+        $devgroup = new UserGroup();
+        $devgroup->setName("developers");
+        $manager->persist($devgroup);
+
+        $testgroup = new UserGroup();
+        $testgroup->setName("testers");
+        $manager->persist($testgroup);
+
+        $managergroup = new UserGroup();
+        $managergroup->setName("managers");
+        $manager->persist($managergroup);
 
 			// Create a admin user 'John Doe'
 		$adminUser = new User();
@@ -77,6 +89,7 @@ class FixtureLoader implements FixtureInterface {
 		$adminUser->getBoards()->add($board3);
 		$adminUser->setSalt(md5(uniqid(microtime())));
 		$adminUser->setPassword('admin');
+        $adminUser->addUserGroup($managergroup);
 		$adminUser->addRole($adminRole);
 
 		$manager->persist($adminUser);
@@ -91,6 +104,8 @@ class FixtureLoader implements FixtureInterface {
 		$normalUser->getBoards()->add($board3);
 		$normalUser->setSalt(md5(uniqid(microtime())));
 		$normalUser->setPassword('user');
+        $normalUser->addUserGroup($devgroup);
+        $normalUser->addUserGroup($testgroup);
 		$normalUser->addRole($userRole);
 
 		$manager->persist($normalUser);
@@ -106,6 +121,7 @@ class FixtureLoader implements FixtureInterface {
 		$deactivatedNormalUser->setSalt(md5(uniqid(microtime())));
 		$deactivatedNormalUser->setPassword('user');
 		$deactivatedNormalUser->setDisabled(TRUE);
+        $deactivatedNormalUser->addUserGroup($devgroup);
 		$deactivatedNormalUser->addRole($userRole);
 
 		$manager->persist($deactivatedNormalUser);
@@ -123,6 +139,7 @@ class FixtureLoader implements FixtureInterface {
 		$anotherAdminUser->setPassword('user');
 		$anotherAdminUser->setDisabled(FALSE);
 		$anotherAdminUser->addRole($adminRole);
+        $anotherAdminUser->addUserGroup($managergroup);
 
 		$manager->persist($anotherAdminUser);
 
@@ -137,6 +154,8 @@ class FixtureLoader implements FixtureInterface {
 		$anotherNormalUser->setPassword('user');
 		$anotherNormalUser->setDisabled(FALSE);
 		$anotherNormalUser->addRole($userRole);
+        $anotherNormalUser->addUserGroup($devgroup);
+        $anotherNormalUser->addUserGroup($testgroup);
 
 		$manager->persist($anotherNormalUser);
 
@@ -149,6 +168,7 @@ class FixtureLoader implements FixtureInterface {
 		$board1Column1->setName('Backlog');
 		$board1Column1->setMaxIssues(0);
 		$board1Column1->setSorting(10);
+        $board1Column1->setUserGroup($devgroup);
 		$board1Column1->setBoard($board1);
 
 		$manager->persist($board1Column1);
@@ -159,6 +179,7 @@ class FixtureLoader implements FixtureInterface {
 		$board1Column2->setMaxIssues(10);
 		$board1Column2->setSorting(20);
 		$board1Column2->setBoard($board1);
+        $board1Column2->setUserGroup($devgroup);
 
 		$manager->persist($board1Column2);
 

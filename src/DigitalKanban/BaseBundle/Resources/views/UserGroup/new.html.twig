@@ -1,0 +1,18 @@
+{% extends 'DigitalKanbanBaseBundle::layout.html.twig' %}
+
+{% block title %}Create a new Kanban board{% endblock %}
+
+{% block content %}
+	<div class="box form">
+		<div class="information">
+			<h1>Create a new user group</h1>
+			<p>
+				User groups are a way to group users and board columns to identify who is responsible for a task.
+			</p>
+		</div>
+		<form action="{{ path('application_usergroup_new') }}" method="post" {{ form_enctype(form) }}>
+			{% include 'DigitalKanbanBaseBundle:UserGroup:form.html.twig' with {'form': form} %}
+		</form>
+		<div class="clearfix"></div>
+	</div>
+{% endblock %}

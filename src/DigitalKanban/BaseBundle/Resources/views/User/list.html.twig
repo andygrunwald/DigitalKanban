@@ -84,7 +84,13 @@
 				</td>
 			</tr>
 		{% endfor %}
-		</table>
-		<div class="clearfix"></div>
+    </table>
+        <!--TODO: Move to CSS file-->
+    <div class="user-usergroup-button">
+        <a style="background-repeat: no-repeat; display: block; background-position: 10px 13px; padding: 10px 10px 10px 40px; background-image: url(/bundles/digitalkanbanbase/images/menu_user.png);" href="{{ path('application_usergroup_list') }}" style="background-image: url({{ asset('bundles/digitalkanbanbase/images/menu_user.png') }});">
+            User group management
+        </a>
+    </div>
+    <div class="clearfix"></div>
 	</div>
 {% endblock %}
