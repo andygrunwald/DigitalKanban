@@ -42,14 +42,23 @@ class UserController extends Controller {
 					// Add a role to user (Admin or User)
 					// This is a special case here, because in formular, the role is a single checkbox
 					// but in technical it is a ManyToMany relation
+                $currentUser = $this->get('security.context')->getToken()->getUser();
 				$requestData = $request->request->get($form->getName());
-				if(isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1) {
+				if(isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
 					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
 
 				} else {
 					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
 				}
 				$user->addRole($role);
+
+                if(isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
+
+                } else {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
+                }
+                $user->addRole($role);
 
 				$entityManager->persist($user);
 				$entityManager->flush();
