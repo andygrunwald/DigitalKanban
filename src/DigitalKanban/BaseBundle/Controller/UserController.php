@@ -46,10 +46,10 @@ class UserController extends Controller
                 // but in technical it is a ManyToMany relation
                 $currentUser = $this->get('security.context')->getToken()->getUser();
                 $requestData = $request->request->get($form->getName());
-                if (isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
+                if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
 
-                } elseif(isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                } elseif(isset($requestData['manager']) === true && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
                 } else {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
@@ -167,9 +167,9 @@ class UserController extends Controller
                 $user->getRolesAsArrayCollection()->clear();
 
                 $currentUser = $this->get('security.context')->getToken()->getUser();
-                if (isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
+                if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
-                } elseif(isset($requestData['manager']) === TRUE && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                } elseif(isset($requestData['manager']) === true && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
                 } else {
                     $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
