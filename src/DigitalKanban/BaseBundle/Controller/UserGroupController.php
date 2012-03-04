@@ -127,45 +127,73 @@ class UserGroupController extends Controller
     public function editAction($id, Request $request) {
         $id = (int) $id;
         $entityManager = $this->getDoctrine()->getEntityManager();
-        $usergroup = $entityManager->getRepository('DigitalKanbanBaseBundle:UserGroup')->findOneById($id);
+        $usergroup = $entityManager->getRepository('DigitalKanbanBaseBundle:UserGroup')->find($id);
 
         // If there is no user, exit here with an error
-     		if($usergroup === NULL) {
-     			$flashMessage = 'User group with id "' . $id . '" does not exist. Sorry dude.';
-     			return $this->redirectToListViewWithError('Editing failed', $flashMessage);
-     		}
+        if($usergroup === NULL) {
+            $flashMessage = 'User group with id "' . $id . '" does not exist. Sorry dude.';
+            return $this->redirectToListViewWithError('Editing failed', $flashMessage);
+        }
 
-     			// Build form
-     		$form = $this->createForm(new UserGroupType(), $usergroup, array('mode' => 'edit'));
+            // Build form
+        $form = $this->createForm(new UserGroupType(), $usergroup, array('mode' => 'edit'));
 
-     			// If the form was submitted with the HTTP method POST
-     		if ($request->getMethod() == 'POST') {
+            // If the form was submitted with the HTTP method POST
+        if ($request->getMethod() == 'POST') {
 
-     				// Check if the form was submitted correctly
-     			$form->bindRequest($request);
-                $usergroup = $form->getData();
+                // Check if the form was submitted correctly
+            $form->bindRequest($request);
+            $usergroup = $form->getData();
 
-     			if ($form->isValid()) {
-     				$entityManager->persist($usergroup);
-                    $entityManager->flush();
+            if ($form->isValid()) {
+                // Get all users which are assigned to the current group and delete this assignment.
+                // This is necessary to correct the ManyToMany-Relation, because in the next step
+                // we will assign the selected user (from form) to this board.
+                // Is there a solution to solve this problem more clever?
+                $query = $entityManager->createQuery(
+                    'SELECT user
+					FROM DigitalKanbanBaseBundle:User user
+					INNER JOIN user.groups usergroup
+					WHERE
+						usergroup.id = :usergroupId')
+                    ->setParameters(array(
+                    'usergroupId' => $usergroup->getId()
+                ));
+                $dbUsers = $query->getResult();
 
-     					// Build success flash message and redirect to list view
-     				$flashMessageData = array(
-     					'title' => 'Editing successful',
-     					'message' => 'User group ' . $usergroup->getName() . ' was edited!',
-     				);
-     				$this->get('session')->setFlash('success', $flashMessageData);
+                // Loop over assigned user and remove relation
+                foreach($dbUsers as $dbUser) {
+                    $dbUser->getGroups()->removeElement($usergroup);
+                }
 
-     				return $this->redirect($this->generateUrl('application_usergroup_list'));
-     			}
-     		}
+                // Assign the selected user and create a new ManyToMany relationship
+                $users = $usergroup->getUsers();
+                if(count($users) > 0) {
+                    foreach($users as $user) {
+                        $user->getGroups()->add($usergroup);
+                        $entityManager->persist($user);
+                    }
+                }
+                $entityManager->persist($usergroup);
+                $entityManager->flush();
 
-     			// Assign form data to template
-     		$templateData = array(
-     			'form' => $form->createView(),
-     			'usergroup' => $usergroup
-     		);
-     		return $this->render('DigitalKanbanBaseBundle:UserGroup:edit.html.twig', $templateData);
+                    // Build success flash message and redirect to list view
+                $flashMessageData = array(
+                    'title' => 'Editing successful',
+                    'message' => 'User group ' . $usergroup->getName() . ' was edited!',
+                );
+                $this->get('session')->setFlash('success', $flashMessageData);
+
+                return $this->redirect($this->generateUrl('application_usergroup_list'));
+            }
+        }
+
+            // Assign form data to template
+        $templateData = array(
+            'form' => $form->createView(),
+            'usergroup' => $usergroup
+        );
+        return $this->render('DigitalKanbanBaseBundle:UserGroup:edit.html.twig', $templateData);
 
     }
 }

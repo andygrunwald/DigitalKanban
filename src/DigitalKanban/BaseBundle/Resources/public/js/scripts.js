@@ -179,7 +179,7 @@ var DigitalKanbanBaseBundle = {
 	initNewColumnItems: function() {
 			// Set click event on Reset button
 		$('#link-column-reset').click(function() {
-			$('#column-name, #column-limit,#column-usergroup').val('');
+			$('#BoardColumnFormType_name, #BoardColumnFormType_max_issues,#BoardColumnFormType_user_group').val('');
 		});
 
 			// Set click event on save button
@@ -358,9 +358,9 @@ var DigitalKanbanBaseBundle = {
 	 */
 	addNewColumnToKanbanBoard: function(event) {
 		var newColumn = {
-				'name': $.trim($('#column-name').val()),
-				'limit': parseInt($.trim($('#column-limit').val())),
-                'usergroup': parseInt($.trim($('#column-usergroup').val()))
+				'name': $.trim($('#BoardColumnFormType_name').val()),
+				'limit': parseInt($.trim($('#BoardColumnFormType_max_issues').val())),
+                'usergroup': parseInt($.trim($('#BoardColumnFormType_user_group').val()))
 			},
 			boardId = 0,
 			options = {};
@@ -421,7 +421,7 @@ var DigitalKanbanBaseBundle = {
 		column.prependTo('.kanban-board ul.editable-column-board');
 
 			// Reset input fields
-		$('#column-name, #column-limit,#column-usergroup').val('');
+		$('#BoardColumnFormType_name, #BoardColumnFormType_max_issues,#BoardColumnFormType_user_group').val('');
 
 			// Refresh and reinitialize sortable objects, events and css styles
 		this.initColumnWidth();

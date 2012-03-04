@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use DigitalKanban\BaseBundle\Form\Type\BoardType;
 use DigitalKanban\BaseBundle\Entity\Board;
 use DigitalKanban\BaseBundle\Entity\BoardColumn;
+use \DigitalKanban\BaseBundle\Form\Type\BoardColumnType ;
 
 /**
  * Board controller
@@ -72,8 +73,11 @@ class BoardController extends Controller {
 			ORDER BY boardcolumn.sorting ASC, issue.sorting ASC')
 			->setParameter('boardId', $id);
 
+        $form = $this->createForm(new BoardColumnType(), new BoardColumn(), array('mode' => 'new'));
+
 		$templateData = array(
 			'board' => $query->getSingleResult(),
+            'form' => $form->createView(),
 		);
 		return $this->render('DigitalKanbanBaseBundle:Board:editColumns.html.twig', $templateData);
 	}

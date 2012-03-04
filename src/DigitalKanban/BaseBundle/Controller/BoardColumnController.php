@@ -55,7 +55,6 @@ class BoardColumnController extends Controller {
 			// Get all columns of this board to raise the sorting
 			// This is necessary, because the new column will be inserted at first column
 		$columns = $entityManager->getRepository('DigitalKanbanBaseBundle:BoardColumn')->findByBoard($boardId);
-        $user_group = $entityManager->getRepository('DigitalKanbanBaseBundle:UserGroup')->findOneById($columnData['usergroup']);
 
         $this->raiseColumnSorting($columns, $board, -10);
 
@@ -65,8 +64,10 @@ class BoardColumnController extends Controller {
 		$column->setMaxIssues($columnData['limit']);
 		$column->setSorting(10);
 		$column->setBoard($board);
-        $column->setUserGroup($user_group);
-
+        if ( $columnData['usergroup'] != "NaN" ){
+            $user_group = $entityManager->getRepository('DigitalKanbanBaseBundle:UserGroup')->findOneById($columnData['usergroup']);
+            $column->setUserGroup($user_group);
+        }
 
 		$entityManager->persist($column);
 		$entityManager->flush();

@@ -1,0 +1,19 @@
+{{ form_errors(form) }}
+
+<div>
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+    {{ form_errors(form.name) }}
+</div>
+<div>
+    {{ form_label(form.max_issues) }}
+    {{ form_widget(form.max_issues) }}
+    {{ form_errors(form.max_issues) }}
+</div>
+<div>
+    {{ form_label(form.user_group) }}
+    {{ form_widget(form.user_group) }}
+    {{ form_errors(form.user_group) }}
+</div>
+
+{{ form_rest(form) }}

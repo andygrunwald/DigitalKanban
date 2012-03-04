@@ -8,14 +8,7 @@
 			<div class="create-new-column">
 				<h2>Create a new column</h2>
 				<div id="new-column">
-					<label for="column-name">Name:</label>
-					<input type="text" name="name" id="column-name" placeholder="The name of column ..." />
-					<br />
-					<label for="column-limit">Limit:</label>
-					<input type="text" name="limit" id="column-limit" placeholder="The limit of column ..." />
-                    <br />
-                    <label for="column-usergroup">User Group:</label>
-                    <input type="text" name="limit" id="column-usergroup" placeholder="The group of the column ..." />
+                    {% include 'DigitalKanbanBaseBundle:Board:formBoardColumn.html.twig' with {'form': form, 'mode': 'new'} %}
 				</div>
 				<a href="javascript:void(0);" title="Save your new column" id="link-column-save">
 					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new column" title="Save your new column" />
