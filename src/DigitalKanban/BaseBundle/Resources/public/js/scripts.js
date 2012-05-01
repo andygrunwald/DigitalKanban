@@ -180,10 +180,15 @@ var DigitalKanbanBaseBundle = {
 			// Set click event on Reset button
 		$('#link-column-reset').click(function() {
 			$('#column-name, #column-limit').val('');
+			$('#column-timeable').attr('checked', false);
+			$('#column-limit').removeAttr("disabled"); 
 		});
 
 			// Set click event on save button
 		$('#link-column-save').click($.proxy(this.addNewColumnToKanbanBoard, this));
+		
+		//set click event on timeable
+		$('#column-timeable').click($.proxy(this.manageTimeableColumnToKanbanBoard, this));
 	},
 
 	/**
@@ -350,6 +355,25 @@ var DigitalKanbanBaseBundle = {
 		this.initIssueAndColumnDeleteFunction();
 	},
 
+	
+	/**
+	 * Method to manage the timeable checkbox a new column to the kanban board
+	 *
+	 * @param event
+	 * @return void
+	 */
+	
+	manageTimeableColumnToKanbanBoard: function(event) {
+		 if ($.trim($('#column-timeable:checkbox:checked').val()) == "true") {
+			 $('#column-limit').val('1');
+			 $('#column-limit').attr("disabled", true); 
+		 } else {
+			 $('#column-limit').removeAttr("disabled"); 
+		 }
+	},
+	
+	
+	
 	/**
 	 * Method to add a new column to the kanban board
 	 *
@@ -359,7 +383,8 @@ var DigitalKanbanBaseBundle = {
 	addNewColumnToKanbanBoard: function(event) {
 		var newColumn = {
 				'name': $.trim($('#column-name').val()),
-				'limit': parseInt($.trim($('#column-limit').val()))
+				'limit': parseInt($.trim($('#column-limit').val())),
+				'timeable': ($.trim($('#column-timeable:checkbox:checked').val()) == "true")? '1': '0'
 			},
 			boardId = 0,
 			options = {};
@@ -403,6 +428,11 @@ var DigitalKanbanBaseBundle = {
 		if(xhrData.limit > 0) {
 			$('div.limit', column).text(xhrData.limit);
 		}
+		
+		//add timeable class
+		if(xhrData.timeable > 0) {
+			$('div.limit', column).addClass('timeable');
+		}
 
 			// Replace Name marker in values and attributes
 		tmpVal = $('span.confirm-text', column).text();
@@ -419,6 +449,8 @@ var DigitalKanbanBaseBundle = {
 
 			// Reset input fields
 		$('#column-name, #column-limit').val('');
+		$('#column-timeable').attr('checked', false);
+		$('#column-limit').removeAttr("disabled"); 
 
 			// Refresh and reinitialize sortable objects, events and css styles
 		this.initColumnWidth();

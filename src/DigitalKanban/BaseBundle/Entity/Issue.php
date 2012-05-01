@@ -72,6 +72,13 @@ class Issue {
 	 * @ORM\Column(name="sorting", type="integer")
 	 */
 	protected $sorting;
+	
+	/**
+	 * @var datetime $duration
+	 *
+	 * @ORM\Column(name="duration", type="integer")
+	 */
+	protected $duration;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="BoardColumn", inversedBy="issues")
@@ -79,6 +86,12 @@ class Issue {
 	 */
 	protected $boardColumn;
 
+	
+	public function __construct(){
+	    $this->duration = 0;
+	}
+	
+	
 	/**
 	 * Get id
 	 *
@@ -202,6 +215,25 @@ class Issue {
 	public function getSorting() {
 		return $this->sorting;
 	}
+	
+	/**
+	 * Set duration
+	 *
+	 * @return void
+	 */
+	public function setDuration($duration) {
+	    $this->edited = $duration;
+	}
+	
+	/**
+	 * Get duration
+	 *
+	 * @return integer
+	 */
+	public function getDuration() {
+	    return $this->duration;
+	}
+	
 
 	/**
 	 * Set BoardColumn
