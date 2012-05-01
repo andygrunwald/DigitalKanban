@@ -56,7 +56,7 @@ Installation
 7. Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
 8. Setting up database (incl. dummy data) with the following shell commands
 	* ``php app/console doctrine:database:create``
-	* ``php app/console doctrine:schema:update --force``
+	* ``php app/console doctrine:migration:migrate``
 	* ``php app/console doctrine:fixtures:load``
 9. Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
 
