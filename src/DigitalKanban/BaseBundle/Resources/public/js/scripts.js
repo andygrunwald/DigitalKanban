@@ -64,6 +64,7 @@ var DigitalKanbanBaseBundle = {
 		this.initIssueAndColumnDeleteFunction();
 		this.initColumnWidth();
 		this.initLastColumnOnKanbanBoard();
+		this.initTimeableItem();
 	},
 
 	/**
@@ -190,6 +191,23 @@ var DigitalKanbanBaseBundle = {
 		//set click event on timeable
 		$('#column-timeable').click($.proxy(this.manageTimeableColumnToKanbanBoard, this));
 	},
+	
+	/**
+	 * Initialize the countdown if necessary
+	 *
+	 * @return void
+	 */
+	initTimeableItem: function() {
+		$("div.timeable").each(function(){ 
+			//$(this).parent().children('.issues li.issue').each(function(){ 
+			$(this).parent().find('.issues > ul > li.issue').each(function(){
+				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass($(this), 'issue');
+				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
+				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
+				$('#timeelapsed-text-'+ tmpId).hide();
+			});
+		});
+	},
 
 	/**
 	 * Javascript method to delete an issue from kanban board
@@ -301,6 +319,7 @@ var DigitalKanbanBaseBundle = {
 			},
 			'successCallback': $.proxy(this.addNewInsertedIssueToDOM, this)
 		};
+		
 		this.sendAjaxRequest(options);
 	},
 
@@ -321,7 +340,25 @@ var DigitalKanbanBaseBundle = {
 			.addClass('issue rotate' + parseInt(xhrData.rotation) + ' issue-' + parseInt(xhrData.id))
 			.text(xhrData.name)
 			.appendTo($('ul', firstColumn));
+		
+		elements.timeelapsed = $(document.createElement('div'))
+		.addClass('timeelapsed')
+		.appendTo(elements.issue);
+	
 
+		elements.timeelapsedtext = $(document.createElement('div'))
+			.addClass('timeelapsed-text')
+			.attr("id", "timeelapsed-text-" + parseInt(xhrData.id))
+			.html("Time elapsed: <span id=\"duration-" + parseInt(xhrData.id) + "\">00:00:00</span> <small>(hh:mi:ss)</small>")
+			.appendTo(elements.timeelapsed);
+
+		elements.timeelapsedcount =  $(document.createElement('div'))
+			.addClass('timeelapsed-count')
+			.attr("id", "timeelapsed-" + parseInt(xhrData.id))
+			.attr("zorig", "0")
+			.appendTo(elements.timeelapsed);
+
+		
 			// If the user is an administrator, generate the delete link and insert this, too
 		if(xhrData.userIsAdmin === true) {
 			elements.deleteText = $(document.createElement('span'))
@@ -353,6 +390,7 @@ var DigitalKanbanBaseBundle = {
 			// Refresh sortable objects and delete link events
 		this.sortableObj.sortable('refresh');
 		this.initIssueAndColumnDeleteFunction();
+		this.initTimeableItem();
 	},
 
 	
@@ -534,6 +572,27 @@ var DigitalKanbanBaseBundle = {
 		issues.each(function(index, element){
 			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element, 'issue');
 			issueIdArray.push(tmpId);
+			
+			
+			//check if timer is needed
+			if($('.column-' + columnId + '> div.timeable').length > 0){
+				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
+				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
+				$('#timeelapsed-text-'+ tmpId).hide();
+			} else {
+				if ($("#timeelapsed-" + tmpId).hasClass("hasCountdown")) {
+					totalSec = parseInt($.countdown.periodsToSeconds($('#timeelapsed-'+ tmpId).countdown('getTimes')));
+					$('#timeelapsed-'+ tmpId).attr('zorig', totalSec);
+					$('#timeelapsed-'+ tmpId).countdown('destroy');
+					hours = parseInt( totalSec / 3600 );
+					minutes = parseInt( totalSec / 60 ) % 60;
+					seconds = totalSec % 60;
+
+					result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+					$('#duration-'+ tmpId).html(result);
+					$('#timeelapsed-text-'+ tmpId).show();
+				}
+			}
 		});
 
 			// Update affected issues in database

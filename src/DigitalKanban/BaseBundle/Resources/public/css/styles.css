@@ -295,7 +295,11 @@ a {
 #main .board-columns .column .timeable {
 	background-image: url(/bundles/digitalkanbanbase/images/time.png);
 	background-repeat: no-repeat;
-	background-position:50px 0; 
+	background-position:50px 0;
+}
+
+#main .board-columns .istimeable {
+	background-color: #C9FFA8;
 	
 }
 
@@ -337,6 +341,7 @@ div.board-header div.create-new-column {
 	float: left;
 	margin-bottom: 15px;
 	width: 280px;
+
 }
 
 div.board-header div.create-new-issue a,

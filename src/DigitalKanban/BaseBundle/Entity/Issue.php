@@ -222,7 +222,7 @@ class Issue {
 	 * @return void
 	 */
 	public function setDuration($duration) {
-	    $this->edited = $duration;
+	    $this->duration = $duration;
 	}
 	
 	/**
