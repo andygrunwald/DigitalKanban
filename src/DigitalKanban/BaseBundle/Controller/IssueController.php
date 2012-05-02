@@ -64,6 +64,22 @@ class IssueController extends Controller {
 			// Create new issue and store it
 		$issue = new Issue();
 		$issue->setName($postIssueData['title']);
+		
+		//manage groups based on # separator
+		$tabstr = explode('#', $postIssueData['title']);
+		
+		if (array_key_exists(1,$tabstr)){
+		    $issue->setGroup1($tabstr[0]);
+		}
+
+		if (array_key_exists(2,$tabstr)){
+		    $issue->setGroup2($tabstr[1]);
+		}
+		
+		if (array_key_exists(3,$tabstr)){
+		    $issue->setGroup1($tabstr[2]);
+		}
+		
 		$issue->setSorting(($highestSorting + 10));
 		$issue->setBoardColumn($column);
 		$issue->setCreatedUser($user);

@@ -51,8 +51,7 @@
 												<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete the issue '{{ issue.getName() }}'" title="Delete the issue '{{ issue.getName() }}'" />
 											</a>
 										{% endif %}
-										{{ issue.getName() }}
-										
+										{{ issue.getName()|splitgroup|raw }}
 										<div class="timeelapsed" >
     									    <div class="timeelapsed-text" id="timeelapsed-text-{{issue.getId()}}" style="{% if column.timeable %}display: none;{% endif %}">	
         										Time elapsed: <span id="duration-{{issue.getId()}}">{{ issue.getDuration()|sec2duration }}</span> <small>(hh:mi:ss)</small>

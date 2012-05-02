@@ -290,6 +290,9 @@ a {
 	color: #333;
 	margin-top:5px;
 	font-size: 12px;
+	border: 1px solid #ddd;
+	background-color: #FFF56D;
+	padding: 2px;
 }
 
 #main .board-columns .column .timeable {
@@ -414,11 +417,40 @@ div#new-column input {
 	margin-bottom: 10px;
 }
 
+
+#main .issues ul li.issue .group1 {
+	color: #111;
+	font-weight: bold;
+	text-align:center;
+	border: 1px solid #ccc; 
+}
+
+#main .issues ul li.issue .group2 {
+	margin-top: 2px;
+	color: #111;
+	font-weight: bold;
+	text-decoration:underline; 
+}
+
+#main .issues ul li.issue .group3 {
+	margin-top: 2px;
+	color: #111;
+	font-weight: bold;
+	text-decoration:underline; 
+}
+
+#main .issues ul li.issue .group0 {
+	border-top: 1px solid #ccc;
+	margin-top: 5px;
+	padding-top: 5px;
+}
+
 #main .issues ul li.issue a.delete {
 	position: absolute;
 	right: -5px;
 	top: -5px;
 }
+
 
 #main .board-columns ul li.column a.delete {
 	position: absolute;

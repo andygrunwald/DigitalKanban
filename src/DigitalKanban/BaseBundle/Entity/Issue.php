@@ -79,6 +79,31 @@ class Issue {
 	 * @ORM\Column(name="duration", type="integer")
 	 */
 	protected $duration;
+	
+	/**
+	 * @var string $group1
+	 *
+	 * @ORM\Column(name="group1", type="string", length=100, nullable=true)
+	 */
+	protected $group1;
+	
+	
+	
+	/**
+	 * @var string $group2
+	 *
+	 * @ORM\Column(name="group2", type="string", length=100, nullable=true)
+	 */
+	protected $group2;
+	
+	
+	/**
+	 * @var string $group3
+	 *
+	 * @ORM\Column(name="group3", type="string", length=100, nullable=true)
+	 */
+	protected $group3;
+	
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="BoardColumn", inversedBy="issues")
@@ -234,6 +259,63 @@ class Issue {
 	    return $this->duration;
 	}
 	
+	
+	/**
+	 * Set group1
+	 *
+	 * @param string $group1
+	 * @return void
+	 */
+	public function setGroup1($group1) {
+	    $this->group1 = $group1;
+	}
+	
+	/**
+	 * Get group1
+	 *
+	 * @return string
+	 */
+	public function getGroup1() {
+	    return $this->group1;
+	}
+	
+	/**
+	 * Set group2
+	 *
+	 * @param string $group2
+	 * @return void
+	 */
+	public function setGroup2($group2) {
+	    $this->group2 = $group2;
+	}
+	
+	/**
+	 * Get group2
+	 *
+	 * @return string
+	 */
+	public function getGroup2() {
+	    return $this->group2;
+	}
+	
+	/**
+	 * Set group3
+	 *
+	 * @param string $group3
+	 * @return void
+	 */
+	public function setGroup3($group3) {
+	    $this->group3 = $group3;
+	}
+	
+	/**
+	 * Get group3
+	 *
+	 * @return string
+	 */
+	public function getGroup3() {
+	    return $this->group3;
+	}
 
 	/**
 	 * Set BoardColumn
