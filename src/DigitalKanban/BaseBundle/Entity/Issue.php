@@ -104,16 +104,24 @@ class Issue {
 	 */
 	protected $group3;
 	
+	
+	/**
+	 * @var boolean $closed
+	 *
+	 * @ORM\Column(name="closed", type="boolean")
+	 */
+	private $closed;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="BoardColumn", inversedBy="issues")
-	 * @ORM\JoinColumn(name="boardcolumn_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @ORM\JoinColumn(name="boardcolumn_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
 	 */
 	protected $boardColumn;
 
 	
 	public function __construct(){
 	    $this->duration = 0;
+	    $this->closed = false;
 	}
 	
 	
@@ -318,12 +326,36 @@ class Issue {
 	}
 
 	/**
+	 * Set closed
+	 *
+	 * @param boolean $closed
+	 */
+	public function setClosed($closed)
+	{
+	    if ($closed == true){
+	        $this->setBoardColumn(null);
+	    }
+	    $this->closed = $closed;
+	}
+	
+	/**
+	 * Get closed
+	 *
+	 * @return boolean
+	 */
+	public function getClosed()
+	{
+	    return $this->closed;
+	}
+	
+	
+	/**
 	 * Set BoardColumn
 	 *
 	 * @param BoardColumn $boardColumn
 	 * @return void
 	 */
-	public function setBoardColumn(BoardColumn $boardColumn) {
+	public function setBoardColumn($boardColumn) {
 		$this->boardColumn = $boardColumn;
 	}
 

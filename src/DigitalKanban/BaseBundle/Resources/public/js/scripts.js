@@ -141,6 +141,31 @@ var DigitalKanbanBaseBundle = {
 			start: this.handleColumnLimitsDuringDragAndDrop,
 			stop: this.handleColumnLimitsDuringDragAndDrop
 		}).disableSelection();
+		
+		/*this.sortableObj.draggable();*/
+		 
+		$("#archive").droppable({
+			accept: ".issues ul li",
+			activeClass: "issue-state-highlight",
+			hoverClass: "issue-state-highlight",
+			over: function(event, ui){
+			},
+			drop: function( event, ui ) {  
+				el = $( ".ui-sortable-helper.issue" );
+				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(el, 'issue');
+				
+				// Update affected issues in database
+				options = {
+					'url': '/application/board/update',
+					'data': {
+						'column': 0,
+						'issues': tmpId
+					}
+				};
+				DigitalKanbanBaseBundle.sendAjaxRequest(options);
+				el.fadeOut();
+			}
+		});
 	},
 
 	/**
