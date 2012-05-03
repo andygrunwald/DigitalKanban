@@ -123,7 +123,7 @@ var DigitalKanbanBaseBundle = {
 									'board');
 
 					options = {
-						'url' : "/app_dev.php/application/board/showarchives/"
+						'url' : "/application/board/showarchives/"
 								+ parseInt(boardId),
 						'data' : {},
 						'successCallback' : $.proxy(
