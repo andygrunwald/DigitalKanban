@@ -1,0 +1,6 @@
+<h1>archives</h1>
+<ul>
+    {%  for a in archives %}
+        <li>{{ a.name |splitgroup|raw }} - {{ a.duration()|sec2duration }}</li>
+    {%  endfor %}
+</ul>
