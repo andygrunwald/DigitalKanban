@@ -1,7 +1,6 @@
 <?php
 
 namespace DigitalKanban\BaseBundle\Entity;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -15,180 +14,212 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
-class Board {
+class Board
+{
 
-	/**
-	 * @var integer $id
-	 *
-	 * @ORM\Column(name="id", type="integer")
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
 
-	/**
-	 * @var string $name
-	 *
-	 * @Assert\NotBlank()
-	 * @Assert\MaxLength(50)
-	 * @ORM\Column(name="name", type="string", length=50)
-	 */
-	protected $name;
+    /**
+     * @var string $name
+     *
+     * @Assert\NotBlank()
+     * @Assert\MaxLength(50)
+     * @ORM\Column(name="name", type="string", length=50)
+     */
+    protected $name;
 
-	/**
-	 * @var string $description
-	 *
-	 * @ORM\Column(name="description", type="text")
-	 */
-	protected $description = '';
+    /**
+     * @var string $description
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    protected $description = '';
 
-	/**
-	 * @var datetime $created
-	 *
-	 * @ORM\Column(name="created", type="datetime")
-	 */
-	protected $created;
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(name="created", type="datetime")
+     */
+    protected $created;
 
-	/**
-	 * @var datetime $edited
-	 *
-	 * @ORM\Column(name="edited", type="datetime")
-	 */
-	protected $edited;
+    /**
+     * @var datetime $edited
+     *
+     * @ORM\Column(name="edited", type="datetime")
+     */
+    protected $edited;
 
-	/**
-	 * @var ArrayCollection $columns
-	 *
-	 * @ORM\OneToMany(targetEntity="BoardColumn", mappedBy="board")
-	 */
-	protected $columns;
+    /**
+     * @var ArrayCollection $columns
+     *
+     * @ORM\OneToMany(targetEntity="BoardColumn", mappedBy="board")
+     */
+    protected $columns;
 
-	/**
-	 * @var ArrayCollection $users
-	 *
-	 * @ORM\ManyToMany(targetEntity="User", mappedBy="boards")
-	 */
-	protected $users;
+    /**
+     * @var ArrayCollection $archives
+     *
+     * @ORM\OneToMany(targetEntity="Archive", mappedBy="board")
+     */
+    protected $archives;
 
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->columns = new ArrayCollection();
-		$this->users = new ArrayCollection();
-	}
+    /**
+     * @var ArrayCollection $users
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="boards")
+     */
+    protected $users;
 
-	/**
-	 * If this class will be used as a string,
-	 * the name of this board will represent this object
-	 *
-	 * @return string
-	 */
-	public function __toString() {
-		return $this->getName();
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->columns = new ArrayCollection();
+        $this->archives = new ArrayCollection();
+        $this->users = new ArrayCollection();
+    }
 
-	/**
-	 * Get id
-	 *
-	 * @return integer
-	 */
-	public function getId() {
-		return $this->id;
-	}
+    /**
+     * If this class will be used as a string,
+     * the name of this board will represent this object
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 
-	/**
-	 * Set name
-	 *
-	 * @param string $name
-	 * @return void
-	 */
-	public function setName($name) {
-		$this->name = $name;
-	}
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	/**
-	 * Get name
-	 *
-	 * @return string
-	 */
-	public function getName() {
-		return $this->name;
-	}
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 
-	/**
-	 * Set description
-	 *
-	 * @param string $description
-	 * @return void
-	 */
-	public function setDescription($description) {
-		$this->description = $description;
-	}
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
 
-	/**
-	 * Get description
-	 *
-	 * @return string
-	 */
-	public function getDescription() {
-		return $this->description;
-	}
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return void
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
 
-	/**
-	 * Set created
-	 *
-	 * @ORM\prePersist
-	 * @return void
-	 */
-	public function setCreated() {
-		$this->created = new \DateTime();
-	}
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 
-	/**
-	 * Get created
-	 *
-	 * @return datetime
-	 */
-	public function getCreated() {
-		return $this->created;
-	}
+    /**
+     * Set created
+     *
+     * @ORM\prePersist
+     * @return void
+     */
+    public function setCreated()
+    {
+        $this->created = new \DateTime();
+    }
 
-	/**
-	 * Set edited
-	 *
-	 * @ORM\prePersist
-	 * @ORM\preUpdate
-	 * @return void
-	 */
-	public function setEdited() {
-		$this->edited = new \DateTime();
-	}
+    /**
+     * Get created
+     *
+     * @return datetime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
 
-	/**
-	 * Get edited
-	 *
-	 * @return integer
-	 */
-	public function getEdited() {
-		return $this->edited;
-	}
+    /**
+     * Set edited
+     *
+     * @ORM\prePersist
+     * @ORM\preUpdate
+     * @return void
+     */
+    public function setEdited()
+    {
+        $this->edited = new \DateTime();
+    }
 
-	/**
-	 * Get the columns
-	 *
-	 * @return ArrayCollection
-	 */
-	public function getColumns() {
-		return $this->columns;
-	}
+    /**
+     * Get edited
+     *
+     * @return integer
+     */
+    public function getEdited()
+    {
+        return $this->edited;
+    }
 
-	/**
-	 * Get the users
-	 *
-	 * @return ArrayCollection
-	 */
-	public function getUsers() {
-		return $this->users;
-	}
+    /**
+     * Get the columns
+     *
+     * @return ArrayCollection
+     */
+    public function getColumns()
+    {
+        return $this->columns;
+    }
+
+    /**
+     * Get the archives
+     *
+     * @return ArrayCollection
+     */
+    public function getArchives()
+    {
+        return $this->archives;
+    }
+
+    /**
+     * Get the users
+     *
+     * @return ArrayCollection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }

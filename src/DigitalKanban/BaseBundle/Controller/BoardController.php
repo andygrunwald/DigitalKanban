@@ -1,6 +1,7 @@
 <?php
 
 namespace DigitalKanban\BaseBundle\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -8,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use DigitalKanban\BaseBundle\Form\Type\BoardType;
 use DigitalKanban\BaseBundle\Entity\Board;
 use DigitalKanban\BaseBundle\Entity\BoardColumn;
+use DigitalKanban\BaseBundle\Entity\Archive;
+
 
 /**
  * Board controller
@@ -321,19 +324,35 @@ class BoardController extends Controller
                                             ->find($issueIds);
 
             $oldcolumn = $issuetoarchive->getBoardColumn();
+            $board = $issuetoarchive->getBoardColumn()->getBoard();
             $columnId = $oldcolumn->getId();
-
+            
+            $archive = new Archive();
+            
             if ($oldcolumn->getTimeable()) {
                 //update duration
                 $start = $issuetoarchive->getEdited();
                 $now = new \DateTime();
                 $interval = $now->diff($start);
-                $issuetoarchive->setDuration($this->interval_to_seconds($interval) + $issuetoarchive->getDuration());
+                $archive->setDuration($this->interval_to_seconds($interval) + $issuetoarchive->getDuration());
+            } else {
+                $archive->setDuration($issuetoarchive->getDuration());
             }
 
-            $issuetoarchive->setBoardColumn(null);
-            $entityManager->persist($issuetoarchive);
-
+            $archive->setBoard($board);
+            $archive->setCreated($issuetoarchive->getCreated());
+            $archive->setCreatedUser($issuetoarchive->getCreatedUser());
+            $archive->setEdited($issuetoarchive->getEdited());
+            $archive->setGroup1($issuetoarchive->getGroup1());
+            $archive->setGroup2($issuetoarchive->getGroup2());
+            $archive->setGroup3($issuetoarchive->getGroup3());
+            $archive->setLastEditedUser($issuetoarchive->getLastEditedUser());
+            $archive->setName($issuetoarchive->getName());
+            
+            $entityManager->remove($issuetoarchive);
+          
+            $entityManager->persist($archive);
+        
         } else {
 
             // Get specific BoardColumn by request data column id from database
@@ -390,7 +409,9 @@ class BoardController extends Controller
                 $issue->setSorting($sorting);
             }
         }
+
         $entityManager->flush();
+        
         return new Response(NULL, 200);
     }
 
@@ -411,6 +432,12 @@ class BoardController extends Controller
         return $this->redirect($this->generateUrl('application_board_list'));
     }
 
+
+    /**
+     * Convert interval type to seconds
+     * 
+     * @param  $interval
+     */
     private function interval_to_seconds($interval)
     {
         return ($interval->y * 365 * 24 * 60 * 60) + ($interval->m * 30 * 24 * 60 * 60) + ($interval->d * 24 * 60 * 60) + ($interval->h * 60 * 60) + ($interval->i * 60) + $interval->s;

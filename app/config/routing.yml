@@ -64,6 +64,10 @@ application_board_editcolumns:
     pattern: /application/board/editcolumns/{id}
     defaults: { _controller: DigitalKanbanBaseBundle:Board:editColumns }
 
+application_board_showarchives:
+    pattern: /application/board/showarchives/{boardId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:listarchive }
+    
 application_issue_add:
     pattern: /application/issue/add
     defaults: { _controller: DigitalKanbanBaseBundle:Issue:add }

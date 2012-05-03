@@ -22,11 +22,12 @@
 			</div>
 			{% endif %}
 			
-			<div class="information">
+			<div class="information board-{{ board.getId() }}">
 				<h1>{{ board.getName() }}</h1>
 				<p>{{ board.getDescription() }}</p>
 			</div>
 			<div id="archive">
+			<div id="archive-btn"></div>
 			Archiving zone...
 			
 			</div>
@@ -86,4 +87,5 @@
 			</div>
 		{% endif %}
 	</div>
+	<div id="archivebox" style="display: none;"></div>
 {% endblock %}

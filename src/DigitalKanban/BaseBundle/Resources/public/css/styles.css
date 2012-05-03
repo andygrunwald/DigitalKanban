@@ -419,6 +419,15 @@ div#archive {
 	text-align: center;
 }
 
+div#archive-btn{
+	background-image: url(/bundles/digitalkanbanbase/images/archive.png);
+	margin-top: -50px;
+	margin-right: -10px;
+	width: 22px;
+	height:22px;
+	float:right;
+}
+
 div#new-column label {
 	display: block;
 	float: left;

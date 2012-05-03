@@ -5,30 +5,33 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @var object JQuery UI Sortable
 	 */
-	sortableObj: null,
+	sortableObj : null,
 
 	/**
 	 * Initialize method to bootstrap the application
 	 * 
 	 * @return void
 	 */
-	init: function() {
+	init : function() {
 
-			// Set focus on username field in login form
+		// Set focus on username field in login form
 		this.initLoginFormular();
 
-			// Board selector is available on every page
+		// Board selector is available on every page
 		this.initBoardSelector();
 
-			// Available on action 'Board show'
+		// Available on action 'Board show'
 		this.initNewIssueItems();
 		this.initKanbanBoard();
 
-			// Available on management sites like 'User management' or 'Board
-			// management'
+		// Available on management sites like 'User management' or 'Board
+		// management'
 		this.initDeleteLinks();
 
-			// Available at 'Edit board columns'
+		// initialize link to display archive
+		this.initArchiveLinks();
+
+		// Available at 'Edit board columns'
 		this.initBoardColumnSortable();
 		this.initNewColumnItems();
 	},
@@ -39,7 +42,7 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initLoginFormular: function() {
+	initLoginFormular : function() {
 		$('#loginbox form input#username').focus();
 	},
 
@@ -48,8 +51,8 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initBoardSelector: function() {
-		$('#boardToShow').change(function(event){
+	initBoardSelector : function() {
+		$('#boardToShow').change(function(event) {
 			window.location.replace($(this).val());
 		});
 	},
@@ -60,7 +63,7 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initKanbanBoard: function() {
+	initKanbanBoard : function() {
 		this.initBoardIssueSortable();
 		this.handleColumnLimitsDuringDragAndDrop();
 		this.initIssueAndColumnDeleteFunction();
@@ -75,7 +78,7 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initLastColumnOnKanbanBoard: function(){
+	initLastColumnOnKanbanBoard : function() {
 		$('.kanban-board .board-columns ul li.column.last').removeClass('last');
 		$('.kanban-board .board-columns ul li:last-child').addClass('last');
 	},
@@ -87,10 +90,58 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initDeleteLinks: function() {
+	initDeleteLinks : function() {
 		$('.delete-link a').click(function() {
 			return confirm($(this).prev().text());
 		});
+	},
+
+	/**
+	 * Initialize the archive link
+	 * 
+	 * @return void
+	 */
+	initArchiveLinks : function() {
+		$("#archivebox").dialog({
+			modal : true,
+			buttons : {
+				Ok : function() {
+					$(this).dialog("close");
+				}
+			},
+			autoOpen : false,
+			show : "blind",
+			hide : "explode",
+			width: 600
+		});
+
+		$('#archive-btn').click(
+				function() {
+
+					boardId = DigitalKanbanBaseBundle
+							.getDatabaseIdFromCSSClass($('.information'),
+									'board');
+
+					options = {
+						'url' : "/app_dev.php/application/board/showarchives/"
+								+ parseInt(boardId),
+						'data' : {},
+						'successCallback' : $.proxy(
+								DigitalKanbanBaseBundle.displayArchive, this)
+					};
+
+					DigitalKanbanBaseBundle.sendAjaxRequest(options);
+
+				});
+	},
+
+	/**
+	 * display archives
+	 */
+	displayArchive : function(xhrData) {
+		$('#archivebox').html(xhrData);
+		$("#archivebox").dialog("open");
+
 	},
 
 	/**
@@ -102,31 +153,27 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initIssueAndColumnDeleteFunction: function() {
-			// Set event handler to show the delete links on issues and columns
-			// We have to unbind the vents before, because this method is called
-			// more than one time. For example if you create a new issue or
-			// column
-			// the method will be call again.
-		$('.show-board .kanban-board .issues li.issue, .board-columns ul li.column')
-			.unbind('mouseenter')
-			.mouseenter(function(){
-				$('a.delete', this).toggle();
-			})
-			.unbind('mouseleave')
-			.mouseleave(function(){
-				$('a.delete', this).toggle();
-			});
+	initIssueAndColumnDeleteFunction : function() {
+		// Set event handler to show the delete links on issues and columns
+		// We have to unbind the vents before, because this method is called
+		// more than one time. For example if you create a new issue or
+		// column
+		// the method will be call again.
+		$(
+				'.show-board .kanban-board .issues li.issue, .board-columns ul li.column')
+				.unbind('mouseenter').mouseenter(function() {
+					$('a.delete', this).toggle();
+				}).unbind('mouseleave').mouseleave(function() {
+					$('a.delete', this).toggle();
+				});
 
-			// Set click delete event handler on issue
+		// Set click delete event handler on issue
 		$('.show-board .kanban-board .issues li.issue a.delete')
-			.unbind('click')
-			.click(this.deleteIssueFromKanbanBoard);
+				.unbind('click').click(this.deleteIssueFromKanbanBoard);
 
-			// Set click delete event handler on column
-		$('.board-columns ul li.column a.delete')
-			.unbind('click')
-			.click(this.deleteColumnFromKanbanBoard);
+		// Set click delete event handler on column
+		$('.board-columns ul li.column a.delete').unbind('click').click(
+				this.deleteColumnFromKanbanBoard);
 	},
 
 	/**
@@ -134,42 +181,44 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initBoardIssueSortable: function() {
+	initBoardIssueSortable : function() {
 		this.sortableObj = $('.show-board .issues ul');
 		this.sortableObj.sortable({
-			connectWith: '.show-board .column.draganddrop-ok .issues ul',
-			placeholder: 'issue-state-highlight',
-				// Ajax request to database to update the issue
-			update: this.updateIssueInKanbanBoard,
-				// Handling of limits of a sortable column
-			start: this.handleColumnLimitsDuringDragAndDrop,
-			stop: this.handleColumnLimitsDuringDragAndDrop
+			connectWith : '.show-board .column.draganddrop-ok .issues ul',
+			placeholder : 'issue-state-highlight',
+			// Ajax request to database to update the issue
+			update : this.updateIssueInKanbanBoard,
+			// Handling of limits of a sortable column
+			start : this.handleColumnLimitsDuringDragAndDrop,
+			stop : this.handleColumnLimitsDuringDragAndDrop
 		}).disableSelection();
-		
+
 		/* this.sortableObj.draggable(); */
-		 
-		$("#archive").droppable({
-			accept: ".issues ul li",
-			activeClass: "issue-state-highlight",
-			hoverClass: "issue-state-highlight",
-			over: function(event, ui){
-			},
-			drop: function( event, ui ) {  
-				el = $( ".ui-sortable-helper.issue" );
-				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(el, 'issue');
-				
-				// Update affected issues in database
-				options = {
-					'url': '/application/board/update',
-					'data': {
-						'column': 0,
-						'issues': tmpId
+
+		$("#archive").droppable(
+				{
+					accept : ".issues ul li",
+					activeClass : "issue-state-highlight",
+					hoverClass : "issue-state-highlight",
+					over : function(event, ui) {
+					},
+					drop : function(event, ui) {
+						el = $(".ui-sortable-helper.issue");
+						tmpId = DigitalKanbanBaseBundle
+								.getDatabaseIdFromCSSClass(el, 'issue');
+
+						// Update affected issues in database
+						options = {
+							'url' : '/application/board/update',
+							'data' : {
+								'column' : 0,
+								'issues' : tmpId
+							}
+						};
+						DigitalKanbanBaseBundle.sendAjaxRequest(options);
+						el.fadeOut();
 					}
-				};
-				DigitalKanbanBaseBundle.sendAjaxRequest(options);
-				el.fadeOut();
-			}
-		});
+				});
 	},
 
 	/**
@@ -177,12 +226,12 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initBoardColumnSortable: function() {
+	initBoardColumnSortable : function() {
 		this.sortableObj = $('.edit-columns ul.editable-column-board');
 		this.sortableObj.sortable({
-				// Ajax request to database to update the issue
-			update: this.updateColumnInKanbanBoard,
-			placeholder: 'column-state-highlight'
+			// Ajax request to database to update the issue
+			update : this.updateColumnInKanbanBoard,
+			placeholder : 'column-state-highlight'
 		}).disableSelection();
 	},
 
@@ -191,14 +240,15 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initNewIssueItems: function() {
-			// Set click event on Reset button
+	initNewIssueItems : function() {
+		// Set click event on Reset button
 		$('#link-issue-reset').click(function() {
 			$('#new-issue textarea').val('');
 		});
 
-			// Set click event on save button
-		$('#link-issue-save').click($.proxy(this.addNewIssueToKanbanBoard, this));
+		// Set click event on save button
+		$('#link-issue-save').click(
+				$.proxy(this.addNewIssueToKanbanBoard, this));
 	},
 
 	/**
@@ -206,36 +256,48 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initNewColumnItems: function() {
-			// Set click event on Reset button
+	initNewColumnItems : function() {
+		// Set click event on Reset button
 		$('#link-column-reset').click(function() {
 			$('#column-name, #column-limit').val('');
 			$('#column-timeable').attr('checked', false);
-			$('#column-limit').removeAttr("disabled"); 
+			$('#column-limit').removeAttr("disabled");
 		});
 
-			// Set click event on save button
-		$('#link-column-save').click($.proxy(this.addNewColumnToKanbanBoard, this));
-		
+		// Set click event on save button
+		$('#link-column-save').click(
+				$.proxy(this.addNewColumnToKanbanBoard, this));
+
 		// set click event on timeable
-		$('#column-timeable').click($.proxy(this.manageTimeableColumnToKanbanBoard, this));
+		$('#column-timeable').click(
+				$.proxy(this.manageTimeableColumnToKanbanBoard, this));
 	},
-	
+
 	/**
 	 * Initialize the countdown if necessary
 	 * 
 	 * @return void
 	 */
-	initTimeableItem: function() {
-		$("div.timeable").each(function(){ 
-			// $(this).parent().children('.issues li.issue').each(function(){
-			$(this).parent().find('.issues > ul > li.issue').each(function(){
-				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass($(this), 'issue');
-				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
-				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
-				$('#timeelapsed-text-'+ tmpId).hide();
-			});
-		});
+	initTimeableItem : function() {
+		$("div.timeable").each(
+				function() {
+					// $(this).parent().children('.issues
+					// li.issue').each(function(){
+					$(this).parent().find('.issues > ul > li.issue').each(
+							function() {
+								tmpId = DigitalKanbanBaseBundle
+										.getDatabaseIdFromCSSClass($(this),
+												'issue');
+								var start = parseInt($('#timeelapsed-' + tmpId)
+										.attr('zorig'));
+								$('#timeelapsed-' + tmpId).countdown({
+									since : '-' + start + 's',
+									compact : true,
+									format : 'HMS'
+								});
+								$('#timeelapsed-text-' + tmpId).hide();
+							});
+				});
 	},
 
 	/**
@@ -244,19 +306,19 @@ var DigitalKanbanBaseBundle = {
 	 * @param event
 	 * @return void
 	 */
-	deleteIssueFromKanbanBoard: function(event) {
-		var issueId,
-			issue = $(this).parents('li.issue'),
-			options = {};
+	deleteIssueFromKanbanBoard : function(event) {
+		var issueId, issue = $(this).parents('li.issue'), options = {};
 
-			// If the user confirms to delete the issue make an ajax call to
-			// talk to the database :)
-		if(confirm($(this).prev().text()) === true) {
-			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(issue, 'issue');
+		// If the user confirms to delete the issue make an ajax call to
+		// talk to the database :)
+		if (confirm($(this).prev().text()) === true) {
+			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(issue,
+					'issue');
 			options = {
-				'url': "/application/issue/delete/" + parseInt(issueId),
-				'data': {},
-				'successCallback': $.proxy(DigitalKanbanBaseBundle.deleteIssueFromDOM, this)
+				'url' : "/application/issue/delete/" + parseInt(issueId),
+				'data' : {},
+				'successCallback' : $.proxy(
+						DigitalKanbanBaseBundle.deleteIssueFromDOM, this)
 			};
 			DigitalKanbanBaseBundle.sendAjaxRequest(options);
 		}
@@ -268,19 +330,19 @@ var DigitalKanbanBaseBundle = {
 	 * @param event
 	 * @return void
 	 */
-	deleteColumnFromKanbanBoard: function(event) {
-		var columnId,
-			column = $(this).parents('li.column'),
-			options = {};
+	deleteColumnFromKanbanBoard : function(event) {
+		var columnId, column = $(this).parents('li.column'), options = {};
 
-			// If the user confirms to delete the column make an ajax call to
-			// talk to the database :)
-		if(confirm($(this).prev().text()) === true) {
-			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(column, 'column');
+		// If the user confirms to delete the column make an ajax call to
+		// talk to the database :)
+		if (confirm($(this).prev().text()) === true) {
+			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(column,
+					'column');
 			options = {
-				'url': '/application/column/delete/' + parseInt(issueId),
-				'data': {},
-				'successCallback': $.proxy(DigitalKanbanBaseBundle.deleteColumnFromDOM, this)
+				'url' : '/application/column/delete/' + parseInt(issueId),
+				'data' : {},
+				'successCallback' : $.proxy(
+						DigitalKanbanBaseBundle.deleteColumnFromDOM, this)
 			};
 			DigitalKanbanBaseBundle.sendAjaxRequest(options);
 		}
@@ -292,9 +354,9 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	deleteIssueFromDOM: function() {
-			// Fade the issue out, after this remove this from DOM and renew the
-			// drag and drop functions
+	deleteIssueFromDOM : function() {
+		// Fade the issue out, after this remove this from DOM and renew the
+		// drag and drop functions
 		$(this).parents('li.issue').fadeOut('fast', function() {
 			$(this).remove();
 			DigitalKanbanBaseBundle.handleColumnLimitsDuringDragAndDrop();
@@ -307,9 +369,9 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	deleteColumnFromDOM: function() {
-			// Fade the column out, after this remove this from DOM and renew
-			// the column width
+	deleteColumnFromDOM : function() {
+		// Fade the column out, after this remove this from DOM and renew
+		// the column width
 		$(this).parents('li.column').fadeOut('fast', function() {
 			$(this).remove();
 			DigitalKanbanBaseBundle.initColumnWidth();
@@ -322,15 +384,11 @@ var DigitalKanbanBaseBundle = {
 	 * @param event
 	 * @return void
 	 */
-	addNewIssueToKanbanBoard: function(event) {
-		var newIssueTitle = $.trim($('#new-issue textarea').val()),
-			firstColumn = null,
-			numOfIssues = 0,
-			nameOfFirstColumn = '',
-			options = {};
+	addNewIssueToKanbanBoard : function(event) {
+		var newIssueTitle = $.trim($('#new-issue textarea').val()), firstColumn = null, numOfIssues = 0, nameOfFirstColumn = '', options = {};
 
-			// If the textarea / issue-text is empty, throw an error
-		if(newIssueTitle === '') {
+		// If the textarea / issue-text is empty, throw an error
+		if (newIssueTitle === '') {
 			alert('Please add a title to your new issue.');
 			return;
 		}
@@ -338,23 +396,28 @@ var DigitalKanbanBaseBundle = {
 		firstColumn = $('#main .board-columns .column:first');
 		numOfIssues = $('div.issues ul li.issue', firstColumn).length;
 
-			// If the limit of the first column is reached, throw an error
-		if(this.checkLimitOfColumn(firstColumn, (numOfIssues + 1)) === false) {
+		// If the limit of the first column is reached, throw an error
+		if (this.checkLimitOfColumn(firstColumn, (numOfIssues + 1)) === false) {
 			nameOfFirstColumn = $.trim($('.name', firstColumn).val());
-			alert('The limit of column ' + nameOfFirstColumn + ' is reached. Please do the work before adding new issues ;)');
+			alert('The limit of column '
+					+ nameOfFirstColumn
+					+ ' is reached. Please do the work before adding new issues ;)');
 			return;
 		}
 
-			// Save new issue to the database
+		// Save new issue to the database
 		options = {
-			'url': '/application/issue/add',
-			'data': {
-				'column': this.getDatabaseIdFromCSSClass(firstColumn, 'column'),
-				'issue': {title: newIssueTitle}
+			'url' : '/application/issue/add',
+			'data' : {
+				'column' : this
+						.getDatabaseIdFromCSSClass(firstColumn, 'column'),
+				'issue' : {
+					title : newIssueTitle
+				}
 			},
-			'successCallback': $.proxy(this.addNewInsertedIssueToDOM, this)
+			'successCallback' : $.proxy(this.addNewInsertedIssueToDOM, this)
 		};
-		
+
 		this.sendAjaxRequest(options);
 	},
 
@@ -367,136 +430,126 @@ var DigitalKanbanBaseBundle = {
 	 * @param xhrObject
 	 * @return void
 	 */
-	addNewInsertedIssueToDOM: function(xhrData, eventName, xhrObject) {
-		var firstColumn = $('#main .board-columns .column:first'),
-			elements = {};
+	addNewInsertedIssueToDOM : function(xhrData, eventName, xhrObject) {
+		var firstColumn = $('#main .board-columns .column:first'), elements = {};
 
-			// parsing text to manage group
+		// parsing text to manage group
 		var arr = xhrData.name.split('#');
-		
-		if (arr.length > 1){
+
+		if (arr.length > 1) {
 			ret = '';
-			if (arr[1] !== undefined){
-				ret += '<div class="group1">' + arr[0] + '</div>';;
+			if (arr[1] !== undefined) {
+				ret += '<div class="group1">' + arr[0] + '</div>';
+				;
 				if (arr[2] !== undefined) {
 					ret += '<div class="group2">' + arr[1] + '</div>';
-                    if (arr[3] !== undefined) {
-                    	ret +=  '<div class="group3">' + arr[2] + '</div>';
-                    }
-                }
+					if (arr[3] !== undefined) {
+						ret += '<div class="group3">' + arr[2] + '</div>';
+					}
+				}
 			}
 			ret += '<div class="group0">' + arr[arr.length - 1] + '</div>';
 		} else {
 			ret = xhrData.name;
 		}
-		
-			// Add the issue to the first column
-		elements.issue = $(document.createElement('li'))
-			.addClass('issue rotate' + parseInt(xhrData.rotation) + ' issue-' + parseInt(xhrData.id))
-			.html(ret)
-			.appendTo($('ul', firstColumn));
-		
-		elements.timeelapsed = $(document.createElement('div'))
-		.addClass('timeelapsed')
-		.appendTo(elements.issue);
-	
 
-		elements.timeelapsedtext = $(document.createElement('div'))
-			.addClass('timeelapsed-text')
-			.attr("id", "timeelapsed-text-" + parseInt(xhrData.id))
-			.html("Time elapsed: <span id=\"duration-" + parseInt(xhrData.id) + "\">00:00:00</span> <small>(hh:mi:ss)</small>")
-			.appendTo(elements.timeelapsed);
+		// Add the issue to the first column
+		elements.issue = $(document.createElement('li')).addClass(
+				'issue rotate' + parseInt(xhrData.rotation) + ' issue-'
+						+ parseInt(xhrData.id)).html(ret).appendTo(
+				$('ul', firstColumn));
 
-		elements.timeelapsedcount =  $(document.createElement('div'))
-			.addClass('timeelapsed-count')
-			.attr("id", "timeelapsed-" + parseInt(xhrData.id))
-			.attr("zorig", "0")
-			.appendTo(elements.timeelapsed);
+		elements.timeelapsed = $(document.createElement('div')).addClass(
+				'timeelapsed').appendTo(elements.issue);
 
-		
-			// If the user is an administrator, generate the delete link and
-			// insert this, too
-		if(xhrData.userIsAdmin === true) {
-			elements.deleteText = $(document.createElement('span'))
-				.addClass('confirm-text visuallyhidden')
-				.text('Wollen Sie das Kanban "' + xhrData.name + '" wirklich löschen?')
-				.appendTo(elements.issue);
+		elements.timeelapsedtext = $(document.createElement('div')).addClass(
+				'timeelapsed-text').attr("id",
+				"timeelapsed-text-" + parseInt(xhrData.id)).html(
+				"Time elapsed: <span id=\"duration-" + parseInt(xhrData.id)
+						+ "\">00:00:00</span> <small>(hh:mi:ss)</small>")
+				.appendTo(elements.timeelapsed);
 
-			elements.deleteLink = $(document.createElement('a'))
-				.attr('href', 'javascript:void(0);')
-				.addClass('delete')
-				.css('display', 'none')
-				.appendTo(elements.issue);
+		elements.timeelapsedcount = $(document.createElement('div')).addClass(
+				'timeelapsed-count').attr("id",
+				"timeelapsed-" + parseInt(xhrData.id)).attr("zorig", "0")
+				.appendTo(elements.timeelapsed);
 
-			elements.deleteImg = $(document.createElement('img'))
-				.attr({
-					'alt': 'Delete',
-					'title': 'Delete',
-					'src': '/bundles/digitalkanbanbase/images/no.png'
-				})
-				.appendTo(elements.deleteLink);
+		// If the user is an administrator, generate the delete link and
+		// insert this, too
+		if (xhrData.userIsAdmin === true) {
+			elements.deleteText = $(document.createElement('span')).addClass(
+					'confirm-text visuallyhidden').text(
+					'Wollen Sie das Kanban "' + xhrData.name
+							+ '" wirklich löschen?').appendTo(elements.issue);
+
+			elements.deleteLink = $(document.createElement('a')).attr('href',
+					'javascript:void(0);').addClass('delete').css('display',
+					'none').appendTo(elements.issue);
+
+			elements.deleteImg = $(document.createElement('img')).attr({
+				'alt' : 'Delete',
+				'title' : 'Delete',
+				'src' : '/bundles/digitalkanbanbase/images/no.png'
+			}).appendTo(elements.deleteLink);
 		}
 
-			// Reset the textarea
+		// Reset the textarea
 		$('#new-issue textarea').val('');
 
-			// Update column icons (drag and drop)
+		// Update column icons (drag and drop)
 		this.handleColumnLimitsDuringDragAndDrop();
 
-			// Refresh sortable objects and delete link events
+		// Refresh sortable objects and delete link events
 		this.sortableObj.sortable('refresh');
 		this.initIssueAndColumnDeleteFunction();
 		this.initTimeableItem();
 	},
 
-	
 	/**
 	 * Method to manage the timeable checkbox a new column to the kanban board
 	 * 
 	 * @param event
 	 * @return void
 	 */
-	
-	manageTimeableColumnToKanbanBoard: function(event) {
-		 if ($.trim($('#column-timeable:checkbox:checked').val()) == "true") {
-			 $('#column-limit').val('1');
-			 $('#column-limit').attr("disabled", true); 
-		 } else {
-			 $('#column-limit').removeAttr("disabled"); 
-		 }
+
+	manageTimeableColumnToKanbanBoard : function(event) {
+		if ($.trim($('#column-timeable:checkbox:checked').val()) == "true") {
+			$('#column-limit').val('1');
+			$('#column-limit').attr("disabled", true);
+		} else {
+			$('#column-limit').removeAttr("disabled");
+		}
 	},
-	
-	
-	
+
 	/**
 	 * Method to add a new column to the kanban board
 	 * 
 	 * @param event
 	 * @return void
 	 */
-	addNewColumnToKanbanBoard: function(event) {
+	addNewColumnToKanbanBoard : function(event) {
 		var newColumn = {
-				'name': $.trim($('#column-name').val()),
-				'limit': parseInt($.trim($('#column-limit').val())),
-				'timeable': ($.trim($('#column-timeable:checkbox:checked').val()) == "true")? '1': '0'
-			},
-			boardId = 0,
-			options = {};
+			'name' : $.trim($('#column-name').val()),
+			'limit' : parseInt($.trim($('#column-limit').val())),
+			'timeable' : ($.trim($('#column-timeable:checkbox:checked').val()) == "true") ? '1'
+					: '0'
+		}, boardId = 0, options = {};
 
-			// If the name field is empty, throw an error
-		if(newColumn.name === '') {
+		// If the name field is empty, throw an error
+		if (newColumn.name === '') {
 			alert('Please add a name to your new column.');
 			return;
 		}
 
-			// Save new column to the database via ajax request
+		// Save new column to the database via ajax request
 		options = {
-			'url': '/application/column/add',
-			'data': {
-				'board': this.getDatabaseIdFromCSSClass($('div.edit-columns div.kanban-board'), 'board'),
-				'column': newColumn
+			'url' : '/application/column/add',
+			'data' : {
+				'board' : this.getDatabaseIdFromCSSClass(
+						$('div.edit-columns div.kanban-board'), 'board'),
+				'column' : newColumn
 			},
-			'successCallback': $.proxy(this.addNewInsertedColumnToDOM, this)
+			'successCallback' : $.proxy(this.addNewInsertedColumnToDOM, this)
 		};
 		this.sendAjaxRequest(options);
 	},
@@ -510,44 +563,46 @@ var DigitalKanbanBaseBundle = {
 	 * @param xhrObject
 	 * @return void
 	 */
-	addNewInsertedColumnToDOM: function(xhrData, eventName, xhrObject) {
-			// Clone the 'template'-node for one column
-		var column = $('ul.hidden li.column').clone(true, true),
-			tmpVal = '';
+	addNewInsertedColumnToDOM : function(xhrData, eventName, xhrObject) {
+		// Clone the 'template'-node for one column
+		var column = $('ul.hidden li.column').clone(true, true), tmpVal = '';
 
-			// Add the missing 'id'-class
+		// Add the missing 'id'-class
 		column.addClass('column-' + xhrData.id);
 
-			// Add name and limit
+		// Add name and limit
 		$('div.name', column).text(xhrData.name);
-		if(xhrData.limit > 0) {
+		if (xhrData.limit > 0) {
 			$('div.limit', column).text(xhrData.limit);
 		}
-		
+
 		// add timeable class
-		if(xhrData.timeable > 0) {
+		if (xhrData.timeable > 0) {
 			$('div.limit', column).addClass('timeable');
 		}
 
-			// Replace Name marker in values and attributes
+		// Replace Name marker in values and attributes
 		tmpVal = $('span.confirm-text', column).text();
-		$('span.confirm-text', column).text(tmpVal.replace(/###NAME###/, xhrData.name));
+		$('span.confirm-text', column).text(
+				tmpVal.replace(/###NAME###/, xhrData.name));
 
 		tmpVal = $('a.delete img', column).attr('alt');
-		$('a.delete img', column).attr('alt', tmpVal.replace(/###NAME###/, xhrData.name));
+		$('a.delete img', column).attr('alt',
+				tmpVal.replace(/###NAME###/, xhrData.name));
 
 		tmpVal = $('a.delete img', column).attr('title');
-		$('a.delete img', column).attr('title', tmpVal.replace(/###NAME###/, xhrData.name));
+		$('a.delete img', column).attr('title',
+				tmpVal.replace(/###NAME###/, xhrData.name));
 
-			// Add the new column to the right place in DOM
+		// Add the new column to the right place in DOM
 		column.prependTo('.kanban-board ul.editable-column-board');
 
-			// Reset input fields
+		// Reset input fields
 		$('#column-name, #column-limit').val('');
 		$('#column-timeable').attr('checked', false);
-		$('#column-limit').removeAttr("disabled"); 
+		$('#column-limit').removeAttr("disabled");
 
-			// Refresh and reinitialize sortable objects, events and css styles
+		// Refresh and reinitialize sortable objects, events and css styles
 		this.initColumnWidth();
 		this.sortableObj.sortable('refresh');
 		this.initIssueAndColumnDeleteFunction();
@@ -563,12 +618,13 @@ var DigitalKanbanBaseBundle = {
 	 * @param options
 	 * @return void
 	 */
-	sendAjaxRequest: function(options) {
+	sendAjaxRequest : function(options) {
 		$.ajax({
-			type: "POST",
-			url: options.url,
-			data: options.data,
-			success: options.successCallback || function(){}
+			type : "POST",
+			url : options.url,
+			data : options.data,
+			success : options.successCallback || function() {
+			}
 		}).fail(function(qXHR, textStatus, headerText) {
 			alert('An error occued: ' + headerText);
 		});
@@ -584,13 +640,14 @@ var DigitalKanbanBaseBundle = {
 	 * 
 	 * @return void
 	 */
-	initColumnWidth: function() {
+	initColumnWidth : function() {
 		var columns = $('#main .board-columns .column');
-		var columnWrapperWidth = parseInt($('#main .board-columns').css('width'));
+		var columnWrapperWidth = parseInt($('#main .board-columns')
+				.css('width'));
 		var widthToSet = parseInt($(columns[1]).css('width')) * columns.length;
 
 		$('#main .board-columns').css('width', widthToSet + 'px');
-		if(columnWrapperWidth < widthToSet) {
+		if (columnWrapperWidth < widthToSet) {
 			$('#main .kanban-board').css('overflow-x', 'scroll');
 		} else {
 			$('#main .kanban-board').css('overflow-x', 'auto');
@@ -609,60 +666,63 @@ var DigitalKanbanBaseBundle = {
 	 *            ui Sortable object of callback event
 	 * @return void
 	 */
-	updateIssueInKanbanBoard: function(event, ui) {
-		var column = null,
-			columnId = 0,
-			tmpId = 0,
-			issues = null,
-			issueIdArray = new Array(),
-			options = {};
+	updateIssueInKanbanBoard : function(event, ui) {
+		var column = null, columnId = 0, tmpId = 0, issues = null, issueIdArray = new Array(), options = {};
 
-			// If a ticket was moved to another column, the plugin Sortable is
-			// called twice.
-			// This condition prevents the second call. To update all issue, one
-			// call is enough.
+		// If a ticket was moved to another column, the plugin Sortable is
+		// called twice.
+		// This condition prevents the second call. To update all issue, one
+		// call is enough.
 		if (this !== ui.item.parent()[0]) {
 			return;
 		}
 
-			// Get the columns with issues
+		// Get the columns with issues
 		column = $(ui.item).parents('div.column');
 		issues = $('div.issues ul li.issue', column);
 
-			// Get database ids from column and issues
-		columnId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(column, 'column');
-		issues.each(function(index, element){
-			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element, 'issue');
+		// Get database ids from column and issues
+		columnId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(column,
+				'column');
+		issues.each(function(index, element) {
+			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element,
+					'issue');
 			issueIdArray.push(tmpId);
-			
-			
+
 			// check if timer is needed
-			if($('.column-' + columnId + '> div.timeable').length > 0){
-				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
-				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
-				$('#timeelapsed-text-'+ tmpId).hide();
+			if ($('.column-' + columnId + '> div.timeable').length > 0) {
+				var start = parseInt($('#timeelapsed-' + tmpId).attr('zorig'));
+				$('#timeelapsed-' + tmpId).countdown({
+					since : '-' + start + 's',
+					compact : true,
+					format : 'HMS'
+				});
+				$('#timeelapsed-text-' + tmpId).hide();
 			} else {
 				if ($("#timeelapsed-" + tmpId).hasClass("hasCountdown")) {
-					totalSec = parseInt($.countdown.periodsToSeconds($('#timeelapsed-'+ tmpId).countdown('getTimes')));
-					$('#timeelapsed-'+ tmpId).attr('zorig', totalSec);
-					$('#timeelapsed-'+ tmpId).countdown('destroy');
-					hours = parseInt( totalSec / 3600 );
-					minutes = parseInt( totalSec / 60 ) % 60;
+					totalSec = parseInt($.countdown.periodsToSeconds($(
+							'#timeelapsed-' + tmpId).countdown('getTimes')));
+					$('#timeelapsed-' + tmpId).attr('zorig', totalSec);
+					$('#timeelapsed-' + tmpId).countdown('destroy');
+					hours = parseInt(totalSec / 3600);
+					minutes = parseInt(totalSec / 60) % 60;
 					seconds = totalSec % 60;
 
-					result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
-					$('#duration-'+ tmpId).html(result);
-					$('#timeelapsed-text-'+ tmpId).show();
+					result = (hours < 10 ? "0" + hours : hours) + ":"
+							+ (minutes < 10 ? "0" + minutes : minutes) + ":"
+							+ (seconds < 10 ? "0" + seconds : seconds);
+					$('#duration-' + tmpId).html(result);
+					$('#timeelapsed-text-' + tmpId).show();
 				}
 			}
 		});
 
-			// Update affected issues in database
+		// Update affected issues in database
 		options = {
-			'url': '/application/board/update',
-			'data': {
-				'column': columnId,
-				'issues': issueIdArray.join(',')
+			'url' : '/application/board/update',
+			'data' : {
+				'column' : columnId,
+				'issues' : issueIdArray.join(',')
 			}
 		};
 		DigitalKanbanBaseBundle.sendAjaxRequest(options);
@@ -678,33 +738,30 @@ var DigitalKanbanBaseBundle = {
 	 *            Sortable object of callback event
 	 * @return void
 	 */
-	updateColumnInKanbanBoard: function(event, ui) {
-		var board = null,
-			boardId = 0,
-			tmpId = 0,
-			columns = null,
-			columnIdArray = new Array(),
-			options = {};
+	updateColumnInKanbanBoard : function(event, ui) {
+		var board = null, boardId = 0, tmpId = 0, columns = null, columnIdArray = new Array(), options = {};
 
-			// Get the board with columns
+		// Get the board with columns
 		board = $(ui.item).parents('div.kanban-board');
 		columns = $('ul.editable-column-board li.column');
 
-			// Get database ids from board and columns
-		boardId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(board, 'board');
-		columns.each(function(index, element){
-			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element, 'column');
+		// Get database ids from board and columns
+		boardId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(board,
+				'board');
+		columns.each(function(index, element) {
+			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element,
+					'column');
 			columnIdArray.push(tmpId);
 		});
 
-			// Update affected columns in database
+		// Update affected columns in database
 		options = {
-			'url': '/application/column/update',
-			'data': {
-				'board': boardId,
-				'columns': columnIdArray.join(',')
+			'url' : '/application/column/update',
+			'data' : {
+				'board' : boardId,
+				'columns' : columnIdArray.join(',')
 			},
-			'successCallback': function() {
+			'successCallback' : function() {
 				DigitalKanbanBaseBundle.initLastColumnOnKanbanBoard();
 			}
 		};
@@ -725,22 +782,24 @@ var DigitalKanbanBaseBundle = {
 	 *            ui Sortable object of callback event
 	 * @return void
 	 */
-	handleColumnLimitsDuringDragAndDrop: function(event, ui) {
-			// Get all columns
+	handleColumnLimitsDuringDragAndDrop : function(event, ui) {
+		// Get all columns
 		var columns = $('#main .board-columns .column');
 		columns.removeClass('draganddrop-ok draganddrop-fail');
 
-			// Loop over every column and renew the drag and drop state in base
-			// of the 'kanban limits'
-		columns.each($.proxy(function(index, singleColumn) {
-			var issues = $('div.issues ul li.issue', singleColumn);
-			if(this.checkLimitOfColumn(singleColumn, (issues.length + 1)) === false) {
-				$(singleColumn).addClass('draganddrop-fail');
-			} else {
-				$(singleColumn).addClass('draganddrop-ok');
-			}
-			this.sortableObj.sortable('refresh');
-		}, DigitalKanbanBaseBundle));
+		// Loop over every column and renew the drag and drop state in base
+		// of the 'kanban limits'
+		columns.each($.proxy(
+				function(index, singleColumn) {
+					var issues = $('div.issues ul li.issue', singleColumn);
+					if (this.checkLimitOfColumn(singleColumn,
+							(issues.length + 1)) === false) {
+						$(singleColumn).addClass('draganddrop-fail');
+					} else {
+						$(singleColumn).addClass('draganddrop-ok');
+					}
+					this.sortableObj.sortable('refresh');
+				}, DigitalKanbanBaseBundle));
 	},
 
 	/**
@@ -754,10 +813,11 @@ var DigitalKanbanBaseBundle = {
 	 *            classPrefix CSS-Class-Prefix
 	 * @return integer Database id of record
 	 */
-	getDatabaseIdFromCSSClass: function(elementWithIdClass, classPrefix) {
-		var tmpIdClass = $(elementWithIdClass).attr('class').split(' ').filter(function(element) {
-			return (element.indexOf(classPrefix + '-') >= 0);
-		});
+	getDatabaseIdFromCSSClass : function(elementWithIdClass, classPrefix) {
+		var tmpIdClass = $(elementWithIdClass).attr('class').split(' ').filter(
+				function(element) {
+					return (element.indexOf(classPrefix + '-') >= 0);
+				});
 		return parseInt(tmpIdClass[0].split('-')[1]);
 	},
 
@@ -768,11 +828,11 @@ var DigitalKanbanBaseBundle = {
 	 *            column DOM-Element of column
 	 * @return integer limit
 	 */
-	getLimitOfColumn: function(column) {
+	getLimitOfColumn : function(column) {
 		var limit = parseInt($('div.limit', column).text());
 
-			// If there is no limit (empty value), set it to 0
-		if(isNaN(limit) === true) {
+		// If there is no limit (empty value), set it to 0
+		if (isNaN(limit) === true) {
 			limit = 0;
 		}
 
@@ -788,11 +848,10 @@ var DigitalKanbanBaseBundle = {
 	 *            numOfIssues Number of issues in the column
 	 * @return boolean FALSE if the limit is reached, TRUE otherwise
 	 */
-	checkLimitOfColumn: function(column, numOfIssues) {
-		var returnVal = true,
-			limit = this.getLimitOfColumn(column);
+	checkLimitOfColumn : function(column, numOfIssues) {
+		var returnVal = true, limit = this.getLimitOfColumn(column);
 
-		if(limit > 0 && limit < (numOfIssues)) {
+		if (limit > 0 && limit < (numOfIssues)) {
 			returnVal = false;
 		}
 
