@@ -2,14 +2,14 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Sortable object
-	 *
+	 * 
 	 * @var object JQuery UI Sortable
 	 */
 	sortableObj: null,
 
 	/**
 	 * Initialize method to bootstrap the application
-	 *
+	 * 
 	 * @return void
 	 */
 	init: function() {
@@ -24,7 +24,8 @@ var DigitalKanbanBaseBundle = {
 		this.initNewIssueItems();
 		this.initKanbanBoard();
 
-			// Available on management sites like 'User management' or 'Board management'
+			// Available on management sites like 'User management' or 'Board
+			// management'
 		this.initDeleteLinks();
 
 			// Available at 'Edit board columns'
@@ -33,9 +34,9 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If the login site is called, set the focus (mouse cursor) on the username field.
-	 * This is just a small but useful usability improvement
-	 *
+	 * If the login site is called, set the focus (mouse cursor) on the username
+	 * field. This is just a small but useful usability improvement
+	 * 
 	 * @return void
 	 */
 	initLoginFormular: function() {
@@ -44,7 +45,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Initialize the onChange-Event of the kanban board selector
-	 *
+	 * 
 	 * @return void
 	 */
 	initBoardSelector: function() {
@@ -54,8 +55,9 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Initialize the kanban board with all the functionality (move, issue delete, and so on ...)
-	 *
+	 * Initialize the kanban board with all the functionality (move, issue
+	 * delete, and so on ...)
+	 * 
 	 * @return void
 	 */
 	initKanbanBoard: function() {
@@ -68,9 +70,9 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Initialize the last column of a kanban board.
-	 * Every column has a css border-right. But the last column shouldn`t have one.
-	 *
+	 * Initialize the last column of a kanban board. Every column has a css
+	 * border-right. But the last column shouldn`t have one.
+	 * 
 	 * @return void
 	 */
 	initLastColumnOnKanbanBoard: function(){
@@ -79,9 +81,10 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Initialize the delete links on User or Board management pages.
-	 * The user will be asked if he want to delete one record via javascript confirm function.
-	 *
+	 * Initialize the delete links on User or Board management pages. The user
+	 * will be asked if he want to delete one record via javascript confirm
+	 * function.
+	 * 
 	 * @return void
 	 */
 	initDeleteLinks: function() {
@@ -91,18 +94,19 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Initialize the delete functions for issues and columns.
-	 * It sets various mouse and click-events.
-	 *
-	 * The mousevents are to handle the toggle of the delete icons.
-	 * The clickevents are to delete the item.
-	 *
+	 * Initialize the delete functions for issues and columns. It sets various
+	 * mouse and click-events.
+	 * 
+	 * The mousevents are to handle the toggle of the delete icons. The
+	 * clickevents are to delete the item.
+	 * 
 	 * @return void
 	 */
 	initIssueAndColumnDeleteFunction: function() {
 			// Set event handler to show the delete links on issues and columns
 			// We have to unbind the vents before, because this method is called
-			// more than one time. For example if you create a new issue or column
+			// more than one time. For example if you create a new issue or
+			// column
 			// the method will be call again.
 		$('.show-board .kanban-board .issues li.issue, .board-columns ul li.column')
 			.unbind('mouseenter')
@@ -127,8 +131,8 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Initialize the drag and drop functionality of issues on a kanban board
-	 *
-	 * @return	void
+	 * 
+	 * @return void
 	 */
 	initBoardIssueSortable: function() {
 		this.sortableObj = $('.show-board .issues ul');
@@ -142,7 +146,7 @@ var DigitalKanbanBaseBundle = {
 			stop: this.handleColumnLimitsDuringDragAndDrop
 		}).disableSelection();
 		
-		/*this.sortableObj.draggable();*/
+		/* this.sortableObj.draggable(); */
 		 
 		$("#archive").droppable({
 			accept: ".issues ul li",
@@ -170,7 +174,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Initialize the drag and drop functionality of column of a kanban board
-	 *
+	 * 
 	 * @return void
 	 */
 	initBoardColumnSortable: function() {
@@ -184,7 +188,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Initialize the 'create new issue' functionality
-	 *
+	 * 
 	 * @return void
 	 */
 	initNewIssueItems: function() {
@@ -199,7 +203,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Initialize the 'create new column' functionality
-	 *
+	 * 
 	 * @return void
 	 */
 	initNewColumnItems: function() {
@@ -213,18 +217,18 @@ var DigitalKanbanBaseBundle = {
 			// Set click event on save button
 		$('#link-column-save').click($.proxy(this.addNewColumnToKanbanBoard, this));
 		
-		//set click event on timeable
+		// set click event on timeable
 		$('#column-timeable').click($.proxy(this.manageTimeableColumnToKanbanBoard, this));
 	},
 	
 	/**
 	 * Initialize the countdown if necessary
-	 *
+	 * 
 	 * @return void
 	 */
 	initTimeableItem: function() {
 		$("div.timeable").each(function(){ 
-			//$(this).parent().children('.issues li.issue').each(function(){ 
+			// $(this).parent().children('.issues li.issue').each(function(){
 			$(this).parent().find('.issues > ul > li.issue').each(function(){
 				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass($(this), 'issue');
 				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
@@ -236,7 +240,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Javascript method to delete an issue from kanban board
-	 *
+	 * 
 	 * @param event
 	 * @return void
 	 */
@@ -245,7 +249,8 @@ var DigitalKanbanBaseBundle = {
 			issue = $(this).parents('li.issue'),
 			options = {};
 
-			// If the user confirms to delete the issue make an ajax call to talk to the database :)
+			// If the user confirms to delete the issue make an ajax call to
+			// talk to the database :)
 		if(confirm($(this).prev().text()) === true) {
 			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(issue, 'issue');
 			options = {
@@ -259,7 +264,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Method to delete a column from kanban board
-	 *
+	 * 
 	 * @param event
 	 * @return void
 	 */
@@ -268,7 +273,8 @@ var DigitalKanbanBaseBundle = {
 			column = $(this).parents('li.column'),
 			options = {};
 
-			// If the user confirms to delete the column make an ajax call to talk to the database :)
+			// If the user confirms to delete the column make an ajax call to
+			// talk to the database :)
 		if(confirm($(this).prev().text()) === true) {
 			issueId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(column, 'column');
 			options = {
@@ -281,12 +287,14 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If the ajax request (aka deletion in database) was a success, remove the issue from DOM
-	 *
+	 * If the ajax request (aka deletion in database) was a success, remove the
+	 * issue from DOM
+	 * 
 	 * @return void
 	 */
 	deleteIssueFromDOM: function() {
-			// Fade the issue out, after this remove this from DOM and renew the drag and drop functions
+			// Fade the issue out, after this remove this from DOM and renew the
+			// drag and drop functions
 		$(this).parents('li.issue').fadeOut('fast', function() {
 			$(this).remove();
 			DigitalKanbanBaseBundle.handleColumnLimitsDuringDragAndDrop();
@@ -294,12 +302,14 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If the ajax request (aka deletion in database) was a success, remove the column from DOM
-	 *
+	 * If the ajax request (aka deletion in database) was a success, remove the
+	 * column from DOM
+	 * 
 	 * @return void
 	 */
 	deleteColumnFromDOM: function() {
-			// Fade the column out, after this remove this from DOM and renew the column width
+			// Fade the column out, after this remove this from DOM and renew
+			// the column width
 		$(this).parents('li.column').fadeOut('fast', function() {
 			$(this).remove();
 			DigitalKanbanBaseBundle.initColumnWidth();
@@ -308,7 +318,7 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Method to add a new issue to the kanban board
-	 *
+	 * 
 	 * @param event
 	 * @return void
 	 */
@@ -349,8 +359,9 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If the ajax request (aka the insertion in the database) was successful, add the new issue to the DOM
-	 *
+	 * If the ajax request (aka the insertion in the database) was successful,
+	 * add the new issue to the DOM
+	 * 
 	 * @param xhrData
 	 * @param eventName
 	 * @param xhrObject
@@ -360,10 +371,29 @@ var DigitalKanbanBaseBundle = {
 		var firstColumn = $('#main .board-columns .column:first'),
 			elements = {};
 
+			// parsing text to manage group
+		var arr = xhrData.name.split('#');
+		
+		if (arr.length > 1){
+			ret = '';
+			if (arr[1] !== undefined){
+				ret += '<div class="group1">' + arr[0] + '</div>';;
+				if (arr[2] !== undefined) {
+					ret += '<div class="group2">' + arr[1] + '</div>';
+                    if (arr[3] !== undefined) {
+                    	ret +=  '<div class="group3">' + arr[2] + '</div>';
+                    }
+                }
+			}
+			ret += '<div class="group0">' + arr[arr.length - 1] + '</div>';
+		} else {
+			ret = xhrData.name;
+		}
+		
 			// Add the issue to the first column
 		elements.issue = $(document.createElement('li'))
 			.addClass('issue rotate' + parseInt(xhrData.rotation) + ' issue-' + parseInt(xhrData.id))
-			.text(xhrData.name)
+			.html(ret)
 			.appendTo($('ul', firstColumn));
 		
 		elements.timeelapsed = $(document.createElement('div'))
@@ -384,7 +414,8 @@ var DigitalKanbanBaseBundle = {
 			.appendTo(elements.timeelapsed);
 
 		
-			// If the user is an administrator, generate the delete link and insert this, too
+			// If the user is an administrator, generate the delete link and
+			// insert this, too
 		if(xhrData.userIsAdmin === true) {
 			elements.deleteText = $(document.createElement('span'))
 				.addClass('confirm-text visuallyhidden')
@@ -421,7 +452,7 @@ var DigitalKanbanBaseBundle = {
 	
 	/**
 	 * Method to manage the timeable checkbox a new column to the kanban board
-	 *
+	 * 
 	 * @param event
 	 * @return void
 	 */
@@ -439,7 +470,7 @@ var DigitalKanbanBaseBundle = {
 	
 	/**
 	 * Method to add a new column to the kanban board
-	 *
+	 * 
 	 * @param event
 	 * @return void
 	 */
@@ -471,8 +502,9 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If the ajax request (aka the insertion into the database) was successful, add the new column to DOM
-	 *
+	 * If the ajax request (aka the insertion into the database) was successful,
+	 * add the new column to DOM
+	 * 
 	 * @param xhrData
 	 * @param eventName
 	 * @param xhrObject
@@ -492,7 +524,7 @@ var DigitalKanbanBaseBundle = {
 			$('div.limit', column).text(xhrData.limit);
 		}
 		
-		//add timeable class
+		// add timeable class
 		if(xhrData.timeable > 0) {
 			$('div.limit', column).addClass('timeable');
 		}
@@ -524,11 +556,10 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Main function to send an ajax request. Options is an object after JSON.
-	 * Possible keys:
-	 * 		url: The 'target' for this ajax request
-	 * 		data: An object after JSON to submit the data to the target (url)
-	 * 		successCallback: A function which will be executed, if the ajax request was a success
-	 *
+	 * Possible keys: url: The 'target' for this ajax request data: An object
+	 * after JSON to submit the data to the target (url) successCallback: A
+	 * function which will be executed, if the ajax request was a success
+	 * 
 	 * @param options
 	 * @return void
 	 */
@@ -544,12 +575,13 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Initialize the width of a kanban board.
-	 * If the board is to big to display it correctly, add the css attribute  overflow: scroll to the parent element.
-	 * With this solution the board could be displayed correctly.
-	 *
-	 * This method will be called again and again. After every insertion / deletion of columns.
-	 *
+	 * Initialize the width of a kanban board. If the board is to big to display
+	 * it correctly, add the css attribute overflow: scroll to the parent
+	 * element. With this solution the board could be displayed correctly.
+	 * 
+	 * This method will be called again and again. After every insertion /
+	 * deletion of columns.
+	 * 
 	 * @return void
 	 */
 	initColumnWidth: function() {
@@ -566,12 +598,15 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * If an issue was moved to another column, this method updates all including issues in the database.
-	 *
+	 * If an issue was moved to another column, this method updates all
+	 * including issues in the database.
+	 * 
 	 * This method is called as a callback from Sortable-library
-	 *
-	 * @param object event JQuery event object of callback event
-	 * @param object ui Sortable object of callback event
+	 * 
+	 * @param object
+	 *            event JQuery event object of callback event
+	 * @param object
+	 *            ui Sortable object of callback event
 	 * @return void
 	 */
 	updateIssueInKanbanBoard: function(event, ui) {
@@ -582,8 +617,10 @@ var DigitalKanbanBaseBundle = {
 			issueIdArray = new Array(),
 			options = {};
 
-			// If a ticket was moved to another column, the plugin Sortable is called twice.
-			// This condition prevents the second call. To update all issue, one call is enough.
+			// If a ticket was moved to another column, the plugin Sortable is
+			// called twice.
+			// This condition prevents the second call. To update all issue, one
+			// call is enough.
 		if (this !== ui.item.parent()[0]) {
 			return;
 		}
@@ -599,7 +636,7 @@ var DigitalKanbanBaseBundle = {
 			issueIdArray.push(tmpId);
 			
 			
-			//check if timer is needed
+			// check if timer is needed
 			if($('.column-' + columnId + '> div.timeable').length > 0){
 				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
 				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
@@ -632,10 +669,13 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * This methods update the column after the column was moved to another place (sorting).
-	 *
-	 * @param event JQuery event object of callback event
-	 * @param ui Sortable object of callback event
+	 * This methods update the column after the column was moved to another
+	 * place (sorting).
+	 * 
+	 * @param event
+	 *            JQuery event object of callback event
+	 * @param ui
+	 *            Sortable object of callback event
 	 * @return void
 	 */
 	updateColumnInKanbanBoard: function(event, ui) {
@@ -672,15 +712,17 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Method to handle the drag and drop action of an kanban board.
-	 * This is very important, because one kanban board column has limits.
-	 * If the limits are reached, it isn`t possible to move an issue to this column.
-	 *
-	 * This method take care of it this behaviour.
-	 * This method is called as a callback from Sortable-library
-	 *
-	 * @param object event JQuery event object of callback event
-	 * @param object ui Sortable object of callback event
+	 * Method to handle the drag and drop action of an kanban board. This is
+	 * very important, because one kanban board column has limits. If the limits
+	 * are reached, it isn`t possible to move an issue to this column.
+	 * 
+	 * This method take care of it this behaviour. This method is called as a
+	 * callback from Sortable-library
+	 * 
+	 * @param object
+	 *            event JQuery event object of callback event
+	 * @param object
+	 *            ui Sortable object of callback event
 	 * @return void
 	 */
 	handleColumnLimitsDuringDragAndDrop: function(event, ui) {
@@ -688,7 +730,8 @@ var DigitalKanbanBaseBundle = {
 		var columns = $('#main .board-columns .column');
 		columns.removeClass('draganddrop-ok draganddrop-fail');
 
-			// Loop over every column and renew the drag and drop state in base of the 'kanban limits'
+			// Loop over every column and renew the drag and drop state in base
+			// of the 'kanban limits'
 		columns.each($.proxy(function(index, singleColumn) {
 			var issues = $('div.issues ul li.issue', singleColumn);
 			if(this.checkLimitOfColumn(singleColumn, (issues.length + 1)) === false) {
@@ -701,12 +744,14 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
-	 * Detect the database id from a given DOM-element with prefix.
-	 * For example the id 5 from element column (css class: column-5).
-	 * For more information have a look at the HTML-Source of a single kanban board.
-	 *
-	 * @param object/string elementWithIdClass DOM-Element or selector
-	 * @param string classPrefix CSS-Class-Prefix
+	 * Detect the database id from a given DOM-element with prefix. For example
+	 * the id 5 from element column (css class: column-5). For more information
+	 * have a look at the HTML-Source of a single kanban board.
+	 * 
+	 * @param object/string
+	 *            elementWithIdClass DOM-Element or selector
+	 * @param string
+	 *            classPrefix CSS-Class-Prefix
 	 * @return integer Database id of record
 	 */
 	getDatabaseIdFromCSSClass: function(elementWithIdClass, classPrefix) {
@@ -718,8 +763,9 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Gets the Kanban limit of a specified column.
-	 *
-	 * @param object column DOM-Element of column
+	 * 
+	 * @param object
+	 *            column DOM-Element of column
 	 * @return integer limit
 	 */
 	getLimitOfColumn: function(column) {
@@ -735,9 +781,11 @@ var DigitalKanbanBaseBundle = {
 
 	/**
 	 * Checks if the limit of a specified column is reached
-	 *
-	 * @param object column DOM-Element of column to check
-	 * @param integer numOfIssues Number of issues in the column
+	 * 
+	 * @param object
+	 *            column DOM-Element of column to check
+	 * @param integer
+	 *            numOfIssues Number of issues in the column
 	 * @return boolean FALSE if the limit is reached, TRUE otherwise
 	 */
 	checkLimitOfColumn: function(column, numOfIssues) {
@@ -753,9 +801,9 @@ var DigitalKanbanBaseBundle = {
 };
 
 /**
- * Bootstrap / Startup functionality
- * If the document is ready and fully loaded, execute the javascript magic
- *
+ * Bootstrap / Startup functionality If the document is ready and fully loaded,
+ * execute the javascript magic
+ * 
  */
 $(document).ready(function() {
 	DigitalKanbanBaseBundle.init();

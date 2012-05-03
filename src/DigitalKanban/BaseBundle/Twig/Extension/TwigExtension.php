@@ -15,9 +15,7 @@ class TwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-                'sec2duration' => new \Twig_Filter_Method($this,
-                        'formatDuration'),
-                'splitgroup' => new \Twig_Filter_Method($this, 'splitGroup'),
+            'sec2duration' => new \Twig_Filter_Method($this, 'formatDuration'), 'splitgroup' => new \Twig_Filter_Method($this, 'splitGroup'),
         );
     }
 
@@ -42,8 +40,7 @@ class TwigExtension extends \Twig_Extension
                     }
                 }
             }
-            $ret .= '<div class="group0">' . $tabstr[count($tabstr) - 1]
-                    . '</div>';
+            $ret .= '<div class="group0">' . $tabstr[count($tabstr) - 1] . '</div>';
         } else {
             $ret = $text;
         }
