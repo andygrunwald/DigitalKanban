@@ -328,7 +328,7 @@ class BoardController extends Controller
                 $start = $issuetoarchive->getEdited();
                 $now = new \DateTime();
                 $interval = $now->diff($start);
-                $issuetoarchive->setDuration($interval->format('%s') + $issuetoarchive->getDuration());
+                $issuetoarchive->setDuration($this->interval_to_seconds($interval) + $issuetoarchive->getDuration());
             }
 
             $issuetoarchive->setBoardColumn(null);
@@ -363,7 +363,7 @@ class BoardController extends Controller
                     $start = $issue->getEdited();
                     $now = new \DateTime();
                     $interval = $now->diff($start);
-                    $issue->setDuration($interval->format('%s') + $issue->getDuration());
+                    $issue->setDuration($this->interval_to_seconds($interval) + $issue->getDuration());
                 }
             }
 
@@ -409,5 +409,10 @@ class BoardController extends Controller
         $this->get('session')
                 ->setFlash('error', $flashMessageData);
         return $this->redirect($this->generateUrl('application_board_list'));
+    }
+
+    private function interval_to_seconds($interval)
+    {
+        return ($interval->y * 365 * 24 * 60 * 60) + ($interval->m * 30 * 24 * 60 * 60) + ($interval->d * 24 * 60 * 60) + ($interval->h * 60 * 60) + $interval->s;
     }
 }
