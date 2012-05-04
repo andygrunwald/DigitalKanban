@@ -1,7 +1,6 @@
 <?php
 
 namespace DigitalKanban\BaseBundle\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
@@ -144,6 +143,91 @@ class IssueController extends Controller
         }
 
         return new Response(NULL, 200);
+    }
+
+    /**
+     * Edit action of issue controller.
+     *
+     * This method is called if a user edits an issue.
+     *
+     * This is only callable as an ajax request.
+     *
+     * @param $issueId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editAction($issueId)
+    {
+        $request = $this->getRequest();
+
+        // If it is not a ajax request OR the user is not an admin
+        // exit here and send a HTTP header 403 Forbidden
+        $user = $this->get('security.context')
+                     ->getToken()
+                     ->getUser();
+        if ($request->isXmlHttpRequest() === FALSE || $user->isAdmin() === FALSE) {
+            return new Response(NULL, 403);
+        }
+
+        // Get specific issue by request data from database
+        $entityManager = $this->getDoctrine()
+                              ->getEntityManager();
+
+        $issue = $entityManager->getRepository('DigitalKanbanBaseBundle:Issue')
+                               ->findOneById($issueId);
+
+        return $this->render('DigitalKanbanBaseBundle:Board:issueedit.html.twig', array('issue' => $issue));
+
+    }
+
+    /**
+     * Save action of issue controller.
+     *
+     * This method is called if a user edits an issue.
+     *
+     * This is only callable as an ajax request.
+     *
+     * @param $issueId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function saveAction($issueId)
+    {
+        $request = $this->getRequest();
+
+        // If it is not a ajax request OR the user is not an admin
+        // exit here and send a HTTP header 403 Forbidden
+        $user = $this->get('security.context')
+                     ->getToken()
+                     ->getUser();
+        if ($request->isXmlHttpRequest() === FALSE || $user->isAdmin() === FALSE) {
+            return new Response(NULL, 403);
+        }
+
+        // Get specific issue by request data from database
+        $entityManager = $this->getDoctrine()
+                              ->getEntityManager();
+
+        $issue = $entityManager->getRepository('DigitalKanbanBaseBundle:Issue')
+                               ->findOneById($issueId);
+
+        $postIssueData = $request->request
+                                 ->get('issue');
+
+        $issue->setName($postIssueData['title']);
+        $issue->setDuration($postIssueData['duration']);
+
+        $entityManager->persist($issue);
+        $entityManager->flush();
+
+        // Build JSON response data
+        $responseData = array(
+            'id' => $issue->getId(), 'name' => $issue->getName(), 'rotation' => $issue->getRandomRotation(), 'userIsAdmin' => $user->isAdmin(), 'duration' => $issue->getDuration()
+        );
+        $response = new Response(json_encode($responseData), 200);
+        $response->headers
+                 ->set('Content-Type', 'application/json');
+
+        return $response;
+
     }
 
     /**

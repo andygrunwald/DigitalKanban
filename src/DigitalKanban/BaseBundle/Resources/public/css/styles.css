@@ -7,10 +7,7 @@ body {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 }
 
-h1,
-h2,
-table tr th,
-a {
+h1,h2,table tr th,a {
 	color: #646464;
 }
 
@@ -91,12 +88,10 @@ a {
 #container header {
 	background-color: white;
 	margin-bottom: 15px;
-
 	-webkit-border-bottom-left-radius: 5px;
 	-khtml-border-bottom-left-radius: 5px;
 	-moz-border-bottom-left-radius: 5px;
 	border-bottom-left-radius: 5px;
-
 	-webkit-border-bottom-right-radius: 5px;
 	-khtml-border-bottom-right-radius: 5px;
 	-moz-border-bottom-right-radius: 5px;
@@ -109,10 +104,8 @@ a {
  */
 #container header div.logo {
 	float: left;
-
 	width: 280px;
 	height: 52px;
-
 	font-size: 35px;
 }
 
@@ -149,17 +142,15 @@ a {
 	display: block;
 	text-decoration: none;
 	color: #646464;
-
 	height: 32px;
 	width: 115px;
 	padding: 10px 10px 10px 40px;
-
 	background-repeat: no-repeat;
 	background-position: 10px 13px;
 }
 
-#container header nav ul li a:hover,
-#container header nav ul li.chose-board:hover {
+#container header nav ul li a:hover,#container header nav ul li.chose-board:hover
+	{
 	background-color: #F7F4E6;
 }
 
@@ -178,16 +169,13 @@ a {
 
 .box {
 	padding: 10px;
-
 	background-color: #FFFFFF;
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-
 	border-bottom: 2px solid #DDDDDD;
 	border-right: 2px solid #DDDDDD;
-
 	-webkit-box-shadow: 5px 5px 5px #DDDDDD;
 	-moz-box-shadow: 5px 5px 5px #DDDDDD;
 	box-shadow: 5px 5px 5px #DDDDDD;
@@ -261,8 +249,7 @@ a {
 	padding: 0;
 }
 
-#main .board-columns div.column,
-#main .board-columns li.column {
+#main .board-columns div.column,#main .board-columns li.column {
 	float: left;
 	width: 250px;
 }
@@ -275,7 +262,6 @@ a {
 
 #main .board-columns li.column:hover {
 	background-color: #E6E6E6;
-
 	-webkit-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -288,7 +274,7 @@ a {
 
 #main .board-columns .column .issues .timeelapsed {
 	color: #333;
-	margin-top:5px;
+	margin-top: 5px;
 	font-size: 12px;
 	border: 1px solid #ddd;
 	background-color: #FFF56D;
@@ -298,12 +284,11 @@ a {
 #main .board-columns .column .timeable {
 	background-image: url(/bundles/digitalkanbanbase/images/time.png);
 	background-repeat: no-repeat;
-	background-position:50px 0;
+	background-position: 50px 0;
 }
 
 #main .board-columns .istimeable {
 	background-color: #C9FFA8;
-	
 }
 
 #main .board-columns .column .name {
@@ -325,8 +310,8 @@ a {
 	min-height: 400px;
 }
 
-#main .board-columns .column.draganddrop-ok,
-#main .board-columns .column.draganddrop-fail {
+#main .board-columns .column.draganddrop-ok,#main .board-columns .column.draganddrop-fail
+	{
 	background-repeat: no-repeat;
 	background-position: 95% 5px;
 }
@@ -339,16 +324,15 @@ a {
 	background-image: url(/bundles/digitalkanbanbase/images/fail.png);
 }
 
-div.board-header div.create-new-issue,
-div.board-header div.create-new-column {
+div.board-header div.create-new-issue,div.board-header div.create-new-column
+	{
 	float: left;
 	margin-bottom: 15px;
 	width: 280px;
-
 }
 
-div.board-header div.create-new-issue a,
-div.board-header div.create-new-column a {
+div.board-header div.create-new-issue a,div.board-header div.create-new-column a
+	{
 	text-decoration: none;
 	margin-bottom: 10px;
 	display: block;
@@ -367,50 +351,49 @@ div.board-header div.create-new-column h2 {
  * Post it
  *
  */
-div#new-issue,
-#main .issues ul li {
+div#new-issue,div#edit-issue,#main .issues ul li {
 	list-style: none;
-
 	background: #FEFABC;
 	color: #000000;
-
 	padding: 15px;
 	margin-bottom: 15px;
 	width: 200px;
-
 	font-family: 'Gloria Hallelujah', cursive;
 	font-size: 15px;
-
 	box-shadow: 0px 4px 6px #333;
 	-moz-box-shadow: 0px 4px 6px #333;
 	-webkit-box-shadow: 0px 4px 6px #333;
-
 	cursor: move;
 }
 
-div#new-issue,
-div#new-column {
+div#new-issue,div#edit-issue,div#new-column {
 	cursor: auto;
 	float: left;
 	margin-top: 0;
 	margin-right: 10px;
 }
 
-div#new-issue textarea {
+div#new-issue textarea,div#edit-issue textarea {
 	background: #FEFABC;
 	width: 195px;
-
 	font-family: 'Gloria Hallelujah', cursive;
 	font-size: 15px;
+	border: none;
+}
 
+div#edit-issue input {
+	background: #FEFABC;
+	width: 195px;
+	font-family: 'Gloria Hallelujah', cursive;
+	font-size: 15px;
 	border: none;
 }
 
 div#archive {
 	background-color: #BDE1FC;
-	padding-top:40px;
-	width:120px; 
-	height:55px;
+	padding-top: 40px;
+	width: 120px;
+	height: 55px;
 	float: right;
 	border: 1px dotted #9dc1dc;
 	box-shadow: 0px 4px 6px #333;
@@ -419,13 +402,13 @@ div#archive {
 	text-align: center;
 }
 
-div#archive-btn{
+div#archive-btn {
 	background-image: url(/bundles/digitalkanbanbase/images/archive.png);
 	margin-top: -50px;
 	margin-right: -10px;
 	width: 22px;
-	height:22px;
-	float:right;
+	height: 22px;
+	float: right;
 }
 
 div#new-column label {
@@ -434,31 +417,29 @@ div#new-column label {
 	width: 70px;
 }
 
-div#new-column label,
-div#new-column input {
+div#new-column label,div#new-column input {
 	margin-bottom: 10px;
 }
-
 
 #main .issues ul li.issue .group1 {
 	color: #111;
 	font-weight: bold;
-	text-align:center;
-	border: 1px solid #ccc; 
+	text-align: center;
+	border: 1px solid #ccc;
 }
 
 #main .issues ul li.issue .group2 {
 	margin-top: 2px;
 	color: #111;
 	font-weight: bold;
-	text-decoration:underline; 
+	text-decoration: underline;
 }
 
 #main .issues ul li.issue .group3 {
 	margin-top: 2px;
 	font-weight: bold;
 	font-size: 0.90em;
-	color: black; 
+	color: black;
 	text-shadow: white 0.1em 0.1em 0.2em;
 }
 
@@ -474,7 +455,6 @@ div#new-column input {
 	top: -5px;
 }
 
-
 #main .board-columns ul li.column a.delete {
 	position: absolute;
 	right: -10px;
@@ -486,16 +466,13 @@ div#new-column input {
  * Drag and drop placeholder
  *
  */
-#main li.issue-state-highlight,
-#main li.column-state-highlight {
+#main li.issue-state-highlight,#main li.column-state-highlight {
 	text-align: center;
 	background: #E6E6E6 !important;
-
 	-webkit-border-radius: 10px;
 	-khtml-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
-
 	box-shadow: none !important;
 	-moz-box-shadow: none !important;
 	-webkit-box-shadow: none !important;
@@ -504,21 +481,17 @@ div#new-column input {
 #main li.column-state-highlight {
 	float: left;
 	list-style-type: none;
-
 	width: 250px;
 	min-height: 400px;
-
 	color: #000000;
-
 	padding: 15px 0 15px 0;
 	margin-top: 15px;
-
 	font-family: 'Gloria Hallelujah', cursive;
 	font-size: 15px;
 }
 
-#main .issue-state-highlight:before,
-#main .column-state-highlight:before {
+#main .issue-state-highlight:before,#main .column-state-highlight:before
+	{
 	content: "Drop it here";
 }
 
@@ -656,8 +629,7 @@ div#new-column input {
 	margin-bottom: 10px;
 }
 
-#main .management table tr th,
-#main .management table tr td {
+#main .management table tr th,#main .management table tr td {
 	padding: 5px 15px 5px 5px;
 	vertical-align: baseline;
 }
@@ -697,8 +669,7 @@ div#new-column input {
 	margin: auto;
 }
 
-#main .form div input,
-#main .form div textarea {
+#main .form div input,#main .form div textarea {
 	width: 250px;
 }
 

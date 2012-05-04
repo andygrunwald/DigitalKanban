@@ -72,6 +72,14 @@ application_issue_add:
     pattern: /application/issue/add
     defaults: { _controller: DigitalKanbanBaseBundle:Issue:add }
 
+application_issue_edit:
+    pattern: /application/issue/edit/{issueId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:edit }
+    
+application_issue_save:
+    pattern: /application/issue/save/{issueId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:save }
+
 application_issue_delete:
     pattern: /application/issue/delete/{issueId}
     defaults: { _controller: DigitalKanbanBaseBundle:Issue:delete }

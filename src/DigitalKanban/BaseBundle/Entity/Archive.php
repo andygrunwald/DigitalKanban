@@ -92,6 +92,7 @@ class Archive
      */
     protected $group3;
 
+    
     /**
      * @ORM\ManyToOne(targetEntity="Board", inversedBy="archives")
      * @ORM\JoinColumn(name="board_id", referencedColumnName="id")

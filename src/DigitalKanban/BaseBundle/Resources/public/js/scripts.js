@@ -70,6 +70,7 @@ var DigitalKanbanBaseBundle = {
 		this.initColumnWidth();
 		this.initLastColumnOnKanbanBoard();
 		this.initTimeableItem();
+		this.initIssueEdit();
 	},
 
 	/**
@@ -97,6 +98,174 @@ var DigitalKanbanBaseBundle = {
 	},
 
 	/**
+	 * bind event on issue double click to edit them
+	 */
+	initIssueEdit : function() {
+		$("#editbox").dialog({
+			modal : true,
+			autoOpen : false,
+			show : "blind",
+			hide : "explode",
+			width : 275
+		});
+
+		this.editableObj = $('.show-board .issues ul li');
+		this.editableObj.dblclick(function() {
+			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass($(this),
+					'issue');
+
+			options = {
+				'url' : "/app_dev.php/application/issue/edit/"
+						+ parseInt(tmpId),
+				'data' : {},
+				'successCallback' : $.proxy(
+						DigitalKanbanBaseBundle.refreshIssue, this)
+			};
+
+			DigitalKanbanBaseBundle.sendAjaxRequest(options);
+
+		});
+	},
+
+	refreshIssue : function(xhrData) {
+		$('#editbox').html(xhrData);
+		$("#editbox").dialog("open");
+
+		// Set click event on save button
+		$('#link-issue-edit-save').click(function() {
+			DigitalKanbanBaseBundle.saveEditedIssueToKanbanBoard();
+		});
+
+	},
+
+	saveEditedIssueToKanbanBoard : function() {
+
+		var tmpId = $.trim($('#edit-issue input:hidden').val());
+		var editedIssueTitle = $.trim($('#edit-issue textarea').val()), options = {};
+		var editedTime = $.trim($('#edit-issue input:text').val());
+
+		var arr = editedTime.split(':');
+
+		if (arr.length != 3) {
+			alert('Please correct the duration (hh:mi:ss)');
+			return;
+		} else {
+			nbsec = parseInt(arr[0] * 3600) + parseInt(arr[1] * 60)
+					+ parseInt(arr[2]);
+		}
+
+		// If the textarea / issue-text is empty, throw an error
+		if (editedIssueTitle === '') {
+			alert('Please add a title to your issue.');
+			return;
+		}
+
+		// Save edited issue to the database
+		options = {
+			'url' : '/app_dev.php/application/issue/save/' + parseInt(tmpId),
+			'data' : {
+				'issue' : {
+					title : editedIssueTitle,
+					duration : nbsec
+				}
+			},
+			'successCallback' : $.proxy(this.refreshIssueToDOM, this)
+		};
+
+		this.sendAjaxRequest(options);
+	},
+
+	refreshIssueToDOM : function(xhrData, eventName, xhrObject) {
+		$("#editbox").dialog("close");
+
+		// which element
+		issue = $('.issue-' + parseInt(xhrData.id));
+		issue.html('');
+
+	
+		
+		// parsing text to manage group
+		var arr = xhrData.name.split('#');
+
+		if (arr.length > 1) {
+			ret = '';
+			if (arr[1] !== undefined) {
+				ret += '<div class="group1">' + arr[0] + '</div>';
+				;
+				if (arr[2] !== undefined) {
+					ret += '<div class="group2">' + arr[1] + '</div>';
+					if (arr[3] !== undefined) {
+						ret += '<div class="group3">' + arr[2] + '</div>';
+					}
+				}
+			}
+			ret += '<div class="group0">' + arr[arr.length - 1] + '</div>';
+		} else {
+			ret = xhrData.name;
+		}
+
+		issue.html(ret);
+
+		timeelapsed = $(document.createElement('div')).addClass(
+				'timeelapsed').appendTo(issue);
+
+	
+		
+		timeelapsedtext = $(document.createElement('div')).addClass(
+				'timeelapsed-text').attr("id",
+				"timeelapsed-text-" + parseInt(xhrData.id)).html(
+				"Time elapsed: <span id=\"duration-" + parseInt(xhrData.id)
+						+ "\">00:00:00</span> <small>(hh:mi:ss)</small>")
+				.appendTo(timeelapsed);
+
+		timeelapsedcount = $(document.createElement('div')).addClass(
+				'timeelapsed-count').attr("id",
+				"timeelapsed-" + parseInt(xhrData.id)).attr("zorig", "0")
+				.appendTo(timeelapsed);
+		
+		totalSec = parseInt(xhrData.duration);
+		
+		$('#timeelapsed-' + tmpId).attr('zorig', totalSec);
+		$('#timeelapsed-' + tmpId).countdown('destroy');
+		hours = parseInt(totalSec / 3600);
+		minutes = parseInt(totalSec / 60) % 60;
+		seconds = totalSec % 60;
+
+		result = (hours < 10 ? "0" + hours : hours) + ":"
+				+ (minutes < 10 ? "0" + minutes : minutes) + ":"
+				+ (seconds < 10 ? "0" + seconds : seconds);
+		$('#duration-' + tmpId).html(result);
+
+		// If the user is an administrator, generate the delete link and
+		// insert this, too
+		if (xhrData.userIsAdmin === true) {
+			deleteText = $(document.createElement('span')).addClass(
+					'confirm-text visuallyhidden').text(
+					'Wollen Sie das Kanban "' + xhrData.name
+							+ '" wirklich löschen?').appendTo(issue);
+
+			deleteLink = $(document.createElement('a')).attr('href',
+					'javascript:void(0);').addClass('delete').css('display',
+					'none').appendTo(issue);
+
+			deleteImg = $(document.createElement('img')).attr({
+				'alt' : 'Delete',
+				'title' : 'Delete',
+				'src' : '/bundles/digitalkanbanbase/images/no.png'
+			}).appendTo(deleteLink);
+		}
+
+		// Update column icons (drag and drop)
+		this.handleColumnLimitsDuringDragAndDrop();
+
+		// Refresh sortable objects and delete link events
+		this.sortableObj.sortable('refresh');
+		this.initIssueAndColumnDeleteFunction();
+		this.initTimeableItem();
+
+	},
+
+	/**
 	 * Initialize the archive link
 	 * 
 	 * @return void
@@ -112,7 +281,7 @@ var DigitalKanbanBaseBundle = {
 			autoOpen : false,
 			show : "blind",
 			hide : "explode",
-			width: 600
+			width : 600
 		});
 
 		$('#archive-btn').click(
