@@ -115,7 +115,7 @@ var DigitalKanbanBaseBundle = {
 					'issue');
 
 			options = {
-				'url' : "/app_dev.php/application/issue/edit/"
+				'url' : "/application/issue/edit/"
 						+ parseInt(tmpId),
 				'data' : {},
 				'successCallback' : $.proxy(
@@ -162,7 +162,7 @@ var DigitalKanbanBaseBundle = {
 
 		// Save edited issue to the database
 		options = {
-			'url' : '/app_dev.php/application/issue/save/' + parseInt(tmpId),
+			'url' : '/application/issue/save/' + parseInt(tmpId),
 			'data' : {
 				'issue' : {
 					title : editedIssueTitle,
