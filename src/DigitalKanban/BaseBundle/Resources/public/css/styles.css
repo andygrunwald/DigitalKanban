@@ -421,6 +421,11 @@ div#new-column label {
 div#new-column label,div#new-column input {
 	margin-bottom: 10px;
 }
+#main .issues ul li.issue .created{
+	float:right;
+	font-size: 0.6em;	
+	color: #555;
+}
 
 #main .issues ul li.issue .group1 {
 	color: #111;

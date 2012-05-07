@@ -230,6 +230,10 @@ var DigitalKanbanBaseBundle = {
 				+ (minutes < 10 ? "0" + minutes : minutes) + ":"
 				+ (seconds < 10 ? "0" + seconds : seconds);
 		$('#duration-' + tmpId).html(result);
+		
+		
+		created = $(document.createElement('div')).addClass(
+		'created').html(xhrData.created).appendTo(issue);
 
 		// If the user is an administrator, generate the delete link and
 		// insert this, too
@@ -694,6 +698,10 @@ var DigitalKanbanBaseBundle = {
 				'timeelapsed-count').attr("id",
 				"timeelapsed-" + parseInt(xhrData.id)).attr("zorig", "0")
 				.appendTo(elements.timeelapsed);
+		
+		elements.created = $(document.createElement('div')).addClass(
+				'created').html(xhrData.created).appendTo(elements.issue);
+		
 
 		// If the user is an administrator, generate the delete link and
 		// insert this, too

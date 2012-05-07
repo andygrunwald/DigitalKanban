@@ -97,9 +97,12 @@ class IssueController extends Controller
         $entityManager->persist($issue);
         $entityManager->flush();
 
+        $created = $issue->getCreated()
+                         ->format("Y/m/d");
+
         // Build JSON response data
         $responseData = array(
-            'id' => $issue->getId(), 'name' => $issue->getName(), 'rotation' => $issue->getRandomRotation(), 'userIsAdmin' => $user->isAdmin()
+            'id' => $issue->getId(), 'name' => $issue->getName(), 'created' => $created, 'rotation' => $issue->getRandomRotation(), 'userIsAdmin' => $user->isAdmin()
         );
         $response = new Response(json_encode($responseData), 200);
         $response->headers
@@ -219,9 +222,13 @@ class IssueController extends Controller
         $entityManager->persist($issue);
         $entityManager->flush();
 
+        $created = $issue->getCreated()
+                         ->format("Y/m/d");
+
         // Build JSON response data
         $responseData = array(
-            'id' => $issue->getId(), 'name' => $issue->getName(), 'rotation' => $issue->getRandomRotation(), 'userIsAdmin' => $user->isAdmin(), 'duration' => $issue->getDuration()
+                'id' => $issue->getId(), 'name' => $issue->getName(), 'created' => $created, 'rotation' => $issue->getRandomRotation(), 'userIsAdmin' => $user->isAdmin(),
+                'duration' => $issue->getDuration()
         );
         $response = new Response(json_encode($responseData), 200);
         $response->headers
@@ -324,7 +331,8 @@ class IssueController extends Controller
             $ret = array();
 
             $ret[] = $a->getId();
-            $ret[] = $a->getBoard()->getName();
+            $ret[] = $a->getBoard()
+                       ->getName();
 
             $tabstr = explode('#', $a->getName());
 
