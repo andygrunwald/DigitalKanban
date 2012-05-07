@@ -315,7 +315,7 @@ class IssueController extends Controller
 
         $handle = fopen('php://memory', 'r+');
         $header = array(
-            'ID', 'Name', 'Group1', 'Group2', 'Group3', 'Duration', 'Archived', 'User'
+            'ID', 'Board name', 'Name', 'Group1', 'Group2', 'Group3', 'Duration', 'Archived', 'User'
         );
 
         fputcsv($handle, $header);
@@ -324,6 +324,7 @@ class IssueController extends Controller
             $ret = array();
 
             $ret[] = $a->getId();
+            $ret[] = $a->getBoard()->getName();
 
             $tabstr = explode('#', $a->getName());
 

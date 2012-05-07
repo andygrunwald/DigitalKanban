@@ -2,6 +2,7 @@
     <table>
         	<tr>
         		<th>ID</th>
+        		<th>Board name</th>
         		<th>Name</th>
         		<th>Group1</th>
         		<th>Group2</th>
@@ -13,6 +14,7 @@
     	{% for a in archives %}
     		<tr>
     			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.id }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ a.board.name }}</td>
     			<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ a.name |splitgroupSolo|raw }}</td>
     			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.group1 }}</td>
     			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.group2 }}</td>
