@@ -625,29 +625,35 @@ div#new-column label,div#new-column input {
  * User management / Board management
  *
  */
-#main .management table {
+#main .management table,
+.arch table {
 	margin: auto;
 	margin-bottom: 10px;
 }
 
-#main .management table tr th,#main .management table tr td {
+#main .management table tr th,#main .management table tr td ,
+.arch table tr th, .arch table tr td{
 	padding: 5px 15px 5px 5px;
 	vertical-align: baseline;
 }
 
-#main .management table tr th {
+#main .management table tr th,
+.arch table tr th {
 	border-bottom: 1px solid #A4A4A4;
 }
 
-#main .management table tr td a {
+#main .management table tr td a,
+.arch table tr td a {
 	color: #000000;
 }
 
-#main .management table tr td.odd {
+#main .management table tr td.odd, 
+.arch table tr td.odd{
 	background-color: #E6E6E6;
 }
 
-#main .management table tr td.even {
+#main .management table tr td.even,
+.arch table tr td.even {
 	background-color: #FFFFFF;
 }
 

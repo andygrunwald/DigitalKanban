@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="archive")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DigitalKanban\BaseBundle\Entity\ArchiveRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Archive
@@ -63,6 +64,12 @@ class Archive
      */
     protected $edited;
 
+    /**
+     * @var datetime $archived
+     *
+     * @ORM\Column(name="archived", type="datetime")
+     */
+    protected $archived;
 
     /**
      * @var datetime $duration
@@ -92,7 +99,14 @@ class Archive
      */
     protected $group3;
 
-    
+    /**
+     * @var User $archived_user
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="archived_user_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $archived_user;
+
     /**
      * @ORM\ManyToOne(targetEntity="Board", inversedBy="archives")
      * @ORM\JoinColumn(name="board_id", referencedColumnName="id")
@@ -101,7 +115,7 @@ class Archive
 
     public function __construct()
     {
-
+        $this->archived = new \DateTime();
     }
 
     /**
@@ -219,6 +233,26 @@ class Archive
     }
 
     /**
+     * Set archived
+     *
+     * @return void
+     */
+    public function setArchived()
+    {
+        $this->archived = new \DateTime();
+    }
+
+    /**
+     * Get archived
+     *
+     * @return datetime
+     */
+    public function getArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
      * Set duration
      *
      * @return void
@@ -299,6 +333,27 @@ class Archive
     public function getGroup3()
     {
         return $this->group3;
+    }
+
+    /**
+     * Set archived_user
+     *
+     * @param User $archivedUser
+     * @return void
+     */
+    public function setArchivedUser(User $archivedUser)
+    {
+        $this->archived_user = $archivedUser;
+    }
+
+    /**
+     * Get archived_user
+     *
+     * @return User
+     */
+    public function getArchivedUser()
+    {
+        return $this->archived_user;
     }
 
     /**

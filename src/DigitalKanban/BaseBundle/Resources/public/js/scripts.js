@@ -30,7 +30,7 @@ var DigitalKanbanBaseBundle = {
 
 		// initialize link to display archive
 		this.initArchiveLinks();
-
+		
 		// Available at 'Edit board columns'
 		this.initBoardColumnSortable();
 		this.initNewColumnItems();
@@ -115,8 +115,7 @@ var DigitalKanbanBaseBundle = {
 					'issue');
 
 			options = {
-				'url' : "/application/issue/edit/"
-						+ parseInt(tmpId),
+				'url' : "/application/issue/edit/" + parseInt(tmpId),
 				'data' : {},
 				'successCallback' : $.proxy(
 						DigitalKanbanBaseBundle.refreshIssue, this)
@@ -182,8 +181,6 @@ var DigitalKanbanBaseBundle = {
 		issue = $('.issue-' + parseInt(xhrData.id));
 		issue.html('');
 
-	
-		
 		// parsing text to manage group
 		var arr = xhrData.name.split('#');
 
@@ -206,11 +203,9 @@ var DigitalKanbanBaseBundle = {
 
 		issue.html(ret);
 
-		timeelapsed = $(document.createElement('div')).addClass(
-				'timeelapsed').appendTo(issue);
+		timeelapsed = $(document.createElement('div')).addClass('timeelapsed')
+				.appendTo(issue);
 
-	
-		
 		timeelapsedtext = $(document.createElement('div')).addClass(
 				'timeelapsed-text').attr("id",
 				"timeelapsed-text-" + parseInt(xhrData.id)).html(
@@ -222,9 +217,9 @@ var DigitalKanbanBaseBundle = {
 				'timeelapsed-count').attr("id",
 				"timeelapsed-" + parseInt(xhrData.id)).attr("zorig", "0")
 				.appendTo(timeelapsed);
-		
+
 		totalSec = parseInt(xhrData.duration);
-		
+
 		$('#timeelapsed-' + tmpId).attr('zorig', totalSec);
 		$('#timeelapsed-' + tmpId).countdown('destroy');
 		hours = parseInt(totalSec / 3600);
@@ -281,27 +276,39 @@ var DigitalKanbanBaseBundle = {
 			autoOpen : false,
 			show : "blind",
 			hide : "explode",
-			width : 600
+			width : 750
 		});
 
-		$('#archive-btn').click(
-				function() {
+		$('#archive-btn')
+				.click(
+						function() {
+							boardId = DigitalKanbanBaseBundle
+									.getDatabaseIdFromCSSClass(
+											$('.information'), 'board');
 
-					boardId = DigitalKanbanBaseBundle
-							.getDatabaseIdFromCSSClass($('.information'),
-									'board');
+							options = {
+								'url' : "/application/board/showarchivesfilters/"
+										+ parseInt(boardId),
+								'data' : {},
+								'successCallback' : $.proxy(
+										DigitalKanbanBaseBundle.displayArchive,
+										this)
+							};
 
-					options = {
-						'url' : "/application/board/showarchives/"
-								+ parseInt(boardId),
-						'data' : {},
-						'successCallback' : $.proxy(
-								DigitalKanbanBaseBundle.displayArchive, this)
-					};
+							DigitalKanbanBaseBundle.sendAjaxRequest(options);
+						});
+	},
 
-					DigitalKanbanBaseBundle.sendAjaxRequest(options);
+	/**
+	 * Initialize the archive export link
+	 * 
+	 * @return void
+	 */
+	initArchiveExportLinks : function() {
+		$('#link-archive-export').click(function() {
+			document.location = "/application/board/exportarchives";
+		});
 
-				});
 	},
 
 	/**
@@ -310,7 +317,52 @@ var DigitalKanbanBaseBundle = {
 	displayArchive : function(xhrData) {
 		$('#archivebox').html(xhrData);
 		$("#archivebox").dialog("open");
+		DigitalKanbanBaseBundle.initArchiveFilters();
+		// initialize link to export archives
+		DigitalKanbanBaseBundle.initArchiveExportLinks();
 
+	},
+
+	initArchiveFilters : function() {
+		$("#filters select").each(function(index, domEle) {
+			$(domEle).change(function() {
+				DigitalKanbanBaseBundle.doFiltre();
+			});
+		});
+
+		$("#filters input:text[class=hasDatepicker]").each(
+				function(index, domEle) {
+					$(domEle).change(function() {
+						DigitalKanbanBaseBundle.doFiltre();
+					});
+				});
+		$("#filters input:checkbox").each(function(index, domEle) {
+			$(domEle).change(function() {
+				DigitalKanbanBaseBundle.doFiltre();
+			});
+		});
+
+	},
+
+	doFiltre : function() {
+		jQuery.ajax({
+			type : 'POST',
+			dataType : 'html',
+			data : $('#filters').serialize(),
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert(XMLHttpRequest.responseText);
+			},
+			complete : function(XMLHttpRequest, textStatus) {
+			},
+			success : function(data, textStatus) {
+				$('#results').hide();
+				$('#results').html(data);
+				$('#results').fadeIn('slow');
+				// initialize link to export archives
+				DigitalKanbanBaseBundle.initArchiveExportLinks();
+			},
+			url : '/app_dev.php/application/board/showarchives'
+		});
 	},
 
 	/**

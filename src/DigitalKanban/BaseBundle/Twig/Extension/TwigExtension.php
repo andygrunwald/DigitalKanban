@@ -15,7 +15,8 @@ class TwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'sec2duration' => new \Twig_Filter_Method($this, 'formatDuration'), 'splitgroup' => new \Twig_Filter_Method($this, 'splitGroup'),
+                'sec2duration' => new \Twig_Filter_Method($this, 'formatDuration'), 'splitgroup' => new \Twig_Filter_Method($this, 'splitGroup'),
+                'splitgroupSolo' => new \Twig_Filter_Method($this, 'splitGroupSolo'),
         );
     }
 
@@ -47,4 +48,19 @@ class TwigExtension extends \Twig_Extension
 
         return $ret;
     }
+
+    public function splitGroupSolo($text)
+    {
+        //manage groups based on # separator
+        $tabstr = explode('#', $text);
+        $ret = '';
+        if (count($tabstr) > 1) {
+            $ret .= '<div class="group0">' . $tabstr[count($tabstr) - 1] . '</div>';
+        } else {
+            $ret = $text;
+        }
+
+        return $ret;
+    }
+
 }

@@ -1,0 +1,34 @@
+<div class="arch">
+    <table>
+        	<tr>
+        		<th>ID</th>
+        		<th>Name</th>
+        		<th>Group1</th>
+        		<th>Group2</th>
+        		<th>Group3</th>
+        		<th>Duration</th>
+        		<th>Archived</th>
+        		<th>By</th>
+        	</tr>
+    	{% for a in archives %}
+    		<tr>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.id }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ a.name |splitgroupSolo|raw }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.group1 }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.group2 }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.group3 }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }}">{{ a.duration()|sec2duration }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ a.archived|date("d/m/Y H:i:s") }}</td>
+    			<td class="{{ cycle(['odd', 'even'], loop.index) }} nowrap">{{ a.archiveduser}}</td>
+    		</tr>
+    	{% endfor %}
+    </table>
+</div>
+
+{% if archives %}
+<div style="display: block; float:right;" >
+    <a  href="javascript:void(0);" title="Export to csv" id="link-archive-export">
+		<img src="{{ asset('bundles/digitalkanbanbase/images/export.png') }}" alt="Export to csv" title="Export to csv" />
+	</a>
+</div>
+{%  endif %}

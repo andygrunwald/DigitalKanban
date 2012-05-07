@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="board")
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DigitalKanban\BaseBundle\Entity\BoardRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Board

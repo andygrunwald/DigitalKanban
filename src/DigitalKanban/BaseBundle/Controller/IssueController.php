@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpFoundation\Response;
 use DigitalKanban\BaseBundle\Entity\Issue;
 use DigitalKanban\BaseBundle\Entity\Board;
+use DigitalKanban\BaseBundle\Form\Type\ArchiveFilterType;
 
 /**
  * Issue controller
@@ -233,43 +234,130 @@ class IssueController extends Controller
     /**
      * return listing of archived issues
      */
-    public function listarchiveAction($boardId)
+    public function listarchiveAction()
     {
 
         $request = $this->getRequest();
+
+        $session = $request->getSession();
+
+        $em = $this->getDoctrine()
+                   ->getEntityManager();
 
         // If it is not a ajax request OR the user is not an admin
         // exit here and send a HTTP header 403 Forbidden
         $user = $this->get('security.context')
                      ->getToken()
                      ->getUser();
+
         if ($request->isXmlHttpRequest() === FALSE || $user->isAdmin() === FALSE) {
             return new Response(NULL, 403);
         }
 
-        $entityManager = $this->getDoctrine()
-                              ->getEntityManager();
+        // form filtre
+        $arch_filtre = $this->getFiltresOptions();
 
-        $board = $entityManager->getRepository('DigitalKanbanBaseBundle:Board')
-                               ->findOneById($boardId);
+        $form_filtre = $this->getFiltersForm($arch_filtre, $em, $user);
 
-        // If there is no board with submitted board id
-        // exit here with an error
-        if (($board instanceof Board) === FALSE) {
-            // It would be better, if we throw an '422 Unprocessable Entity'
-            // but this code is an HTTP extension by WebDAV :(
-            // With this code we want to say 'Hey, wrong ID'
-            return new Response(NULL, 400);
+        if ($request->getMethod() == 'POST') {
+
+            $form_filtre->bindRequest($request);
+
+            if ($form_filtre->isValid()) {
+                $postdata = $form_filtre->getData();
+                foreach ($arch_filtre as $k => $v) {
+                    if (array_key_exists($k, $postdata)) {
+                        $arch_filtre[$k] = $postdata[$k];
+                    }
+                }
+            }
+
         }
 
-        $archives = $entityManager->getRepository('DigitalKanbanBaseBundle:Archive')
-                                  ->findBy(array('board' => $board->getId()));
+        $session->set('sess_archive_filters', $arch_filtre);
+
+        $archives = $em->getRepository('DigitalKanbanBaseBundle:Archive')
+                       ->getFiltered($user, $arch_filtre);
 
         $templateData = array(
-            'archives' => $archives,
+            'archives' => $archives, 'form_filter' => $form_filtre,
         );
 
-        return $this->render('DigitalKanbanBaseBundle:Board:showarchive.html.twig', $templateData);
+        return $this->render('DigitalKanbanBaseBundle:Board:_archivesdetails.html.twig', $templateData);
+
+    }
+
+    public function exportarchivesAction()
+    {
+
+        $request = $this->getRequest();
+
+        $session = $request->getSession();
+
+        $em = $this->getDoctrine()
+                   ->getEntityManager();
+
+        // If it is not a ajax request OR the user is not an admin
+        // exit here and send a HTTP header 403 Forbidden
+        $user = $this->get('security.context')
+                     ->getToken()
+                     ->getUser();
+
+        if ($user->isAdmin() === FALSE) {
+            return new Response(NULL, 403);
+        }
+
+        // form filtre
+        $arch_filtre = $this->getFiltresOptions();
+
+        $archives = $em->getRepository('DigitalKanbanBaseBundle:Archive')
+                       ->getFiltered($user, $arch_filtre);
+
+        $handle = fopen('php://memory', 'r+');
+        $header = array(
+            'ID', 'Name', 'Group1', 'Group2', 'Group3', 'Duration', 'Archived', 'User'
+        );
+
+        fputcsv($handle, $header);
+
+        foreach ($archives as $a) {
+            $ret = array();
+
+            $ret[] = $a->getId();
+
+            $tabstr = explode('#', $a->getName());
+
+            if (count($tabstr) > 1) {
+                $name = $tabstr[count($tabstr) - 1];
+            } else {
+                $name = $a->getName();
+            }
+
+            $ret[] = $name;
+            $ret[] = $a->getGroup1();
+            $ret[] = $a->getGroup2();
+            $ret[] = $a->getGroup3();
+            $ret[] = $a->getDuration();
+            $ret[] = $a->getArchived()
+                       ->format('Y-m-d H:i:s');
+            $ret[] = $a->getArchivedUser();
+
+            fputcsv($handle, $ret);
+        }
+
+        rewind($handle);
+        $content = stream_get_contents($handle);
+
+        fclose($handle);
+
+        $response = new Response();
+        $response->setContent($content);
+        $response->headers
+                 ->set('Content-Type', 'application/force-download');
+        $response->headers
+                 ->set('Content-Disposition', 'attachment; filename="export.csv"');
+
+        return $response;
     }
 
     /**
@@ -308,4 +396,54 @@ class IssueController extends Controller
 
         return $highestSorting;
     }
+
+    private function getFiltresOptions()
+    {
+        $options = array(
+            'datedeb' => new \DateTime("-30 day"), 'datefin' => new \DateTime(), 'myarchive' => true, 'board' => false,
+        );
+
+        // surcharge avec opt de session
+        $session = $this->getRequest()
+                        ->getSession();
+
+        $sess_archive_filters = $session->get('sess_archive_filters', array());
+
+        foreach ($options as $k => $v) {
+            if (array_key_exists($k, $sess_archive_filters)) {
+                $options[$k] = $sess_archive_filters[$k];
+            }
+        }
+
+        return $options;
+    }
+
+    private function getFiltersForm($form_filtre_vals, $em, $user)
+    {
+        return $this->createForm(new ArchiveFilterType(), $form_filtre_vals, array('em' => $em, 'user' => $user));
+    }
+
+    /**
+     * 
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function filterAction()
+    {
+        $em = $this->getDoctrine()
+                   ->getEntityManager();
+
+        $user = $this->get('security.context')
+                     ->getToken()
+                     ->getUser();
+
+        // form filtre
+        $form_filtre_vals = $this->getFiltresOptions();
+
+        $form_filtre = $this->getFiltersForm($form_filtre_vals, $em, $user);
+
+        return $this->render('DigitalKanbanBaseBundle:Board:showarchive.html.twig', array('form_filter' => $form_filtre->createView(), 'form_filter_vals' => $form_filtre_vals,));
+
+    }
+
 }

@@ -346,6 +346,7 @@ class BoardController extends Controller
             $archive->setGroup1($issuetoarchive->getGroup1());
             $archive->setGroup2($issuetoarchive->getGroup2());
             $archive->setGroup3($issuetoarchive->getGroup3());
+            $archive->setArchivedUser($user);
             $archive->setLastEditedUser($issuetoarchive->getLastEditedUser());
             $archive->setName($issuetoarchive->getName());
             
