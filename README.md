@@ -59,6 +59,9 @@ Installation
 	* ``php app/console doctrine:migration:migrate``
 	* ``php app/console doctrine:fixtures:load``
 9. Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
+10. In case of update for an older version, you have to update bundles and database by running:
+	* ``php bin/vendors install``
+	* ``php app/console doctrine:migration:migrate``
 
 Logins
 ------------
