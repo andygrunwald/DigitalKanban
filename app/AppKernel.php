@@ -19,6 +19,7 @@ class AppKernel extends Kernel
 			new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 			new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
 		    new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
+	        new Genemu\Bundle\FormBundle\GenemuFormBundle(),
 			new DigitalKanban\BaseBundle\DigitalKanbanBaseBundle(),
 		);
 

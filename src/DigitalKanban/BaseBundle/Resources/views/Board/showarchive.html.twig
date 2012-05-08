@@ -1,0 +1,20 @@
+ <form id="filters"  method="post" >
+    {{ form_row(form_filter.board) }}
+    {{ form_row(form_filter.myarchive) }}
+    {{ form_row(form_filter.datedeb) }}
+    {{ form_row(form_filter.datefin) }}
+    {{ form_rest(form_filter) }}
+
+    <div class="ui-helper-clearfix"></div>
+</form>
+	
+<hr/>
+
+<div id="results">
+    {% render 'DigitalKanbanBaseBundle:Issue:listarchive'  %}
+</div>
+
+
+    
+{{ form_stylesheet(form_filter) }}
+{{ form_javascript(form_filter) }}

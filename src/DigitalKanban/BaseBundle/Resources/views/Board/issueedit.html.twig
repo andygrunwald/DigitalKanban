@@ -1,0 +1,12 @@
+<div class="edit-existing-issue">
+	<div id="edit-issue">
+	    <input type="hidden" value="{{issue.id()}}"/>
+		<textarea rows="3" cols="22" >{{ issue.name }}</textarea>
+		Time elapsed: <span id="edit-duration-{{issue.id()}}"><input type="text" size="20" name="edit-duration" value="{{ issue.duration()|sec2duration }}"/></span> <small>(hh:mi:ss)</small>
+	</div>
+	
+	<a href="javascript:void(0);" title="Save your issue" id="link-issue-edit-save">
+		<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your issue" title="Save your issue" />
+	</a>
+	<div class="clearfix"></div>
+</div>

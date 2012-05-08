@@ -72,13 +72,59 @@ class Issue {
 	 * @ORM\Column(name="sorting", type="integer")
 	 */
 	protected $sorting;
+	
+	/**
+	 * @var datetime $duration
+	 *
+	 * @ORM\Column(name="duration", type="integer")
+	 */
+	protected $duration;
+	
+	/**
+	 * @var string $group1
+	 *
+	 * @ORM\Column(name="group1", type="string", length=100, nullable=true)
+	 */
+	protected $group1;
+	
+	
+	
+	/**
+	 * @var string $group2
+	 *
+	 * @ORM\Column(name="group2", type="string", length=100, nullable=true)
+	 */
+	protected $group2;
+	
+	
+	/**
+	 * @var string $group3
+	 *
+	 * @ORM\Column(name="group3", type="string", length=100, nullable=true)
+	 */
+	protected $group3;
+	
+	
+	/**
+	 * @var boolean $closed
+	 *
+	 * @ORM\Column(name="closed", type="boolean")
+	 */
+	private $closed;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="BoardColumn", inversedBy="issues")
-	 * @ORM\JoinColumn(name="boardcolumn_id", referencedColumnName="id", onDelete="CASCADE")
+	 * @ORM\JoinColumn(name="boardcolumn_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
 	 */
 	protected $boardColumn;
 
+	
+	public function __construct(){
+	    $this->duration = 0;
+	    $this->closed = false;
+	}
+	
+	
 	/**
 	 * Get id
 	 *
@@ -202,14 +248,114 @@ class Issue {
 	public function getSorting() {
 		return $this->sorting;
 	}
+	
+	/**
+	 * Set duration
+	 *
+	 * @return void
+	 */
+	public function setDuration($duration) {
+	    $this->duration = $duration;
+	}
+	
+	/**
+	 * Get duration
+	 *
+	 * @return integer
+	 */
+	public function getDuration() {
+	    return $this->duration;
+	}
+	
+	
+	/**
+	 * Set group1
+	 *
+	 * @param string $group1
+	 * @return void
+	 */
+	public function setGroup1($group1) {
+	    $this->group1 = $group1;
+	}
+	
+	/**
+	 * Get group1
+	 *
+	 * @return string
+	 */
+	public function getGroup1() {
+	    return $this->group1;
+	}
+	
+	/**
+	 * Set group2
+	 *
+	 * @param string $group2
+	 * @return void
+	 */
+	public function setGroup2($group2) {
+	    $this->group2 = $group2;
+	}
+	
+	/**
+	 * Get group2
+	 *
+	 * @return string
+	 */
+	public function getGroup2() {
+	    return $this->group2;
+	}
+	
+	/**
+	 * Set group3
+	 *
+	 * @param string $group3
+	 * @return void
+	 */
+	public function setGroup3($group3) {
+	    $this->group3 = $group3;
+	}
+	
+	/**
+	 * Get group3
+	 *
+	 * @return string
+	 */
+	public function getGroup3() {
+	    return $this->group3;
+	}
 
+	/**
+	 * Set closed
+	 *
+	 * @param boolean $closed
+	 */
+	public function setClosed($closed)
+	{
+	    if ($closed == true){
+	        $this->setBoardColumn(null);
+	    }
+	    $this->closed = $closed;
+	}
+	
+	/**
+	 * Get closed
+	 *
+	 * @return boolean
+	 */
+	public function getClosed()
+	{
+	    return $this->closed;
+	}
+	
+	
 	/**
 	 * Set BoardColumn
 	 *
 	 * @param BoardColumn $boardColumn
 	 * @return void
 	 */
-	public function setBoardColumn(BoardColumn $boardColumn) {
+	public function setBoardColumn($boardColumn) {
 		$this->boardColumn = $boardColumn;
 	}
 

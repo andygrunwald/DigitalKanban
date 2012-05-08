@@ -16,12 +16,23 @@
 				<a href="javascript:void(0);" title="Reset the issue" id="link-issue-reset">
 					<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Reset the issue" title="Reset the issue" />
 				</a>
+				
 				<div class="clearfix"></div>
+				
 			</div>
 			{% endif %}
-			<div class="information">
+			
+			<div class="information board-{{ board.getId() }}">
 				<h1>{{ board.getName() }}</h1>
 				<p>{{ board.getDescription() }}</p>
+			</div>
+			<div id="archive">
+    			<a href="javascript:void(0);" title="Display archive" id="archive-btn">
+    			   <img src="{{ asset('bundles/digitalkanbanbase/images/archive.png') }}" alt="Display archive" title="Display archive" />
+    			</a>
+			
+			Archiving zone...
+			
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -29,8 +40,8 @@
 		<div class="kanban-board">
 			<div class="board-columns">
 				{% for column in board.getColumns() %}
-					<div class="column draganddrop-ok column-{{column.getId() }} {% if board.getColumns().count() == loop.index %}last{% endif %}">
-						<div class="limit">
+					<div class="column {% if column.getTimeable()  %}istimeable{% endif %} draganddrop-ok column-{{column.getId() }} {% if board.getColumns().count() == loop.index %}last{% endif %}">
+						<div class="limit {% if column.getTimeable()  %}timeable{% endif %}">
 							{% if column.getMaxIssues() > 0 %}
 								{{ column.getMaxIssues() }}
 							{% else %}
@@ -48,7 +59,16 @@
 												<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete the issue '{{ issue.getName() }}'" title="Delete the issue '{{ issue.getName() }}'" />
 											</a>
 										{% endif %}
-										{{ issue.getName() }}
+										{{ issue.getName()|splitgroup|raw }}
+										<div class="timeelapsed" >
+    									    <div class="timeelapsed-text" id="timeelapsed-text-{{issue.getId()}}" style="{% if column.timeable %}display: none;{% endif %}">	
+        										Time elapsed: <span id="duration-{{issue.getId()}}">{{ issue.getDuration()|sec2duration }}</span> <small>(hh:mi:ss)</small>
+    										</div>
+    										<div class="timeelapsed-count" id="timeelapsed-{{issue.getId()}}" zorig="{{issue.getDuration()}}"></div>
+										</div>
+										<div class="created">
+										    {{ issue.created|date("Y/m/d") }}
+										</div>
 									</li>
 								{% endfor %}
 							</ul>
@@ -72,4 +92,6 @@
 			</div>
 		{% endif %}
 	</div>
+	<div id="archivebox" title="Archives" style="display: none;"></div>
+	<div id="editbox" style="display: none;"></div>
 {% endblock %}

@@ -64,9 +64,29 @@ application_board_editcolumns:
     pattern: /application/board/editcolumns/{id}
     defaults: { _controller: DigitalKanbanBaseBundle:Board:editColumns }
 
+application_board_showarchives:
+    pattern: /application/board/showarchives
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:listarchive }
+    
+application_board_showarchivesfilters:
+    pattern: /application/board/showarchivesfilters/{boardId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:filter }
+    
+application_board_exportarchives:
+    pattern: /application/board/exportarchives
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:exportarchives }
+        
 application_issue_add:
     pattern: /application/issue/add
     defaults: { _controller: DigitalKanbanBaseBundle:Issue:add }
+
+application_issue_edit:
+    pattern: /application/issue/edit/{issueId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:edit }
+    
+application_issue_save:
+    pattern: /application/issue/save/{issueId}
+    defaults: { _controller: DigitalKanbanBaseBundle:Issue:save }
 
 application_issue_delete:
     pattern: /application/issue/delete/{issueId}

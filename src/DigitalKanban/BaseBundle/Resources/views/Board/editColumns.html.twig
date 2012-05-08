@@ -13,6 +13,9 @@
 					<br />
 					<label for="column-limit">Limit:</label>
 					<input type="text" name="limit" id="column-limit" placeholder="The limit of column ..." />
+					<br/>
+					<label for="column-timeable">Time tracking:</label>
+					<input type="checkbox" name="timeable" id="column-timeable" value="true" /><small>If checked, limit will be set to 1.</small>
 				</div>
 				<a href="javascript:void(0);" title="Save your new column" id="link-column-save">
 					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new column" title="Save your new column" />
@@ -41,12 +44,14 @@
 						<a href="javascript:void(0);" class="delete" style="display: none;">
 							<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete '{{ column.getName() }}'" title="Delete '{{ column.getName() }}'" />
 						</a>
-						<div class="limit">
+						<div class="limit {% if column.getTimeable()  %}timeable{% endif %}" >
+						   
 							{% if column.getMaxIssues() > 0 %}
 								{{ column.getMaxIssues() }}
 							{% else %}
 								&nbsp;
 							{% endif %}
+						    
 						</div>
 						<div class="name">{{ column.getName() }}</div>
 						<div class="issues">
