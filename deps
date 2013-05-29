@@ -72,7 +72,7 @@
 [DoctrineFixturesBundle]
     git=http://github.com/doctrine/DoctrineFixturesBundle
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
-    
+
 [doctrine-migrations]
     git=http://github.com/doctrine/migrations.git
 
