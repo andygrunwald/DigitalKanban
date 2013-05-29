@@ -1,0 +1,6 @@
+{% for type, flashMessage in app.session.flashbag.all() %}
+    <div class="flash-message message-{{ type }}">
+        <div class="message-header">{{ flashMessage.title }}</div>
+        <div class="message-body">{{ flashMessage.message }}</div>
+    </div>
+{% endfor %}

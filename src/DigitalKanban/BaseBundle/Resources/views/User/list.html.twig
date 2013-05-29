@@ -21,18 +21,9 @@
 				Common, be brave and try one of your options!
 			</p>
 		</div>
-		{% if app.session.flash('success') %}
-			<div class="flash-message message-success">
-				<div class="message-header">{{ app.session.flash('success').title }}</div>
-				<div class="message-body">{{ app.session.flash('success').message }}</div>
-			</div>
-		{% endif %}
-		{% if app.session.flash('error') %}
-			<div class="flash-message message-error">
-				<div class="message-header">{{ app.session.flash('error').title }}</div>
-				<div class="message-body">{{ app.session.flash('error').message }}</div>
-			</div>
-		{% endif %}
+
+        {% include 'DigitalKanbanBaseBundle:include:flashMessages.html.twig' %}
+
 		<table>
 			<tr>
 				<td colspan="10">
