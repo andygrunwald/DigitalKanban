@@ -13,3 +13,4 @@ JMSSecurityExtraBundle e752f888c51425f71382c056961f10f2be642102
 SensioDistributionBundle 20b66a408084ad8752f98e50f10533f5245310bf
 SensioGeneratorBundle b1ccb78c1743f30817b0fce9bb5c6baff6ed7bf8
 AsseticBundle v1.0.1
+DoctrineFixturesBundle v2.0.0

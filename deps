@@ -62,11 +62,15 @@
     target=/bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
 
+[DoctrineBundle]
+    git=https://github.com/doctrine/DoctrineBundle
+    target=/bundles/Doctrine/Bundle/DoctrineBundle
+
 [doctrine-fixtures]
     git=http://github.com/doctrine/data-fixtures.git
 
 [DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    git=http://github.com/doctrine/DoctrineFixturesBundle
     target=/bundles/Symfony/Bundle/DoctrineFixturesBundle
     
 [doctrine-migrations]
