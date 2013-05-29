@@ -2,7 +2,7 @@
 namespace DigitalKanban\BaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * BoardType
@@ -22,7 +22,7 @@ class BoardType extends AbstractType {
 	 * @param FormBuilder   $builder The form builder
 	 * @param array         $options The options
 	 */
-	public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name', 'text');
 		$builder->add('description', 'textarea');
 		$builder->add('users', NULL, array(

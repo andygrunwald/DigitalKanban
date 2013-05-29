@@ -2,7 +2,7 @@
 namespace DigitalKanban\BaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class UserType extends AbstractType {
 
@@ -17,7 +17,7 @@ class UserType extends AbstractType {
 	 * @param FormBuilder   $builder The form builder
 	 * @param array         $options The options
 	 */
-	public function buildForm(FormBuilder $builder, array $options) {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('username', 'text');
 
 		if($options['mode'] === 'new') {
