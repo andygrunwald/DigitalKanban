@@ -24,14 +24,21 @@ class FixtureLoader implements FixtureInterface {
 		 * ROLES
 		 */
 
-			// Create the ROLE_ADMIN role
+		// Create the ROLE_ADMIN role
 		$adminRole = new Role();
 		$adminRole->setName('ROLE_ADMIN');
 		$adminRole->setDescription('Administration. This group is focused on system management.');
 
 		$manager->persist($adminRole);
 
-			// Create the ROLE_USER role
+        // Create the ROLE_MANAGER role
+		$managerRole = new Role();
+		$managerRole->setName('ROLE_MANAGER');
+		$managerRole->setDescription('Manager. This group is focused on system management within the boards they are assigned.');
+
+		$manager->persist($managerRole);
+
+		// Create the ROLE_USER role
 		$userRole = new Role();
 		$userRole->setName('ROLE_USER');
 		$userRole->setDescription("Normal usergroup. For example employees.");
@@ -42,21 +49,21 @@ class FixtureLoader implements FixtureInterface {
 		 * BOARDS
 		 */
 
-			// Create board 'Team E-Commerce'
+		// Create board 'Team E-Commerce'
 		$board1 = new Board();
 		$board1->setName('Team E-Commerce');
 		$board1->setDescription('Kanban-board of e-commerce-team. Displays issues from topics online-shopping, electronic trading/commerce and development of websites like online shops. Systems which are used are for example Magento, Oxid or Terrashop.');
 
 		$manager->persist($board1);
 
-			// Create board 'Team Human Resources'
+		// Create board 'Team Human Resources'
 		$board2 = new Board();
 		$board2->setName('Team Human Resources');
 		$board2->setDescription('Kanban-board of staff department. Working and managing at issues for human resources. For example different topics of employees, payment of them, hiring new people, organize travel for team events and ask for working feedback.');
 
 		$manager->persist($board2);
 
-			// Create board 'Team Backend-Development'
+		// Create board 'Team Backend-Development'
 		$board3 = new Board();
 		$board3->setName('Team Backend-Development');
 		$board3->setDescription('Kanban-board of backend-development-team. Tasks for connection different websites with third party systems like ERP or CRM.');
@@ -67,7 +74,7 @@ class FixtureLoader implements FixtureInterface {
 		 * USER
 		 */
 
-			// Create a admin user 'John Doe'
+		// Create a admin user 'John Doe'
 		$adminUser = new User();
 		$adminUser->setFirstName('John');
 		$adminUser->setLastName('Doe');
@@ -81,7 +88,20 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($adminUser);
 
-			// Create a normal user 'Max Mustermann'
+        // Create a manager user 'Daniel K'
+        $managerUser = new User();
+        $managerUser->setFirstName('Daniel');
+        $managerUser->setLastName('K');
+        $managerUser->setUsername('manager');
+        $managerUser->setEmail('daniel@example.com');
+        $managerUser->getBoards()->add($board1);
+        $managerUser->setSalt(md5(uniqid(microtime())));
+        $managerUser->setPassword('manager');
+        $managerUser->addRole($managerRole);
+
+        $manager->persist($managerUser);
+
+		// Create a normal user 'Max Mustermann'
 		$normalUser = new User();
 		$normalUser->setFirstName('Max');
 		$normalUser->setLastName('Mustermann');
@@ -95,7 +115,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($normalUser);
 
-			// Create a deactivated normal user 'Dieter Müller'
+		// Create a deactivated normal user 'Dieter Müller'
 		$deactivatedNormalUser = new User();
 		$deactivatedNormalUser->setFirstName('Dieter');
 		$deactivatedNormalUser->setLastName('Müller');
@@ -110,7 +130,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($deactivatedNormalUser);
 
-			// Create a admin user 'Markus Ele'
+		// Create a admin user 'Markus Ele'
 		$anotherAdminUser = new User();
 		$anotherAdminUser->setFirstName('Markus');
 		$anotherAdminUser->setLastName('Ele');
@@ -126,7 +146,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($anotherAdminUser);
 
-			// Create a normal user 'Daniel Schmi'
+		// Create a normal user 'Daniel Schmi'
 		$anotherNormalUser = new User();
 		$anotherNormalUser->setFirstName('Daniel');
 		$anotherNormalUser->setLastName('Schmi');
@@ -144,7 +164,7 @@ class FixtureLoader implements FixtureInterface {
 		 * BOARD COLUMNS
 		 */
 
-			// Create first board column 'Backlog' for board 'Team E-Commerce'
+		// Create first board column 'Backlog' for board 'Team E-Commerce'
 		$board1Column1 = new BoardColumn();
 		$board1Column1->setName('Backlog');
 		$board1Column1->setMaxIssues(0);
@@ -153,7 +173,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column1);
 
-			// Create second board column 'ToDo' for board 'Team E-Commerce'
+		// Create second board column 'ToDo' for board 'Team E-Commerce'
 		$board1Column2 = new BoardColumn();
 		$board1Column2->setName('ToDo');
 		$board1Column2->setMaxIssues(10);
@@ -162,7 +182,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column2);
 
-			// Create third board column 'Analysis' for board 'Team E-Commerce'
+		// Create third board column 'Analysis' for board 'Team E-Commerce'
 		$board1Column3 = new BoardColumn();
 		$board1Column3->setName('Analysis');
 		$board1Column3->setMaxIssues(4);
@@ -171,7 +191,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column3);
 
-			// Create fourth board column 'Development' for board 'Team E-Commerce'
+		// Create fourth board column 'Development' for board 'Team E-Commerce'
 		$board1Column4 = new BoardColumn();
 		$board1Column4->setName('Development');
 		$board1Column4->setMaxIssues(2);
@@ -180,7 +200,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column4);
 
-			// Create fifth board column 'Approval' for board 'Team E-Commerce'
+		// Create fifth board column 'Approval' for board 'Team E-Commerce'
 		$board1Column5 = new BoardColumn();
 		$board1Column5->setName('Approval');
 		$board1Column5->setMaxIssues(0);
@@ -189,7 +209,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column5);
 
-			// Create sixth board column 'Deploy' for board 'Team E-Commerce'
+		// Create sixth board column 'Deploy' for board 'Team E-Commerce'
 		$board1Column6 = new BoardColumn();
 		$board1Column6->setName('Deploy');
 		$board1Column6->setMaxIssues(3);
@@ -198,7 +218,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column6);
 
-			// Create seventh board column 'Done' for board 'Team E-Commerce'
+		// Create seventh board column 'Done' for board 'Team E-Commerce'
 		$board1Column7 = new BoardColumn();
 		$board1Column7->setName('Done');
 		$board1Column7->setMaxIssues(0);
@@ -207,7 +227,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board1Column7);
 
-			// Create first board column 'Job requests' for board 'Team Human Resources'
+		// Create first board column 'Job requests' for board 'Team Human Resources'
 		$board2Column1 = new BoardColumn();
 		$board2Column1->setName('Job requests');
 		$board2Column1->setMaxIssues(15);
@@ -216,7 +236,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board2Column1);
 
-			// Create second board column 'Job meeting' for board 'Team Human Resources'
+		// Create second board column 'Job meeting' for board 'Team Human Resources'
 		$board2Column2 = new BoardColumn();
 		$board2Column2->setName('Job meeting');
 		$board2Column2->setMaxIssues(2);
@@ -225,7 +245,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($board2Column2);
 
-			// Create third board column 'Done' for board 'Team Human Resources'
+		// Create third board column 'Done' for board 'Team Human Resources'
 		$board2Column3 = new BoardColumn();
 		$board2Column3->setName('Done');
 		$board2Column3->setMaxIssues(0);
@@ -238,7 +258,7 @@ class FixtureLoader implements FixtureInterface {
 		 * ISSUES
 		 */
 
-			// Create first issue for column 'Backlog'
+		// Create first issue for column 'Backlog'
 		$issue1 = new Issue();
 		$issue1->setName('Evaluate Paypal module for Magento');
 		$issue1->setSorting(30);
@@ -248,7 +268,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue1);
 
-			// Create second issue for column 'Backlog'
+		// Create second issue for column 'Backlog'
 		$issue2 = new Issue();
 		$issue2->setName('Evaluate Paypal module for Oxid');
 		$issue2->setSorting(20);
@@ -258,7 +278,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue2);
 
-			// Create third issue for column 'Backlog'
+		// Create third issue for column 'Backlog'
 		$issue3 = new Issue();
 		$issue3->setName('Insert new design collection to Karl Lagerfelds onlineshop');
 		$issue3->setSorting(10);
@@ -268,7 +288,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue3);
 
-			// Create first issue for column 'Analysis'
+		// Create first issue for column 'Analysis'
 		$issue4 = new Issue();
 		$issue4->setName('Hash user passwords in database for more security');
 		$issue4->setSorting(10);
@@ -278,7 +298,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue4);
 
-			// Create fourth issue for column 'Backlog'
+		// Create fourth issue for column 'Backlog'
 		$issue5 = new Issue();
 		$issue5->setName('Write a new magento module to take A/B usability tests');
 		$issue5->setSorting(40);
@@ -288,7 +308,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue5);
 
-			// Create first issue for column 'Development'
+		// Create first issue for column 'Development'
 		$issue6 = new Issue();
 		$issue6->setName('"Sign up" function for newsletter at Levis online shop');
 		$issue6->setSorting(10);
@@ -298,7 +318,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue6);
 
-			// Create first issue for column 'Job requests'
+		// Create first issue for column 'Job requests'
 		$issue7 = new Issue();
 		$issue7->setName('Dennis Putta requested via Linked.in');
 		$issue7->setSorting(10);
@@ -308,7 +328,7 @@ class FixtureLoader implements FixtureInterface {
 
 		$manager->persist($issue7);
 
-			// Create first issue for column 'Done'
+		// Create first issue for column 'Done'
 		$issue8 = new Issue();
 		$issue8->setName('Hire a new java developer');
 		$issue8->setSorting(10);

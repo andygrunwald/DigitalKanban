@@ -11,200 +11,241 @@ use DigitalKanban\BaseBundle\Entity\User;
 /**
  * User controller
  */
-class UserController extends Controller {
+class UserController extends Controller
+{
 
-	/**
-	 * New action of user controller.
-	 *
-	 * This method is called if a user created a new user.
-	 *
-	 * @param \Symfony\Component\HttpFoundation\Request $request
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
-	 */
-	public function newAction(Request $request) {
-			// Build form in base of an object
-		$form = $this->createForm(new UserType(), new User(), array('mode' => 'new'));
+    /**
+     * New action of user controller.
+     *
+     * This method is called if a user created a new user.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
+     */
+    public function newAction(Request $request)
+    {
+        $currentUser = $this->get('security.context')->getToken()->getUser();
 
-			// If the form was submitted with the HTTP method POST
-		if ($request->getMethod() == 'POST') {
+        // Build form in base of an object
+        $form = $this->createForm(new UserType($currentUser), new User(), array('mode' => 'new'));
 
-			$user = $form->getData();
-				// Set password salt BEFORE binding this request to form,
-				// because salt is in user entity required and must be set  before the validation starts.
-				// Otherwise the validation will failed every time.
-			$user->setSalt(md5(uniqid(microtime())));
+        // If the form was submitted with the HTTP method POST
+        if ($request->getMethod() == 'POST') {
 
-				// Check if the form was submitted correctly
-			$form->bindRequest($request);
-			if ($form->isValid()) {
-				$entityManager = $this->getDoctrine()->getEntityManager();
+            $user = $form->getData();
+            // Set password salt BEFORE binding this request to form,
+            // because salt is in user entity required and must be set  before the validation starts.
+            // Otherwise the validation will failed every time.
+            $user->setSalt(md5(uniqid(microtime())));
 
-					// Add a role to user (Admin or User)
-					// This is a special case here, because in formular, the role is a single checkbox
-					// but in technical it is a ManyToMany relation
-				$requestData = $request->request->get($form->getName());
-				if(isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1) {
-					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
+            // Check if the form was submitted correctly
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+                $entityManager = $this->getDoctrine()->getEntityManager();
 
-				} else {
-					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
-				}
-				$user->addRole($role);
+                // Add a role to user (Admin or User)
+                // This is a special case here, because in formular, the role is a single checkbox
+                // but in technical it is a ManyToMany relation
+                $requestData = $request->request->get($form->getName());
+                if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
 
-				$entityManager->persist($user);
-				$entityManager->flush();
+                } elseif(isset($requestData['manager']) === true && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
+                } else {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
+                }
 
-					// Build success flash message and redirect to user list
-				$flashMessageData = array(
-					'title' => 'Creation successful',
-					'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '> was created!',
-				);
-				$this->get('session')->setFlash('success', $flashMessageData);
+                $user->addRole($role);
 
-				return $this->redirect($this->generateUrl('application_user_list'));
-			}
-		}
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-			// Assign form to template
-		$templateData = array(
-			'form' => $form->createView(),
-		);
-		return $this->render('DigitalKanbanBaseBundle:User:new.html.twig', $templateData);
-	}
+                // Build success flash message and redirect to user list
+                $flashMessageData = array(
+                    'title' => 'Creation successful',
+                    'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '> was created!',
+                );
+                $this->get('session')->setFlash('success', $flashMessageData);
 
-	/**
-	 * List action of user controller.
-	 *
-	 * This method is called if the user select the 'User'-section in the frontend.
-	 *
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\Response
-	 */
-	public function listAction() {
-			// Get all users and assign them to the template
-		$entityManager = $this->getDoctrine()->getEntityManager();
-		$users = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findAll();
+                return $this->redirect($this->generateUrl('application_user_list'));
+            }
+        }
 
-		$templateData = array(
-			'users' => $users,
-		);
-		return $this->render('DigitalKanbanBaseBundle:User:list.html.twig', $templateData);
-	}
+        // Assign form to template
+        $templateData = array(
+            'form' => $form->createView(),
+        );
+        return $this->render('DigitalKanbanBaseBundle:User:new.html.twig', $templateData);
+    }
 
-	/**
-	 * Edit action of User controller.
-	 *
-	 * This method is called if the user will edit another user.
-	 *
-	 * @param integer $id
-	 * @param \Symfony\Component\HttpFoundation\Request $request
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
-	 */
-	public function editAction($id, Request $request) {
-		$id = (int) $id;
-		$entityManager = $this->getDoctrine()->getEntityManager();
-		$user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
+    /**
+     * List action of user controller.
+     *
+     * This method is called if the user select the 'User'-section in the frontend.
+     *
+     * @return \Symfony\Bundle\FrameworkBundle\Controller\Response
+     */
+    public function listAction()
+    {
+        // Get all users and assign them to the template
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $repository = $entityManager->getRepository('DigitalKanbanBaseBundle:User');
 
-			// If there is no user, exit here with an error
-		if($user === NULL) {
-			$flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
-			return $this->redirectToListViewWithError('Editing failed', $flashMessage);
-		}
+        $user = $this->get('security.context')->getToken()->getUser();
 
-			// Build form
-		$form = $this->createForm(new UserType(), $user, array('mode' => 'edit'));
+        if ($user->isManager()) {
 
-			// If the form was submitted with the HTTP method POST
-		if ($request->getMethod() == 'POST') {
+            $users = $repository->getUsersAssociatedToManager($user);
 
-				// Check if the form was submitted correctly
-			$form->bindRequest($request);
-			$user = $form->getData();
-			if ($form->isValid()) {
-				$entityManager->persist($user);
+            // remove admin and manager itself
+            foreach ($users as $key => $user) {
 
-					// Add a role to user (Admin or User)
-					// This is a special case here, because in formular, the role is a single checkbox
-					// but in technical it is a ManyToMany relation
-				$requestData = $request->request->get($form->getName());
-					// Clear all roles before, because technical it is a ManyToMany relation
-					// but logical it is an 1:n relation. Every user can has only ONE role.
-					// But many user can be administrator OR user.
-				$user->getRolesAsArrayCollection()->clear();
+                if ($user->isAdmin() || $user->isManager()) {
 
-				if(isset($requestData['admin']) === TRUE && intval($requestData['admin']) === 1) {
-					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
+                    unset($users[$key]);
 
-				} else {
-					$role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
-				}
-				$user->addRole($role);
-				$entityManager->flush();
+                }
 
-					// Build success flash message and redirect to list view
-				$flashMessageData = array(
-					'title' => 'Editing successful',
-					'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '>  was edited!',
-				);
-				$this->get('session')->setFlash('success', $flashMessageData);
+            }
 
-				return $this->redirect($this->generateUrl('application_user_list'));
-			}
-		}
+        } elseif ($user->isAdmin()) {
 
-			// Assign form data to template
-		$templateData = array(
-			'form' => $form->createView(),
-			'user' => $user
-		);
-		return $this->render('DigitalKanbanBaseBundle:User:edit.html.twig', $templateData);
-	}
+            $users = $repository->findAll();
 
-	/**
-	 * Delete action of user controller.
-	 *
-	 * This method is called if an user deletes another user.
-	 *
-	 * @param integer $id
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
-	 */
-	public function deleteAction($id) {
-		$id = (int) $id;
-		$entityManager = $this->getDoctrine()->getEntityManager();
-		$user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
+        } else {
 
-			// If there is no user, exit here with an error
-		if($user === NULL) {
-			$flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
-			return $this->redirectToListViewWithError('Deletion failed', $flashMessage);
-		}
+            $users = null; // @todo: throw an exception?
 
-			// Build a success flash message
-		$flashMessageData = array(
-			'title' => 'Deletion successful',
-			'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '>  was deleted!',
-		);
-		$this->get('session')->setFlash('success', $flashMessageData);
+        }
 
-			// Delete the user
-		$entityManager->remove($user);
-		$entityManager->flush();
+        $templateData = array(
+            'users' => $users,
+        );
+        return $this->render('DigitalKanbanBaseBundle:User:list.html.twig', $templateData);
+    }
 
-		return $this->redirect($this->generateUrl('application_user_list'));
-	}
+    /**
+     * Edit action of User controller.
+     *
+     * This method is called if the user will edit another user.
+     *
+     * @param integer $id
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
+     */
+    public function editAction($id, Request $request)
+    {
+        $currentUser = $this->get('security.context')->getToken()->getUser();
 
-	/**
-	 * Redirect the user to the user list view and saves an error flash message into session.
-	 *
-	 * @param string $title
-	 * @param string $message
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
-	 */
-	protected function redirectToListViewWithError($title, $message) {
-		$flashMessageData = array(
-			'title' => $title,
-			'message' => $message,
-		);
-		$this->get('session')->setFlash('error', $flashMessageData);
-		return $this->redirect($this->generateUrl('application_user_list'));
-	}
+        $id = (int) $id;
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
+
+        // If there is no user, exit here with an error
+        if ($user === null) {
+            $flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
+            return $this->redirectToListViewWithError('Editing failed', $flashMessage);
+        }
+
+        // Build form
+        $form = $this->createForm(new UserType($currentUser), $user, array('mode' => 'edit'));
+
+        // If the form was submitted with the HTTP method POST
+        if ($request->getMethod() == 'POST') {
+
+            // Check if the form was submitted correctly
+            $form->bindRequest($request);
+            $user = $form->getData();
+            if ($form->isValid()) {
+                $entityManager->persist($user);
+
+                // Add a role to user (Admin or User)
+                // This is a special case here, because in formular, the role is a single checkbox
+                // but in technical it is a ManyToMany relation
+                $requestData = $request->request->get($form->getName());
+                // Clear all roles before, because technical it is a ManyToMany relation
+                // but logical it is an 1:n relation. Every user can has only ONE role.
+                // But many user can be administrator OR user.
+                $user->getRolesAsArrayCollection()->clear();
+
+                if (isset($requestData['admin']) === true && intval($requestData['admin']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_ADMIN');
+                } elseif(isset($requestData['manager']) === true && intval($requestData['manager']) === 1 && $currentUser->isAdmin()) {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_MANAGER');
+                } else {
+                    $role = $entityManager->getRepository('DigitalKanbanBaseBundle:Role')->findOneByName('ROLE_USER');
+                }
+                $user->addRole($role);
+                $entityManager->flush();
+
+                // Build success flash message and redirect to list view
+                $flashMessageData = array(
+                    'title' => 'Editing successful',
+                    'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '>  was edited!',
+                );
+                $this->get('session')->setFlash('success', $flashMessageData);
+
+                return $this->redirect($this->generateUrl('application_user_list'));
+            }
+        }
+
+        // Assign form data to template
+        $templateData = array(
+            'form' => $form->createView(),
+            'user' => $user
+        );
+        return $this->render('DigitalKanbanBaseBundle:User:edit.html.twig', $templateData);
+    }
+
+    /**
+     * Delete action of user controller.
+     *
+     * This method is called if an user deletes another user.
+     *
+     * @param integer $id
+     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
+     */
+    public function deleteAction($id)
+    {
+        $id = (int) $id;
+        $entityManager = $this->getDoctrine()->getEntityManager();
+        $user = $entityManager->getRepository('DigitalKanbanBaseBundle:User')->findOneById($id);
+
+        // If there is no user, exit here with an error
+        if ($user === null) {
+            $flashMessage = 'User with id "' . $id . '" does not exist. Sorry dude.';
+            return $this->redirectToListViewWithError('Deletion failed', $flashMessage);
+        }
+
+        // Build a success flash message
+        $flashMessageData = array(
+            'title' => 'Deletion successful',
+            'message' => 'User "' . $user->getFirstName() . ' ' . $user->getLastName() . '" <' . $user->getEmail() . '>  was deleted!',
+        );
+        $this->get('session')->setFlash('success', $flashMessageData);
+
+        // Delete the user
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->redirect($this->generateUrl('application_user_list'));
+    }
+
+    /**
+     * Redirect the user to the user list view and saves an error flash message into session.
+     *
+     * @param string $title
+     * @param string $message
+     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
+     */
+    protected function redirectToListViewWithError($title, $message)
+    {
+        $flashMessageData = array(
+            'title' => $title,
+            'message' => $message,
+        );
+        $this->get('session')->setFlash('error', $flashMessageData);
+        return $this->redirect($this->generateUrl('application_user_list'));
+    }
 }

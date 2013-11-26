@@ -9,6 +9,7 @@
 			<div class="create-new-issue">
 				<div id="new-issue">
 					<textarea rows="3" cols="22" placeholder="Enter your issue title here"></textarea>
+                    <input rows="3" cols="1" placeholder="type"/>
 				</div>
 				<a href="javascript:void(0);" title="Save your new issue" id="link-issue-save">
 					<img src="{{ asset('bundles/digitalkanbanbase/images/save.png') }}" alt="Save your new issue" title="Save your new issue" />
@@ -42,7 +43,7 @@
 							<ul>
 								{% for issue in column.getIssues() %}
 									<li class="issue rotate{{issue.getRandomRotation()}} issue-{{issue.getId() }}">
-										{% if is_granted('ROLE_ADMIN') %}
+										{% if is_granted('ROLE_MANAGER') %}
 											<span class="confirm-text visuallyhidden">Are you sure you want to delete this record? "{{ issue.getName() }}"</span>
 											<a href="javascript:void(0);" class="delete" style="display: none;">
 												<img src="{{ asset('bundles/digitalkanbanbase/images/no.png') }}" alt="Delete the issue '{{ issue.getName() }}'" title="Delete the issue '{{ issue.getName() }}'" />
