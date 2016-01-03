@@ -345,7 +345,7 @@ class BoardController extends Controller {
 			'title' => $title,
 			'message' => $message,
 		);
-		$this->get('session')->setFlash('error', $flashMessageData);
+		$this->get('session')->getFlashBag->add('error', $flashMessageData);
 		return $this->redirect($this->generateUrl('application_board_list'));
 	}
 }
