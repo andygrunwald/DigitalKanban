@@ -6,7 +6,7 @@
             "name": "Andy Grunwald",
             "email": "andygrunwald@gmail.com",
             "role": "Developer"
-        },
+        }
     ],
     "autoload": {
         "psr-0": {
