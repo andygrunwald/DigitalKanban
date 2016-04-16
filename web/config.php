@@ -4,10 +4,12 @@ if (!isset($_SERVER['HTTP_HOST'])) {
     exit('This script cannot be run from the CLI. Run it from a browser.');
 }
 
-if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
-    '127.0.0.1',
-    '::1',
-))) {
+// 127.0.0.1 				Localhost
+// 10.0.0.0 - 10.255.255.255 		single class A network
+// 172.16.0.0 - 172.31.255.255 		16 contiguous class B networks (not implemented to this expression)
+// 192.168.0.0 - 192.168.255.255 	256 contiguous class C networks
+if(preg_match('^(127\.0\.0\.1|10\.[0-9]{0,3}\.[0-9]{0,3}\.[0-9]{0,3}|192\.168\.[0-9]{0,3}\.[0-9]{0,3})$', @$_SERVER['REMOTE_ADDR']))
+{
     header('HTTP/1.0 403 Forbidden');
     exit('This script is only accessible from localhost.');
 }
