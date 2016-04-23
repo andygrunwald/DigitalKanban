@@ -52,14 +52,15 @@ Installation
 3. For shell commands you have to change the directory to main application root (level on ``app/``, ``bin/`` and so on)
 4. Copy ``app/config/parameters.ini.dist`` to ``app/config/parameters.ini`` and edit database settings to match your personal settings
 5. Call ``composer install`` via shell (make sure you installed composer globally or just download composer and run ``php composer.phar install``
-6. Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
-7. Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
-8. Setting up database (incl. dummy data) with the following shell commands
+6. chmod -R write permission to app/cache and app/logs
+7. Call [http://digitalkanban.local/config.php](http://digitalkanban.local/config.php) via webbrowser to check for all (web) requirements (if a test will not pass, configure your server to pass this tests)
+8. Call ``php app/check.php`` via shell to check for all (cli) requirements (if a test will not pass, configure your server to pass this tests)
+9. Setting up database (incl. dummy data) with the following shell commands
 	* ``php app/console doctrine:database:create``
 	* ``php app/console doctrine:migration:migrate``
 	* ``php app/console doctrine:fixtures:load``
-9. Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
-10. In case of update for an older version, you have to update bundles and database by running:
+10. Call [http://digitalkanban.local/](http://digitalkanban.local/) via webbrowser and enjoy the application
+11. In case of update for an older version, you have to update bundles and database by running:
 	* ``composer install``
 	* ``php app/console doctrine:migration:migrate``
 
