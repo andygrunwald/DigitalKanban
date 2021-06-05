@@ -100,6 +100,13 @@ Password: *user*<br />
 Role: User<br />
 Active: Yes
 
+Special syntax on issue creation
+------------
+You can use the special separator "#" in issue description to automaticaly managed grouping of issue. 3 groups can be created for an issue. For exemple you can do:
+	*  mycustomer#myproject#mylanguage#description
+This feature will be useful for archiving purpose and csv export.
+
+
 Problems / Issues / Help
 ------------
 If you got a blank page while starting the application, open *web/app.php* and replace
