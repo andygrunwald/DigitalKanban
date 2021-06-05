@@ -61,6 +61,7 @@ class BoardColumnController extends Controller {
 		$column = new BoardColumn();
 		$column->setName($columnData['name']);
 		$column->setMaxIssues($columnData['limit']);
+		$column->setTimeable($columnData['timeable']);
 		$column->setSorting(10);
 		$column->setBoard($board);
 
@@ -72,6 +73,7 @@ class BoardColumnController extends Controller {
 			'id' => $column->getId(),
 			'name' => $column->getName(),
 			'limit' => $column->getMaxIssues(),
+		    'timeable' => $column->getTimeable(),    
 		);
 		$response = new Response(json_encode($responseData), 200);
 		$response->headers->set('Content-Type', 'application/json');

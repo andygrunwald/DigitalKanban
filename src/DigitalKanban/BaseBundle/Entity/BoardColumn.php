@@ -58,12 +58,23 @@ class BoardColumn {
 	 */
 	private $edited;
 
+	
+	/**
+	 * @var boolean $timeable
+	 *
+	 * @ORM\Column(name="timeable", type="boolean")
+	 */
+	private $timeable;
+	
+	
 	/**
 	 * @var integer $sorting
 	 *
 	 * @ORM\Column(name="sorting", type="integer")
 	 */
 	protected $sorting;
+	
+	
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Board", inversedBy="columns")
@@ -83,6 +94,7 @@ class BoardColumn {
 	 */
 	public function __construct() {
 		$this->issues = new ArrayCollection();
+		$this->timeable = false;
 	}
 
 	/**
@@ -217,4 +229,34 @@ class BoardColumn {
 	public function getIssues() {
 		return $this->issues;
 	}
+
+    /**
+     * Set timeable
+     *
+     * @param boolean $timeable
+     */
+    public function setTimeable($timeable)
+    {
+        $this->timeable = $timeable;
+    }
+
+    /**
+     * Get timeable
+     *
+     * @return boolean 
+     */
+    public function getTimeable()
+    {
+        return $this->timeable;
+    }
+
+    /**
+     * Add issues
+     *
+     * @param DigitalKanban\BaseBundle\Entity\Issue $issues
+     */
+    public function addIssue(\DigitalKanban\BaseBundle\Entity\Issue $issues)
+    {
+        $this->issues[] = $issues;
+    }
 }
