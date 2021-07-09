@@ -179,7 +179,7 @@ var DigitalKanbanBaseBundle = {
 	initNewColumnItems: function() {
 			// Set click event on Reset button
 		$('#link-column-reset').click(function() {
-			$('#column-name, #column-limit').val('');
+			$('#BoardColumnFormType_name, #BoardColumnFormType_max_issues,#BoardColumnFormType_user_group').val('');
 		});
 
 			// Set click event on save button
@@ -358,8 +358,9 @@ var DigitalKanbanBaseBundle = {
 	 */
 	addNewColumnToKanbanBoard: function(event) {
 		var newColumn = {
-				'name': $.trim($('#column-name').val()),
-				'limit': parseInt($.trim($('#column-limit').val()))
+				'name': $.trim($('#BoardColumnFormType_name').val()),
+				'limit': parseInt($.trim($('#BoardColumnFormType_max_issues').val())),
+                'usergroup': parseInt($.trim($('#BoardColumnFormType_user_group').val()))
 			},
 			boardId = 0,
 			options = {};
@@ -372,7 +373,7 @@ var DigitalKanbanBaseBundle = {
 
 			// Save new column to the database via ajax request
 		options = {
-			'url': '/application/column/add',
+			'url': '/app_dev.php/application/column/add',
 			'data': {
 				'board': this.getDatabaseIdFromCSSClass($('div.edit-columns div.kanban-board'), 'board'),
 				'column': newColumn
@@ -403,7 +404,9 @@ var DigitalKanbanBaseBundle = {
 		if(xhrData.limit > 0) {
 			$('div.limit', column).text(xhrData.limit);
 		}
-
+        if(xhrData.usergroup) {
+            $('div.usergroup', column).text(xhrData.usergroup);
+        }
 			// Replace Name marker in values and attributes
 		tmpVal = $('span.confirm-text', column).text();
 		$('span.confirm-text', column).text(tmpVal.replace(/###NAME###/, xhrData.name));
@@ -418,7 +421,7 @@ var DigitalKanbanBaseBundle = {
 		column.prependTo('.kanban-board ul.editable-column-board');
 
 			// Reset input fields
-		$('#column-name, #column-limit').val('');
+		$('#BoardColumnFormType_name, #BoardColumnFormType_max_issues,#BoardColumnFormType_user_group').val('');
 
 			// Refresh and reinitialize sortable objects, events and css styles
 		this.initColumnWidth();

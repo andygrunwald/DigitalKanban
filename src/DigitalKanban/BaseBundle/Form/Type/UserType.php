@@ -35,6 +35,7 @@ class UserType extends AbstractType {
 		));
 
 		$builder->add('boards', NULL);
+        $builder->add('groups', NULL);
 	}
 
 	/**

@@ -78,6 +78,13 @@ class BoardColumn {
 	 */
 	protected $issues;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="UserGroup")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $user_group;
+
+
 	/**
 	 * Constructor
 	 */
@@ -217,4 +224,34 @@ class BoardColumn {
 	public function getIssues() {
 		return $this->issues;
 	}
+
+    /**
+     * Add issues
+     *
+     * @param DigitalKanban\BaseBundle\Entity\Issue $issues
+     */
+    public function addIssue(\DigitalKanban\BaseBundle\Entity\Issue $issues)
+    {
+        $this->issues[] = $issues;
+    }
+
+    /**
+     * Set user_group
+     *
+     * @param DigitalKanban\BaseBundle\Entity\UserGroup $userGroup
+     */
+    public function setUserGroup(\DigitalKanban\BaseBundle\Entity\UserGroup $userGroup)
+    {
+        $this->user_group = $userGroup;
+    }
+
+    /**
+     * Get user_group
+     *
+     * @return DigitalKanban\BaseBundle\Entity\UserGroup 
+     */
+    public function getUserGroup()
+    {
+        return $this->user_group;
+    }
 }

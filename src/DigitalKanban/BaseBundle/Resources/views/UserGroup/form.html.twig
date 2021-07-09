@@ -1,0 +1,17 @@
+{{ form_errors(form) }}
+
+<div>
+	{{ form_label(form.name) }}
+	{{ form_widget(form.name) }}
+	{{ form_errors(form.name) }}
+</div>
+<div>
+	{{ form_label(form.users) }}
+	{{ form_widget(form.users) }}
+	{{ form_errors(form.users) }}
+</div>
+
+{{ form_rest(form) }}
+<div class="submit center">
+	<input type="submit" name="submit" value="Submit your changes now" />
+</div>

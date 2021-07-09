@@ -127,7 +127,7 @@ class UserController extends Controller {
 					// but in technical it is a ManyToMany relation
 				$requestData = $request->request->get($form->getName());
 					// Clear all roles before, because technical it is a ManyToMany relation
-					// but logical it is an 1:n relation. Every user can has only ONE role.
+					// but logical it is an 1:n relation. Every user can have only ONE role.
 					// But many user can be administrator OR user.
 				$user->getRolesAsArrayCollection()->clear();
 
