@@ -64,6 +64,7 @@ var DigitalKanbanBaseBundle = {
 		this.initIssueAndColumnDeleteFunction();
 		this.initColumnWidth();
 		this.initLastColumnOnKanbanBoard();
+		this.initTimeableItem();
 	},
 
 	/**
@@ -180,10 +181,32 @@ var DigitalKanbanBaseBundle = {
 			// Set click event on Reset button
 		$('#link-column-reset').click(function() {
 			$('#column-name, #column-limit').val('');
+			$('#column-timeable').attr('checked', false);
+			$('#column-limit').removeAttr("disabled"); 
 		});
 
 			// Set click event on save button
 		$('#link-column-save').click($.proxy(this.addNewColumnToKanbanBoard, this));
+		
+		//set click event on timeable
+		$('#column-timeable').click($.proxy(this.manageTimeableColumnToKanbanBoard, this));
+	},
+	
+	/**
+	 * Initialize the countdown if necessary
+	 *
+	 * @return void
+	 */
+	initTimeableItem: function() {
+		$("div.timeable").each(function(){ 
+			//$(this).parent().children('.issues li.issue').each(function(){ 
+			$(this).parent().find('.issues > ul > li.issue').each(function(){
+				tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass($(this), 'issue');
+				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
+				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
+				$('#timeelapsed-text-'+ tmpId).hide();
+			});
+		});
 	},
 
 	/**
@@ -296,6 +319,7 @@ var DigitalKanbanBaseBundle = {
 			},
 			'successCallback': $.proxy(this.addNewInsertedIssueToDOM, this)
 		};
+		
 		this.sendAjaxRequest(options);
 	},
 
@@ -316,7 +340,25 @@ var DigitalKanbanBaseBundle = {
 			.addClass('issue rotate' + parseInt(xhrData.rotation) + ' issue-' + parseInt(xhrData.id))
 			.text(xhrData.name)
 			.appendTo($('ul', firstColumn));
+		
+		elements.timeelapsed = $(document.createElement('div'))
+		.addClass('timeelapsed')
+		.appendTo(elements.issue);
+	
 
+		elements.timeelapsedtext = $(document.createElement('div'))
+			.addClass('timeelapsed-text')
+			.attr("id", "timeelapsed-text-" + parseInt(xhrData.id))
+			.html("Time elapsed: <span id=\"duration-" + parseInt(xhrData.id) + "\">00:00:00</span> <small>(hh:mi:ss)</small>")
+			.appendTo(elements.timeelapsed);
+
+		elements.timeelapsedcount =  $(document.createElement('div'))
+			.addClass('timeelapsed-count')
+			.attr("id", "timeelapsed-" + parseInt(xhrData.id))
+			.attr("zorig", "0")
+			.appendTo(elements.timeelapsed);
+
+		
 			// If the user is an administrator, generate the delete link and insert this, too
 		if(xhrData.userIsAdmin === true) {
 			elements.deleteText = $(document.createElement('span'))
@@ -348,8 +390,28 @@ var DigitalKanbanBaseBundle = {
 			// Refresh sortable objects and delete link events
 		this.sortableObj.sortable('refresh');
 		this.initIssueAndColumnDeleteFunction();
+		this.initTimeableItem();
 	},
 
+	
+	/**
+	 * Method to manage the timeable checkbox a new column to the kanban board
+	 *
+	 * @param event
+	 * @return void
+	 */
+	
+	manageTimeableColumnToKanbanBoard: function(event) {
+		 if ($.trim($('#column-timeable:checkbox:checked').val()) == "true") {
+			 $('#column-limit').val('1');
+			 $('#column-limit').attr("disabled", true); 
+		 } else {
+			 $('#column-limit').removeAttr("disabled"); 
+		 }
+	},
+	
+	
+	
 	/**
 	 * Method to add a new column to the kanban board
 	 *
@@ -359,7 +421,8 @@ var DigitalKanbanBaseBundle = {
 	addNewColumnToKanbanBoard: function(event) {
 		var newColumn = {
 				'name': $.trim($('#column-name').val()),
-				'limit': parseInt($.trim($('#column-limit').val()))
+				'limit': parseInt($.trim($('#column-limit').val())),
+				'timeable': ($.trim($('#column-timeable:checkbox:checked').val()) == "true")? '1': '0'
 			},
 			boardId = 0,
 			options = {};
@@ -403,6 +466,11 @@ var DigitalKanbanBaseBundle = {
 		if(xhrData.limit > 0) {
 			$('div.limit', column).text(xhrData.limit);
 		}
+		
+		//add timeable class
+		if(xhrData.timeable > 0) {
+			$('div.limit', column).addClass('timeable');
+		}
 
 			// Replace Name marker in values and attributes
 		tmpVal = $('span.confirm-text', column).text();
@@ -419,6 +487,8 @@ var DigitalKanbanBaseBundle = {
 
 			// Reset input fields
 		$('#column-name, #column-limit').val('');
+		$('#column-timeable').attr('checked', false);
+		$('#column-limit').removeAttr("disabled"); 
 
 			// Refresh and reinitialize sortable objects, events and css styles
 		this.initColumnWidth();
@@ -502,6 +572,27 @@ var DigitalKanbanBaseBundle = {
 		issues.each(function(index, element){
 			tmpId = DigitalKanbanBaseBundle.getDatabaseIdFromCSSClass(element, 'issue');
 			issueIdArray.push(tmpId);
+			
+			
+			//check if timer is needed
+			if($('.column-' + columnId + '> div.timeable').length > 0){
+				var start = parseInt($('#timeelapsed-'+ tmpId).attr('zorig'));
+				$('#timeelapsed-'+ tmpId).countdown({since: '-' + start + 's',compact: true,format: 'HMS'});
+				$('#timeelapsed-text-'+ tmpId).hide();
+			} else {
+				if ($("#timeelapsed-" + tmpId).hasClass("hasCountdown")) {
+					totalSec = parseInt($.countdown.periodsToSeconds($('#timeelapsed-'+ tmpId).countdown('getTimes')));
+					$('#timeelapsed-'+ tmpId).attr('zorig', totalSec);
+					$('#timeelapsed-'+ tmpId).countdown('destroy');
+					hours = parseInt( totalSec / 3600 );
+					minutes = parseInt( totalSec / 60 ) % 60;
+					seconds = totalSec % 60;
+
+					result = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+					$('#duration-'+ tmpId).html(result);
+					$('#timeelapsed-text-'+ tmpId).show();
+				}
+			}
 		});
 
 			// Update affected issues in database
