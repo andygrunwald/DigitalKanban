@@ -305,6 +305,20 @@ class BoardController extends Controller {
 
 			// Get unsorted issues by issue id list from database
 		$unsortedIssues = $entityManager->getRepository('DigitalKanbanBaseBundle:Issue')->findById($issueIds);
+		
+		
+		//test if we should update duration
+		foreach($unsortedIssues as $issue) {
+		    $col = $issue->getBoardColumn();
+		    $col->getId();
+		    if($issue->getBoardColumn()->getTimeable()) {
+		        //update duration
+			    $start = $issue->getEdited();
+			    $now = new \DateTime();
+			    $interval = $now->diff($start);
+			    $issue->setDuration($interval->format('%s') + $issue->getDuration());
+		    }
+		}
 
 			// Sort issues from database like issues from request data ($issueIds)
 			// It is necessary that the issues have the correct order, because in the next step

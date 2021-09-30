@@ -3,3 +3,8 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
             -  { name: twig.extension }
+            
+    twig.extension.digitalkanbantwigext:
+        class: DigitalKanban\BaseBundle\Twig\Extension\TwigExtension
+        tags:
+            - { name: twig.extension }
