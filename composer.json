@@ -15,7 +15,7 @@
     },
     "require": {
         "symfony/symfony": ">=2.2.0-beta2,<2.3-dev",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "doctrine/orm": "^2.4.x-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "twig/extensions": "*",
         "symfony/assetic-bundle": "2.1.*",
